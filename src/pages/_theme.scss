@@ -1,5 +1,6 @@
-$primary-color: blue;
+$primary-color: #0278ae;
 $secondary-color: green;
+$green : #00b140;
 $mt-1 : 5px;
 $mt-2 : 10px;
 $ml-1 : 5px;
@@ -10,4 +11,8 @@ $ml-2 : 10px;
     justify-content: $verticalAlign;
     align-items: $horizontalAlign;
     flex-direction: $direction;
+}
+@mixin  text($fontSize,$fontWieght) {
+    font-size: $fontSize;
+    font-weight: $fontWieght;
 }
