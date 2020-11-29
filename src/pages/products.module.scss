@@ -1,0 +1,37 @@
+@import "./theme";
+
+.header{
+    @include flexCenter(column,center,center);
+    background-color: $primary-color;
+    height: 150px;
+    .search{
+        width: 80%;
+        padding: 17px;
+    }
+}
+.container{
+    @include flexCenter(column,none,center);
+    height: 100vh;
+    .card{
+        @include flexCenter(row,none,center);
+        height: 150px;
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+        width: 95%;
+        margin-top: $mt-2;
+        .thumbnailImage{
+            width: 120px;
+            height: 140px;
+            margin-left: $ml-1;
+        }
+        .details{
+            @include flexCenter(row,none,none);
+            height: 100%;
+            width: 100%;
+            .heading{
+                font-size: 18px;
+                margin-top: $mt-1;
+                margin-left: $ml-1;
+            }
+        }
+    }
+}

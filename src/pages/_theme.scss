@@ -1,0 +1,13 @@
+$primary-color: blue;
+$secondary-color: green;
+$mt-1 : 5px;
+$mt-2 : 10px;
+$ml-1 : 5px;
+$ml-2 : 10px;
+
+@mixin flexCenter($direction,$verticalAlign,$horizontalAlign) {
+    display: flex;
+    justify-content: $verticalAlign;
+    align-items: $horizontalAlign;
+    flex-direction: $direction;
+}
