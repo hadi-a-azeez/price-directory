@@ -37,8 +37,8 @@ const ProductDetailed = (props) => {
           </div>
           <div className={styles.container}>
             <img
-              src="https://media.thieve.co/products%2Fp34mJdDonjjGQeITPtKo.jpg?fm=jpg&dpr=1&q=70&w=354&h=354"
-              alt=""
+              src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${product.product_image}?alt=media`}
+              alt="product_image`"
               className={styles.productImage}
             />
             <div className={styles.details}>

@@ -8,7 +8,6 @@ const Products = () => {
   const [isProductsLoading, setIsProductsLoading] = useState(false);
   const [isSearchResultLoading, setIsSearchResultLoading] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [counter, setCouner] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,14 +23,6 @@ const Products = () => {
     };
     fetchData();
   }, []);
-  const ImageFetch = async ({ imageUrl }) => {
-    let storageRef = firebase.storage().ref();
-    // Points to 'images'
-    let imagesRef = storageRef.child("images");
-    var spaceRef = imagesRef.child(imageUrl);
-    let image = await spaceRef.getDownloadURL();
-    return <img src={image} alt="productImage" />;
-  };
 
   const doSearch = (e) => {
     setIsProductsLoading(true);
@@ -54,23 +45,28 @@ const Products = () => {
       <>
         {!isSearchResultLoading &&
           filteredProducts.map((product, index) => (
-            <div className={styles.card} key={index}>
-              <img
-                src={product.product_image}
-                alt="product"
-                className={styles.thumbnailImage}
-              />
-              <div className={styles.details}>
-                <h1 className={styles.cod}>{product.product_cod}</h1>
-                <h1 className={styles.price}>{product.product_price}</h1>
-                <h1 className={styles.stock}>In Stock</h1>
-              </div>
-            </div>
+            <Link
+              to={`/product_detailed/${product.id}`}
+              key={index}
+              className={styles.link}
+            >
+              <div className={styles.card} key={index}>
+                <img
+                  src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${product.product_image}?alt=media`}
+                  alt="product_image`"
+                  className={styles.thumbnailImage}
+                />
+                <div className={styles.details}>
+                  <h1 className={styles.cod}>{product.product_cod}</h1>
+                  <h1 className={styles.price}>{product.product_price}</h1>
+                  <h1 className={styles.stock}>In Stock</h1>
+                </div>
+              </div>{" "}
+            </Link>
           ))}
       </>
     );
   };
-
   return (
     <>
       <div className={styles.header}>
@@ -90,9 +86,13 @@ const Products = () => {
               className={styles.link}
             >
               <div className={styles.card}>
-                <ImageFetch imageUrl={product.product_image} />
+                <img
+                  src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${product.product_image}?alt=media`}
+                  alt="product_image`"
+                  className={styles.thumbnailImage}
+                />
                 <div className={styles.details}>
-                  <h1 className={styles.cod}>{product.product_image}</h1>
+                  <h1 className={styles.cod}>{product.product_cod}</h1>
                   <h1 className={styles.price}>{product.product_price}</h1>
                   <h1 className={styles.stock}>In Stock</h1>
                 </div>
