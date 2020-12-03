@@ -1,0 +1,32 @@
+@import "./theme";
+
+.container {
+  display: flex;
+  justify-content: center;
+}
+.containerForm {
+  width: 90%;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+
+  label {
+    margin-left: 10px;
+    font-size: 20px;
+  }
+  input {
+    margin: 10px;
+    width: 90%;
+    padding: 10px;
+  }
+  input[type="file"] {
+    background-color: aqua;
+  }
+  .productSizeContainer {
+    input {
+      margin: 10px;
+      width: 4%;
+      padding: 10px;
+    }
+  }
+}

@@ -1,34 +1,53 @@
-@import './theme';
+@import "./theme";
 
-.container{
-    @include flexCenter(column,none,center);
-    .productImage{
-        width: 90%;
-        height: auto;
+.header {
+  background-color: $primary-color;
+  height: 60px;
+  @include flexCenter(row, center, center);
+
+  .backIcon {
+    width: 20px;
+    height: auto;
+    background-color: white;
+    border-radius: 30px;
+    padding: 6px;
+  }
+  .label {
+    font-weight: 400;
+    font-size: 20px;
+    color: white;
+  }
+}
+.container {
+  @include flexCenter(column, none, center);
+  .productImage {
+    width: 90%;
+    height: auto;
+    margin-top: 20px;
+  }
+  .details {
+    @include flexCenter(column, none, flex-start);
+    width: 100%;
+    .cod {
+      @include text(26px, 600);
+      margin-top: $mt-2;
+      margin-left: $ml-1 + 10px;
     }
-    .details{
-        @include flexCenter(column,none,flex-start);
-        width: 100%;
-        .cod{
-            @include text(26px,500);
-            margin-top: $mt-2;
-            margin-left: $ml-1 + 10px;
-        }
-        .price{
-            @include text(20px,500);
-            margin-top: $mt-1;
-            margin-left: $ml-1 + 10px;
-            color: $green;
-        }
-        .stock{
-            @include text(22px,400);
-            margin-top: $mt-1;
-            margin-left: $ml-1 + 10px;
-        }
-        .size{
-            @include text(22px,400);
-            margin-top: $mt-1;
-            margin-left: $ml-1 + 10px;
-        }
+    .price {
+      @include text(20px, 500);
+      margin-top: $mt-1;
+      margin-left: $ml-1 + 10px;
+      color: $green;
     }
+    .stock {
+      @include text(22px, 400);
+      margin-top: $mt-1;
+      margin-left: $ml-1 + 10px;
+    }
+    .size {
+      @include text(22px, 400);
+      margin-top: $mt-1;
+      margin-left: $ml-1 + 10px;
+    }
+  }
 }
