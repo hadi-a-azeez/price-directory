@@ -1,6 +1,7 @@
 import { useState } from "react";
 import imageCompression from "browser-image-compression";
 import styles from "./productadd.module.scss";
+import Placeholder from '../assets/placeholder.png';
 import firebase from "../firebase";
 import { v4 as uuidv4 } from "uuid";
 
@@ -8,6 +9,7 @@ const ProductAdd = () => {
   const [product_cod, setProductCod] = useState("");
   const [product_price, setProductPrice] = useState(0);
   const [product_image, setProductImage] = useState("");
+  const [isImage, setIsImage] = useState(false);
   const [product_image_converted, setProductImageConverted] = useState("");
   const [sizeXS, setXS] = useState(0);
   const [sizeS, setS] = useState(0);
@@ -43,6 +45,7 @@ const ProductAdd = () => {
     try {
       const compressedFile = await imageCompression(imageFile, options);
       setProductImage(compressedFile);
+      setIsImage(true);
       setProductImageConverted(URL.createObjectURL(compressedFile));
     } catch (error) {
       console.log(error);
@@ -61,17 +64,26 @@ const ProductAdd = () => {
 
   return (
     <>
+      <div className={styles.header}>
+        <h1 className={styles.labelHeader}>Add Product</h1>
+      </div>
       <div className={styles.container}>
-        <div className={styles.containerForm}>
-          <img
+          {isImage ?
+            (<img
             src={product_image_converted}
-            width="200px"
+            className={styles.image}
             alt="image_preview"
-          />
-          <label>Product Image</label>
+          />)
+        :(<img
+          src={Placeholder}
+          className={styles.image}
+          alt="image_preview"
+        />)}
+          <label htmlFor="file-upload" className={styles.customFileUpload}>Upload Image</label>
           <input
             type="file"
             accept="image/*"
+            id="file-upload"
             onChange={(event) => compressImage(event)}
           />
           <label>Product cod</label>
@@ -83,39 +95,58 @@ const ProductAdd = () => {
           />
           <label>Product Sizes</label>
           <div className={styles.productSizeContainer}>
-            <label>XS</label>
-            <input
-              type="number"
-              onChange={(e) => setXS(parseInt(e.target.value))}
-            />
-            <label>S</label>
-            <input
-              type="number"
-              onChange={(e) => setS(parseInt(e.target.value))}
-            />
-            <label>M</label>
-            <input
-              type="number"
-              onChange={(e) => setM(parseInt(e.target.value))}
-            />
-            <label>L</label>
-            <input
-              type="number"
-              onChange={(e) => setL(parseInt(e.target.value))}
-            />
-            <label>XL</label>
-            <input
-              type="number"
-              onChange={(e) => setXL(parseInt(e.target.value))}
-            />
-            <label>XXL</label>
-            <input
-              type="number"
-              onChange={(e) => setXXL(parseInt(e.target.value))}
-            />
+            <div className={styles.sizeItem}>
+              <label>XS</label>
+              <input
+                type="number"
+                className={styles.sizeField}
+                onChange={(e) => setXS(parseInt(e.target.value))}
+              />
+            </div>
+            <div className={styles.sizeItem}>
+              <label>S</label>
+              <input
+                type="number"
+                className={styles.sizeField}
+                onChange={(e) => setS(parseInt(e.target.value))}
+              />
+            </div>
+            <div className={styles.sizeItem}>
+              <label>M</label>
+              <input
+                type="number"
+                className={styles.sizeField}
+                onChange={(e) => setM(parseInt(e.target.value))}
+              />
+            </div>
           </div>
-          <button onClick={addProduct}>Add Product</button>
-        </div>
+          <div className={styles.productSizeContainer}>
+          <div className={styles.sizeItem}>
+              <label>L</label>
+              <input
+                type="number"
+                className={styles.sizeField}
+                onChange={(e) => setL(parseInt(e.target.value))}
+              />
+            </div>
+            <div className={styles.sizeItem}>
+              <label>XL</label>
+              <input
+                type="number"
+                className={styles.sizeField}
+                onChange={(e) => setXL(parseInt(e.target.value))}
+              />
+            </div>
+            <div className={styles.sizeItem}>
+              <label>XXL</label>
+              <input
+                type="number"
+                className={styles.sizeField}
+                onChange={(e) => setXXL(parseInt(e.target.value))}
+              />
+            </div>
+          </div>
+          <button onClick={addProduct} className={styles.btnPrimary}>Add Product</button>
       </div>
     </>
   );

@@ -1,32 +1,80 @@
 @import "./theme";
 
-.container {
-  display: flex;
-  justify-content: center;
+.header {
+  height: 60px;
+  background-color: $primary-color;
+  @include flexCenter(column, center, center);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  .labelHeader {
+    @include text(18px, 500);
+    color: white;
+  }
 }
-.containerForm {
-  width: 90%;
-  margin-top: 40px;
-  display: flex;
-  flex-direction: column;
-
+.container {
+  @include flexCenter(column, none, center);
+  margin-top: 60px;
+  .image {
+    width: 90%;
+    height: auto;
+    margin-top: 10px;
+  }
   label {
     margin-left: 10px;
     font-size: 20px;
+    text-align: start;
+    align-content: flex-start;
+    width: 90%;
+    margin-top: 10px;
+    font-size: 18px;
   }
   input {
-    margin: 10px;
-    width: 90%;
-    padding: 10px;
+    margin-top: 10px;
+    width: 80%;
+    padding: 13px;
   }
   input[type="file"] {
-    background-color: aqua;
+    display: none;
+  }
+  .customFileUpload {
+    background-color: $primary-color;
+    color: white;
+    font-weight: 500;
+    width: 83%;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btnPrimary {
+    background-color: $primary-color;
+    padding: 18px;
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+    border: none;
+    width: 90%;
+    margin-top: 15px;
+    margin-bottom: 20px;
   }
   .productSizeContainer {
-    input {
-      margin: 10px;
-      width: 4%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    margin-left: 7%;
+    .sizeItem {
+      width: 30%;
+    }
+    .sizeField {
+      width: 10%;
       padding: 10px;
+      margin-left: 10px;
+    }
+    label {
+      width: 20px !important;
+      font-size: 18px;
     }
   }
 }
