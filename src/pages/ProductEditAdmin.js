@@ -1,37 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import imageCompression from "browser-image-compression";
 import styles from "./productadd.module.scss";
 import Placeholder from "../assets/placeholder.png";
 import firebase from "../firebase";
 import { v4 as uuidv4 } from "uuid";
 
-const ProductAdd = () => {
-  const [product_cod, setProductCod] = useState("");
-  const [product_price, setProductPrice] = useState(0);
+const ProductAdd = (props) => {
+  const ref = firebase.firestore().collection("products");
+  const id = props.match.params.id;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const snapshot = await ref.doc(id).get();
+      const data = await snapshot.data();
+      setProduct(data);
+    };
+    fetchData();
+  }, []);
+
+  const [product, setProduct] = useState({});
   const [product_image, setProductImage] = useState("");
   const [isImage, setIsImage] = useState(false);
   const [product_image_converted, setProductImageConverted] = useState("");
-  const [sizeXS, setXS] = useState(0);
-  const [sizeS, setS] = useState(0);
-  const [sizeM, setM] = useState(0);
-  const [sizeL, setL] = useState(0);
-  const [sizeXL, setXL] = useState(0);
-  const [sizeXXL, setXXL] = useState(0);
 
   const addProduct = async () => {
-    let imageName = await imageToServer(product_image);
+    if (isImage) {
+      let imageName = await imageToServer(product_image);
+      setProduct({ ...product, product_image: imageName });
+    }
     const db = firebase.firestore();
-    db.collection("products").add({
-      product_image: imageName,
-      product_cod,
-      product_price,
-      sizeXS,
-      sizeS,
-      sizeM,
-      sizeL,
-      sizeXL,
-      sizeXXL,
-    });
+    db.collection("products").doc(id).set(product);
+  };
+
+  const deleteProduct = () => {
+    const db = firebase.firestore();
+    db.collection("products").doc(id).delete();
   };
 
   const compressImage = async (event) => {
@@ -75,7 +78,11 @@ const ProductAdd = () => {
             alt="image_preview"
           />
         ) : (
-          <img src={Placeholder} className={styles.image} alt="image_preview" />
+          <img
+            src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${product.product_image}?alt=media`}
+            className={styles.image}
+            alt="image_preview"
+          />
         )}
         <label htmlFor="file-upload" className={styles.customFileUpload}>
           Upload Image
@@ -87,11 +94,20 @@ const ProductAdd = () => {
           onChange={(event) => compressImage(event)}
         />
         <label>Product cod</label>
-        <input type="text" onChange={(e) => setProductCod(e.target.value)} />
+        <input
+          type="text"
+          value={product.product_cod || ""}
+          onChange={(e) =>
+            setProduct({ ...product, product_cod: e.target.value })
+          }
+        />
         <label>Product Price</label>
         <input
           type="number"
-          onChange={(e) => setProductPrice(parseInt(e.target.value))}
+          value={product.product_price || ""}
+          onChange={(e) =>
+            setProduct({ ...product, product_price: e.target.value })
+          }
         />
         <label>Product Sizes</label>
         <div className={styles.productSizeContainer}>
@@ -99,24 +115,39 @@ const ProductAdd = () => {
             <label>XS</label>
             <input
               type="number"
+              value={product.sizeXS || ""}
               className={styles.sizeField}
-              onChange={(e) => setXS(parseInt(e.target.value))}
+              onChange={(e) =>
+                setProduct({ ...product, sizeXS: e.target.value })
+              }
             />
           </div>
           <div className={styles.sizeItem}>
             <label>S</label>
             <input
               type="number"
+              value={product.sizeS || ""}
               className={styles.sizeField}
-              onChange={(e) => setS(parseInt(e.target.value))}
+              onChange={(e) =>
+                setProduct({
+                  ...product,
+                  sizeS: e.target.value,
+                })
+              }
             />
           </div>
           <div className={styles.sizeItem}>
             <label>M</label>
             <input
               type="number"
+              value={product.sizeM || ""}
               className={styles.sizeField}
-              onChange={(e) => setM(parseInt(e.target.value))}
+              onChange={(e) =>
+                setProduct({
+                  ...product,
+                  sizeM: e.target.value,
+                })
+              }
             />
           </div>
         </div>
@@ -125,29 +156,50 @@ const ProductAdd = () => {
             <label>L</label>
             <input
               type="number"
+              value={product.sizeL || ""}
               className={styles.sizeField}
-              onChange={(e) => setL(parseInt(e.target.value))}
+              onChange={(e) =>
+                setProduct({
+                  ...product,
+                  sizeL: e.target.value,
+                })
+              }
             />
           </div>
           <div className={styles.sizeItem}>
             <label>XL</label>
             <input
               type="number"
+              value={product.sizeXL || ""}
               className={styles.sizeField}
-              onChange={(e) => setXL(parseInt(e.target.value))}
+              onChange={(e) =>
+                setProduct({
+                  ...product,
+                  sizeXL: e.target.value,
+                })
+              }
             />
           </div>
           <div className={styles.sizeItem}>
             <label>XXL</label>
             <input
               type="number"
+              value={product.sizeXXL || ""}
               className={styles.sizeField}
-              onChange={(e) => setXXL(parseInt(e.target.value))}
+              onChange={(e) =>
+                setProduct({
+                  ...product,
+                  sizeXXL: e.target.value,
+                })
+              }
             />
           </div>
         </div>
         <button onClick={addProduct} className={styles.btnPrimary}>
-          Add Product
+          Update Product
+        </button>
+        <button onClick={deleteProduct} className={styles.btnPrimary}>
+          Delete Product
         </button>
       </div>
     </>
