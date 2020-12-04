@@ -4,6 +4,9 @@ import styles from "./productadd.module.scss";
 import Placeholder from '../assets/placeholder.png';
 import firebase from "../firebase";
 import { v4 as uuidv4 } from "uuid";
+import Loader from "react-loader-spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import { useHistory } from "react-router-dom";
 
 const ProductAdd = () => {
   const [product_cod, setProductCod] = useState("");
@@ -18,8 +21,11 @@ const ProductAdd = () => {
   const [sizeXL, setXL] = useState(0);
   const [sizeXXL, setXXL] = useState(0);
   const [isValidationError,setIsValidationError] = useState(false);
+  const [isLoading,setIsLoading] = useState(false);
+  const history = useHistory();
 
   const addProduct = async () => {
+    setIsLoading(true);
     const isValidate = validateFields();
     if(isValidate === true){
       let imageName = await imageToServer(product_image);
@@ -35,7 +41,10 @@ const ProductAdd = () => {
         sizeXL,
         sizeXXL,
       });
+      setIsLoading(false);
+      history.push('/admin/products_admin');
     }
+    else setIsLoading(false);
   };
 
   const validateFields = () =>{
@@ -158,8 +167,22 @@ const ProductAdd = () => {
               />
             </div>
           </div>
-          <h1 className={styles.validationError}>*Product cod and product price field must be filled</h1>
-          <button onClick={addProduct} className={styles.btnPrimary}>Add Product</button>
+          {isValidationError &&
+            <h1 className={styles.validationError}>*Product cod and product price field must be filled</h1>}
+          <button onClick={addProduct} className={styles.btnPrimary}>
+            {isLoading ? (
+              <div className={styles.loader}>
+                <Loader
+                  type="Oval"
+                  color="white"
+                  height={18}
+                  width={18}
+                  visible={isLoading}
+                />
+              </div>
+            ) : 
+            <div>Add Product</div>}
+        </button>
       </div>
     </>
   );

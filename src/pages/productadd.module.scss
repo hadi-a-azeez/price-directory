@@ -1,15 +1,38 @@
 @import "./theme";
 
+.loaderwraper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .header {
-  height: 60px;
   background-color: $primary-color;
-  @include flexCenter(column, center, center);
+  height: 60px;
   position: fixed;
   top: 0;
   width: 100%;
-  .labelHeader {
-    @include text(18px, 500);
+  @include flexCenter(row, center, center);
+  .backButton {
+    background-color: $primary-color;
+    border-radius: 30px;
+    padding: 8px;
+    border: none;
+    float: left;
+    position: absolute;
+    left: 20px;
+    .backIcon {
+      width: 20px;
+      height: auto;
+      filter: invert(100%) sepia(0%) saturate(7440%) hue-rotate(297deg)
+        brightness(111%) contrast(114%);
+    }
+  }
+  .label {
+    font-weight: 400;
+    font-size: 20px;
     color: white;
+    text-align: center;
   }
 }
 .container {
@@ -34,6 +57,8 @@
     margin-top: 10px;
     width: 80%;
     padding: 13px;
+    font-size: 18px;
+    font-weight: 500;
   }
   input[type="file"] {
     display: none;
@@ -57,7 +82,25 @@
     border: none;
     width: 90%;
     margin-top: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+  .btnDanger {
+    background-color: $danger-color;
+    padding: 18px;
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+    border: none;
+    width: 90%;
+    margin-top: 10px;
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
   }
   .productSizeContainer {
     display: flex;

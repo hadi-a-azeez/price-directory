@@ -51,7 +51,7 @@ const Products = () => {
         {!isSearchResultLoading &&
           filteredProducts.map((product, index) => (
             <Link
-              to={`/product_detailed/${product.id}`}
+              to={`/admin/product_edit_admin/${product.id}`}
               key={index}
               className={styles.link}
             >
@@ -99,7 +99,7 @@ const Products = () => {
         {isProductsDisplayed ? (
           products.map((product, index) => (
             <Link
-              to={`/product_detailed/${product.id}`}
+              to={`/admin/product_edit_admin/${product.id}`}
               key={index}
               className={styles.link}
             >
@@ -121,7 +121,7 @@ const Products = () => {
           <SearchResult />
         )}
       </div>
-      <div style={{marginBottom : `20px`}} />
+      <div style={{marginTop : 20}} />
     </>
   );
 };
