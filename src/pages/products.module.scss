@@ -13,13 +13,22 @@
     font-size: 17px;
   }
 }
+.loaderwraper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .container {
   @include flexCenter(column, none, center);
   height: 100vh;
   margin-top: 150px;
   .link {
     text-decoration: none;
-    width: 90%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    color: black;
   }
   .card {
     @include flexCenter(row, none, center);

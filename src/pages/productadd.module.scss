@@ -15,9 +15,10 @@
 .container {
   @include flexCenter(column, none, center);
   margin-top: 60px;
+  width: 100%;
   .image {
     width: 90%;
-    height: auto;
+    height: 350px;
     margin-top: 10px;
   }
   label {
@@ -62,8 +63,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
-    width: 100%;
-    margin-left: 7%;
+    width: 90%;
     .sizeItem {
       width: 30%;
     }
@@ -76,5 +76,12 @@
       width: 20px !important;
       font-size: 18px;
     }
+  }
+  .validationError {
+    font-size: 16px;
+    font-weight: 400;
+    color: red;
+    width: 88%;
+    margin-top: $mt-2;
   }
 }

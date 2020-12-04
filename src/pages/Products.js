@@ -2,16 +2,20 @@ import { useEffect, useState } from "react";
 import styles from "./products.module.scss";
 import firebase from "../firebase";
 import { Link } from "react-router-dom";
+import Loader from "react-loader-spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
-  const [isProductsLoading, setIsProductsLoading] = useState(false);
+  const [isProductsDisplayed, setIsProductsDisplayed] = useState(false);
   const [isSearchResultLoading, setIsSearchResultLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsProductsLoading(true);
+      setIsProductsDisplayed(false);
+      setIsLoading(true);
       const db = firebase.firestore();
       const data = await db.collection("products").get();
       setProducts(
@@ -19,13 +23,14 @@ const Products = () => {
           return { ...product.data(), id: product.id };
         })
       );
-      setIsProductsLoading(false);
+      setIsProductsDisplayed(true);
+      setIsLoading(false);
     };
     fetchData();
   }, []);
 
   const doSearch = (e) => {
-    setIsProductsLoading(true);
+    setIsProductsDisplayed(false);
     setIsSearchResultLoading(true);
 
     const searchTerm = e.target.value.toLowerCase();
@@ -36,7 +41,7 @@ const Products = () => {
     );
     setIsSearchResultLoading(false);
     if (searchTerm === "") {
-      setIsProductsLoading(false);
+      setIsProductsDisplayed(true);
     }
   };
 
@@ -77,8 +82,21 @@ const Products = () => {
           onChange={(e) => doSearch(e)}
         ></input>
       </div>
+      {isLoading ? (
+          <div className={styles.loaderwraper}>
+            <Loader
+              type="Oval"
+              color="#0278ae"
+              height={50}
+              width={50}
+              visible={isLoading}
+            />
+          </div>
+        ) : (
+          <div></div>
+        )}
       <div className={styles.container}>
-        {!isProductsLoading ? (
+        {isProductsDisplayed ? (
           products.map((product, index) => (
             <Link
               to={`/product_detailed/${product.id}`}
@@ -97,12 +115,13 @@ const Products = () => {
                   <h1 className={styles.stock}>In Stock</h1>
                 </div>
               </div>
-            </Link>
+            </Link>  
           ))
         ) : (
           <SearchResult />
         )}
       </div>
+      <div style={{marginTop : 20}} />
     </>
   );
 };

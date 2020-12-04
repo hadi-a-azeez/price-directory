@@ -17,22 +17,34 @@ const ProductAdd = () => {
   const [sizeL, setL] = useState(0);
   const [sizeXL, setXL] = useState(0);
   const [sizeXXL, setXXL] = useState(0);
+  const [isValidationError,setIsValidationError] = useState(false);
 
   const addProduct = async () => {
-    let imageName = await imageToServer(product_image);
-    const db = firebase.firestore();
-    db.collection("products").add({
-      product_image: imageName,
-      product_cod,
-      product_price,
-      sizeXS,
-      sizeS,
-      sizeM,
-      sizeL,
-      sizeXL,
-      sizeXXL,
-    });
+    const isValidate = validateFields();
+    if(isValidate === true){
+      let imageName = await imageToServer(product_image);
+      const db = firebase.firestore();
+      db.collection("products").add({
+        product_image: imageName,
+        product_cod,
+        product_price,
+        sizeXS,
+        sizeS,
+        sizeM,
+        sizeL,
+        sizeXL,
+        sizeXXL,
+      });
+    }
   };
+
+  const validateFields = () =>{
+    if(product_cod === "" || product_price === 0){
+      setIsValidationError(true);
+      return false;
+    }
+    else return true;
+  }
 
   const compressImage = async (event) => {
     //compresses image to below 1MB
@@ -146,6 +158,7 @@ const ProductAdd = () => {
               />
             </div>
           </div>
+          <h1 className={styles.validationError}>*Product cod and product price field must be filled</h1>
           <button onClick={addProduct} className={styles.btnPrimary}>Add Product</button>
       </div>
     </>

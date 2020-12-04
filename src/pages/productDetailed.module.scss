@@ -1,53 +1,119 @@
 @import "./theme";
 
+$base-spacing-unit: 24px;
+$half-spacing-unit: $base-spacing-unit / 2;
+
+$color-alpha: #1772ff;
+$color-form-highlight: #eeeeee;
+
 .header {
   background-color: $primary-color;
   height: 60px;
+  position: fixed;
+  top: 0;
+  width: 100%;
   @include flexCenter(row, center, center);
-
-  .backIcon {
-    width: 20px;
-    height: auto;
-    background-color: white;
+  .backButton {
+    background-color: $primary-color;
     border-radius: 30px;
-    padding: 6px;
+    padding: 8px;
+    border: none;
+    float: left;
+    position: absolute;
+    left: 20px;
+    .backIcon {
+      width: 20px;
+      height: auto;
+      filter: invert(100%) sepia(0%) saturate(7440%) hue-rotate(297deg)
+        brightness(111%) contrast(114%);
+    }
   }
   .label {
     font-weight: 400;
     font-size: 20px;
     color: white;
+    text-align: center;
   }
+}
+.loaderwraper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .container {
   @include flexCenter(column, none, center);
   .productImage {
     width: 90%;
-    height: auto;
-    margin-top: 20px;
+    height: 400px;
+    margin-top: 70px;
   }
   .details {
     @include flexCenter(column, none, flex-start);
-    width: 100%;
+    width: 90%;
     .cod {
-      @include text(26px, 600);
-      margin-top: $mt-2;
-      margin-left: $ml-1 + 10px;
+      @include text(30px, 500);
+      margin-top: $mt-3;
     }
     .price {
-      @include text(20px, 500);
+      @include text(24px, 500);
       margin-top: $mt-1;
-      margin-left: $ml-1 + 10px;
       color: $green;
+      margin-bottom: $mb-2;
     }
     .stock {
       @include text(22px, 400);
       margin-top: $mt-1;
-      margin-left: $ml-1 + 10px;
+    }
+    div {
+      width: 100%;
+      .table {
+        width: 100%;
+        border: 1px solid $color-form-highlight;
+      }
+      .tableHeader {
+        display: flex;
+        width: 100%;
+        background: $primary-color;
+        padding: ($half-spacing-unit * 1.5) 0;
+      }
+      .tableRow {
+        display: flex;
+        width: 100%;
+        padding: ($half-spacing-unit * 1.5) 0;
+        background: $color-form-highlight;
+      }
+      .tableData {
+        flex: 1 1 20%;
+        text-align: center;
+      }
+      .tableText {
+        font-size: 18px;
+        text-align: center;
+      }
+      .headerItem {
+        flex: 1 1 20%;
+        text-align: center;
+      }
+      .tableContent {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+      }
+      .headerText {
+        color: white;
+        font-size: 18px;
+        font-weight: 500;
+        position: relative;
+        display: inline-block;
+        padding-left: $base-spacing-unit;
+        padding-right: $base-spacing-unit;
+      }
     }
     .size {
       @include text(22px, 400);
       margin-top: $mt-1;
-      margin-left: $ml-1 + 10px;
     }
   }
 }
