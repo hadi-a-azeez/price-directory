@@ -134,7 +134,7 @@ const ProductAdd = (props) => {
             <label>Product cod</label>
             <input
               type="text"
-              value={product.product_cod || ""}
+              value={product.product_cod}
               onChange={(e) =>
                 setProduct({ ...product, product_cod: e.target.value })
               }
@@ -142,7 +142,7 @@ const ProductAdd = (props) => {
             <label>Product Price</label>
             <input
               type="number"
-              value={product.product_price || ""}
+              value={product.product_price}
               onChange={(e) =>
                 setProduct({ ...product, product_price: e.target.value })
               }
@@ -153,7 +153,7 @@ const ProductAdd = (props) => {
                 <label>XS</label>
                 <input
                   type="number"
-                  value={product.sizeXS || ""}
+                  value={product.sizeXS}
                   className={styles.sizeField}
                   onChange={(e) =>
                     setProduct({ ...product, sizeXS: e.target.value })
@@ -164,7 +164,7 @@ const ProductAdd = (props) => {
                 <label>S</label>
                 <input
                   type="number"
-                  value={product.sizeS || ""}
+                  value={product.sizeS}
                   className={styles.sizeField}
                   onChange={(e) =>
                     setProduct({
@@ -178,7 +178,7 @@ const ProductAdd = (props) => {
                 <label>M</label>
                 <input
                   type="number"
-                  value={product.sizeM || ""}
+                  value={product.sizeM}
                   className={styles.sizeField}
                   onChange={(e) =>
                     setProduct({
@@ -194,7 +194,7 @@ const ProductAdd = (props) => {
                 <label>L</label>
                 <input
                   type="number"
-                  value={product.sizeL || ""}
+                  value={product.sizeL}
                   className={styles.sizeField}
                   onChange={(e) =>
                     setProduct({
@@ -208,7 +208,7 @@ const ProductAdd = (props) => {
                 <label>XL</label>
                 <input
                   type="number"
-                  value={product.sizeXL || ""}
+                  value={product.sizeXL}
                   className={styles.sizeField}
                   onChange={(e) =>
                     setProduct({
@@ -222,7 +222,7 @@ const ProductAdd = (props) => {
                 <label>XXL</label>
                 <input
                   type="number"
-                  value={product.sizeXXL || ""}
+                  value={product.sizeXXL}
                   className={styles.sizeField}
                   onChange={(e) =>
                     setProduct({
