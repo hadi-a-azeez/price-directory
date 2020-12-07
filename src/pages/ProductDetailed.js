@@ -9,6 +9,8 @@ import { useHistory } from "react-router-dom";
 const ProductDetailed = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [product, setProduct] = useState([]);
+  const [pantVisible,setPantVisible] = useState('none');
+  const [topVisible,setTopVisible] = useState('none');
   const history = useHistory();
   const ref = firebase.firestore().collection("products");
   const id = props.match.params.id;
@@ -29,6 +31,24 @@ const ProductDetailed = (props) => {
 
   const handleBackClick = () =>{
     history.goBack();
+  }
+
+  const handlePantToggle = () =>{
+    if(pantVisible === "none"){
+      setPantVisible("block");
+    }
+    else{
+      setPantVisible("none");
+    }
+  }
+
+  const handleTopToggle = () =>{
+    if(topVisible === "none"){
+      setTopVisible("block");
+    }
+    else{
+      setTopVisible("none");
+    }
   }
 
   return (
@@ -62,7 +82,9 @@ const ProductDetailed = (props) => {
             />
             <div className={styles.details}>
               <h1 className={styles.cod}>{product.product_cod}</h1>
+              <div className={styles.badgePrimary}>{product.type}</div>
               <h1 className={styles.price}>{`₹${product.product_price}`}</h1>
+              <h1 className={styles.fabric}>{product.fabric}</h1>
               <div>
                 <div className={styles.table}>
                   <div className={styles.tableHeader}>
@@ -85,7 +107,7 @@ const ProductDetailed = (props) => {
                     </div>
                     <div className={styles.tableRow}>		
                       <div className={styles.tabelData}><h1 className={styles.tableText} >L</h1></div>
-                      <div className={styles.tabelData}><h1 className={styles.tableText} >5</h1></div>
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >{product.sizeL}</h1></div>
                     </div>
                     <div className={styles.tableRow}>		
                       <div className={styles.tabelData}><h1 className={styles.tableText} >XL</h1></div>
@@ -95,6 +117,81 @@ const ProductDetailed = (props) => {
                     <div className={styles.tableRow}>		
                       <div className={styles.tabelData}><h1 className={styles.tableText} >XXL</h1></div>
                       <div className={styles.tabelData}><h1 className={styles.tableText} >{product.sizeXXL}</h1></div>
+                    </div>
+                  </div>	
+                </div>  
+              </div>
+              <h1 className={styles.fabric}>Size Chart </h1>
+              <button className={styles.pantOrTop} onClick={handlePantToggle}>Pant</button>
+              <div style={{display: `${pantVisible}`}}>
+                <div className={styles.table}>
+                  <div className={styles.tableHeader}>
+                    <div className={styles.headerItem}><h1  className={styles.headerText}>Size</h1></div>
+                    <div className={styles.headerItem}><h1 className={styles.headerText} >Length</h1></div>
+                  </div>
+                  <div className={styles.tableContent}>	
+                    <div className={styles.tableRow}>		
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >XS</h1></div>
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >26</h1></div>
+                    </div>
+                    </div>
+                    <div className={styles.tableRow}>		
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >S</h1></div>
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >28</h1></div>
+                    </div>
+                    <div className={styles.tableRow}>		
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >M</h1></div>
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >30</h1></div>
+                    </div>
+                    <div className={styles.tableRow}>		
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >L</h1></div>
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >32</h1></div>
+                    </div>
+                    <div className={styles.tableRow}>		
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >XL</h1></div>
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >34</h1></div>
+                    </div>
+                    <div className={styles.tableContent}>	
+                    <div className={styles.tableRow}>		
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >XXL</h1></div>
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >36</h1></div>
+                    </div>
+                  </div>	
+                </div>  
+              </div>
+              <button className={styles.pantOrTop} onClick={handleTopToggle}>Top</button>
+              <div style={{display: `${topVisible}`}}>
+                <div className={styles.table}>
+                  <div className={styles.tableHeader}>
+                    <div className={styles.headerItem}><h1  className={styles.headerText}>Size</h1></div>
+                    <div className={styles.headerItem}><h1 className={styles.headerText} >Length</h1></div>
+                  </div>
+                  <div className={styles.tableContent}>	
+                    <div className={styles.tableRow}>		
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >XS</h1></div>
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >36</h1></div>
+                    </div>
+                    </div>
+                    <div className={styles.tableRow}>		
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >S</h1></div>
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >38</h1></div>
+                    </div>
+                    <div className={styles.tableRow}>		
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >M</h1></div>
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >40</h1></div>
+                    </div>
+                    <div className={styles.tableRow}>		
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >L</h1></div>
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >42</h1></div>
+                    </div>
+                    <div className={styles.tableRow}>		
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >XL</h1></div>
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >44</h1></div>
+                    </div>
+                    <div className={styles.tableContent}>	
+                    <div className={styles.tableRow}>		
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >XXL</h1></div>
+                      <div className={styles.tabelData}><h1 className={styles.tableText} >46</h1></div>
                     </div>
                   </div>	
                 </div>  

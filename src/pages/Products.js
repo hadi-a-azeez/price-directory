@@ -4,6 +4,7 @@ import firebase from "../firebase";
 import { Link } from "react-router-dom";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import { useHistory } from "react-router-dom";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -11,6 +12,7 @@ const Products = () => {
   const [isSearchResultLoading, setIsSearchResultLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const history = useHistory();
 
   useEffect(() => {
     setIsProductsDisplayed(false);
@@ -75,6 +77,7 @@ const Products = () => {
   return (
     <>
       <div className={styles.header}>
+      <button className={styles.btnHome} onClick={()=> history.push('/')}>Home</button>
         <input
           type="text"
           placeholder="Search cod here"

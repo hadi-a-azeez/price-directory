@@ -183,7 +183,7 @@ const ProductAdd = (props) => {
                   onChange={(e) =>
                     setProduct({
                       ...product,
-                      sizeM: e.target.value,
+                      sizeM: e.target.value,  
                     })
                   }
                 />

@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { useHistory } from "react-router-dom";
+import backIcon from "../assets/backIcon.png";
 
 const ProductAdd = () => {
   const [product_cod, setProductCod] = useState("");
@@ -20,6 +21,8 @@ const ProductAdd = () => {
   const [sizeL, setL] = useState(0);
   const [sizeXL, setXL] = useState(0);
   const [sizeXXL, setXXL] = useState(0);
+  const [fabric, setFabric] = useState("");
+  const [type, setType] = useState("Top");
   const [isValidationError,setIsValidationError] = useState(false);
   const [isLoading,setIsLoading] = useState(false);
   const history = useHistory();
@@ -31,6 +34,8 @@ const ProductAdd = () => {
       let imageName = await imageToServer(product_image);
       const db = firebase.firestore();
       db.collection("products").add({
+        fabric,
+        type,
         product_image: imageName,
         product_cod,
         product_price,
@@ -83,10 +88,26 @@ const ProductAdd = () => {
     return imageName;
   };
 
+  const handleBackClick = () => {
+    history.goBack();
+  };
+
+  const handleFabricClick = (val) => {
+    setFabric(val);
+    console.log(val);
+  };
+  const handleTypeClick = (val) => {
+    setType(val);
+    console.log(val);
+  };
+
   return (
     <>
-      <div className={styles.header}>
-        <h1 className={styles.labelHeader}>Add Product</h1>
+     <div className={styles.header}>
+        <button className={styles.backButton} onClick={handleBackClick}>
+          <img src={backIcon} className={styles.backIcon} alt="back_icon" />
+        </button>
+        <h1 className={styles.label}>Add Product</h1>
       </div>
       <div className={styles.container}>
           {isImage ?
@@ -109,11 +130,38 @@ const ProductAdd = () => {
           />
           <label>Product cod</label>
           <input type="text" onChange={(e) => setProductCod(e.target.value)} />
+          <select
+            name="type"
+            id="type"
+            className={styles.dropdown}
+            onChange={(e) => handleTypeClick(e.target.value)}
+          >
+            <option value="Top" key="1">
+              Top
+            </option>
+            <option value="Pant" key="2">
+              Pant
+            </option>
+          </select>
           <label>Product Price</label>
           <input
             type="number"
             onChange={(e) => setProductPrice(parseInt(e.target.value))}
           />
+          <select
+            name="fabric"
+            id="fabrics"
+            className={styles.dropdown}
+            defaultValue={"DEFAULT"}
+            onChange={(e) => handleFabricClick(e.target.value)}
+          >
+            <option value="DEFAULT" disabled>
+              Select a fabric
+            </option>
+            <option value="cotton" key="1">
+              Cotton
+            </option>
+          </select>
           <label>Product Sizes</label>
           <div className={styles.productSizeContainer}>
             <div className={styles.sizeItem}>

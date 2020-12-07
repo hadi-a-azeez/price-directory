@@ -102,6 +102,12 @@
     justify-content: center;
     align-items: center;
   }
+  .dropdown {
+    width: 88%;
+    padding: 13px;
+    font-size: 18px;
+    margin-top: $mt-3;
+  }
   .productSizeContainer {
     display: flex;
     align-items: flex-start;
@@ -126,5 +132,38 @@
     color: red;
     width: 88%;
     margin-top: $mt-2;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .container {
+    .image {
+      width: 50%;
+      height: 550px;
+    }
+    .customFileUpload {
+      width: 50%;
+    }
+    .btnPrimary {
+      width: 50%;
+    }
+    .btnDanger {
+      width: 50%;
+    }
+    input {
+      width: 50%;
+    }
+    label {
+      width: 54%;
+    }
+    .dropdown {
+      width: 52%;
+    }
+    .productSizeContainer {
+      width: 55%;
+      .sizeField {
+        margin-left: 3px;
+      }
+    }
   }
 }

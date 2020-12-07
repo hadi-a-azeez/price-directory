@@ -7,6 +7,15 @@
   background-color: $primary-color;
   height: 150px;
   width: 100%;
+  .btnHome {
+    background-color: yellow;
+    padding: 10px 13px;
+    font-size: 16px;
+    border: none;
+    align-self: flex-end;
+    margin-right: 6%;
+    margin-bottom: 5px;
+  }
   .search {
     width: 80%;
     padding: 14px;
@@ -23,6 +32,22 @@
   @include flexCenter(column, none, center);
   height: 100vh;
   margin-top: 150px;
+  .btnFloat {
+    /* padding: 18px 18px; */
+    width: 70px;
+    height: 70px;
+    border-radius: 100%;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    background-color: $primary-color;
+    margin-right: 20px;
+    margin-bottom: 30px;
+    border: none;
+    color: white;
+    font-size: 42px;
+    font-weight: 400;
+  }
   .link {
     text-decoration: none;
     width: 100%;
@@ -61,6 +86,14 @@
         margin-left: $ml-1 + 10px;
         color: $green;
       }
+    }
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .container {
+    .card {
+      width: 80%;
     }
   }
 }

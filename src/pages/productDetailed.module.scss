@@ -59,11 +59,27 @@ $color-form-highlight: #eeeeee;
       @include text(24px, 500);
       margin-top: $mt-1;
       color: $green;
+    }
+    .fabric {
+      @include text(24px, 500);
+      margin-top: $mt-1;
+      color: black;
       margin-bottom: $mb-2;
     }
     .stock {
       @include text(22px, 400);
       margin-top: $mt-1;
+    }
+    .badgePrimary {
+      background-color: #f56a79;
+      width: auto;
+      height: auto;
+      padding: 8px 20px;
+      color: white;
+      font-weight: 600;
+      font-size: 15px;
+      border-radius: 6px;
+      display: inline;
     }
     div {
       width: 100%;
@@ -114,6 +130,27 @@ $color-form-highlight: #eeeeee;
     .size {
       @include text(22px, 400);
       margin-top: $mt-1;
+    }
+    .pantOrTop {
+      width: 100%;
+      font-size: 24px;
+      background-color: gray;
+      border: none;
+      color: white;
+      padding: 10px;
+      margin-top: 10px;
+      text-align: left;
+      cursor: pointer;
+    }
+  }
+}
+@media only screen and (min-width: 768px) {
+  .container {
+    @include flexCenter(column, none, center);
+    .productImage {
+      width: 40%;
+      height: 400px;
+      margin-top: 70px;
     }
   }
 }
