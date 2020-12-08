@@ -21,6 +21,7 @@ const ProductAdd = (props) => {
   const history = useHistory();
 
   useEffect(() => {
+    console.log(product_image);
     setIsLoading(true);
     const fetchData = async () => {
       const snapshot = await ref.doc(id).get();
@@ -38,9 +39,15 @@ const ProductAdd = (props) => {
       imageName = await imageToServer(product_image);
     }
     const db = firebase.firestore();
-    db.collection("products")
-      .doc(id)
-      .set({ ...product, product_image: imageName });
+    if (isImage) {
+      db.collection("products")
+        .doc(id)
+        .set({ ...product, product_image: imageName });
+    } else {
+      db.collection("products")
+        .doc(id)
+        .set({ ...product });
+    }
     setIsUpdateLoading(false);
     history.push("/admin/products_admin");
   };
@@ -183,7 +190,7 @@ const ProductAdd = (props) => {
                   onChange={(e) =>
                     setProduct({
                       ...product,
-                      sizeM: e.target.value,  
+                      sizeM: e.target.value,
                     })
                   }
                 />
