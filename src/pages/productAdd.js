@@ -26,6 +26,8 @@ const ProductAdd = () => {
   const [isValidationError,setIsValidationError] = useState(false);
   const [isLoading,setIsLoading] = useState(false);
   const history = useHistory();
+  const fabricsArray = ['cotton','Muslin','Rayon','Denim','Gorjet','Linen','Cotton mix','Linen cotton','Schifon'];
+  const typeArray = ['Top','Pant','Set'];
 
   const addProduct = async () => {
     setIsLoading(true);
@@ -136,12 +138,11 @@ const ProductAdd = () => {
             className={styles.dropdown}
             onChange={(e) => handleTypeClick(e.target.value)}
           >
-            <option value="Top" key="1">
-              Top
-            </option>
-            <option value="Pant" key="2">
-              Pant
-            </option>
+            {typeArray.map((type,index)=>(
+              <option value={type} key={index}>
+                {type}
+              </option>
+            ))}
           </select>
           <label>Product Price</label>
           <input
@@ -158,9 +159,11 @@ const ProductAdd = () => {
             <option value="DEFAULT" disabled>
               Select a fabric
             </option>
-            <option value="cotton" key="1">
-              Cotton
-            </option>
+            {fabricsArray.map((fabric,index)=>(
+              <option value={fabric} key={index}>
+                {fabric}
+              </option>
+            ))}
           </select>
           <label>Product Sizes</label>
           <div className={styles.productSizeContainer}>
