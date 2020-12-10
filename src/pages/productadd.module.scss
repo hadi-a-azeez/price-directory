@@ -43,6 +43,8 @@
     width: 90%;
     height: 350px;
     margin-top: 10px;
+    object-fit: contain;
+    object-position: center;
   }
   label {
     margin-left: 10px;

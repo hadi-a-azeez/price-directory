@@ -47,6 +47,8 @@ $color-form-highlight: #eeeeee;
     width: 90%;
     height: 400px;
     margin-top: 70px;
+    object-fit: contain;
+    object-position: center;
   }
   .details {
     @include flexCenter(column, none, flex-start);

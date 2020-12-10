@@ -47,6 +47,15 @@ const Products = () => {
     }
   };
 
+  const StockStatus = (data) =>{
+    const {sizeXS,sizeS,sizeM,sizeL,sizeXL,sizeXXL} = data.data;
+    const totalStock = sizeXS+sizeS+sizeM+sizeL+sizeXL+sizeXXL;
+    if(totalStock>0){
+      return (<h1 className={styles.InStock}>In Stock</h1>)
+    }
+    else return (<h1 className={styles.OutOfStock}>Out Of Stock </h1>)
+  }
+
   const handleFloatingButtonClick = ()=>{
     history.push('/admin/product_add');
   }
@@ -64,13 +73,13 @@ const Products = () => {
               <div className={styles.card} key={index}>
                 <img
                   src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${product.product_image}?alt=media`}
-                  alt="product_image`"
+                  alt="productImage"
                   className={styles.thumbnailImage}
                 />
                 <div className={styles.details}>
                   <h1 className={styles.cod}>{product.product_cod}</h1>
-                  <h1 className={styles.price}>{product.product_price}</h1>
-                  <h1 className={styles.stock}>In Stock</h1>
+                  <h1 className={styles.price}>{`₹${product.product_price}`}</h1>
+                  <StockStatus data={product} />
                 </div>
               </div>{" "}
             </Link>
@@ -119,8 +128,8 @@ const Products = () => {
                 />
                 <div className={styles.details}>
                   <h1 className={styles.cod}>{product.product_cod}</h1>
-                  <h1 className={styles.price}>{product.product_price}</h1>
-                  <h1 className={styles.stock}>In Stock</h1>
+                  <h1 className={styles.price}>{`₹${product.product_price}`}</h1>
+                  <StockStatus data={product} />
                 </div>
               </div>
             </Link>  
