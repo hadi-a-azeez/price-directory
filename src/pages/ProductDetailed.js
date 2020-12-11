@@ -129,7 +129,7 @@ const ProductDetailed = (props) => {
                   copyText(resellerCopy(product, sizeArr));
                   setCopySuccess("copied!");
                 }}
-              ><img src={Whatsapp} width="20px" height="20px" style={{marginRight: `3px`}}/>
+              ><img src={Whatsapp} alt="whatsapp" width="20px" height="20px" style={{marginRight: `3px`}}/>
                 Copy For Resellers
               </button>
 
@@ -141,8 +141,8 @@ const ProductDetailed = (props) => {
                   setcopySuccessInsta("copied!");
                 }}
               >
-                <img src={Instagram} width="20px" height="20px" style={{marginRight: `3px`}}/>
-                Copy For Insta
+                <img src={Instagram} width="20px" alt="instagram" height="20px" style={{marginRight: `3px`}}/>
+                Copy For Instagram
               </button>
 
               <p>{copySuccessInsta}</p>
