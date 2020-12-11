@@ -47,14 +47,13 @@ const Products = () => {
     }
   };
 
-  const StockStatus = (data) =>{
-    const {sizeXS,sizeS,sizeM,sizeL,sizeXL,sizeXXL} = data.data;
-    const totalStock = sizeXS+sizeS+sizeM+sizeL+sizeXL+sizeXXL;
-    if(totalStock>0){
-      return (<h1 className={styles.InStock}>In Stock</h1>)
-    }
-    else return (<h1 className={styles.OutOfStock}>Out Of Stock </h1>)
-  }
+  const StockStatus = (data) => {
+    const { sizeXS, sizeS, sizeM, sizeL, sizeXL, sizeXXL } = data.data;
+    const totalStock = sizeXS + sizeS + sizeM + sizeL + sizeXL + sizeXXL;
+    if (totalStock > 0) {
+      return <h1 className={styles.InStock}>In Stock</h1>;
+    } else return <h1 className={styles.OutOfStock}>Out Of Stock </h1>;
+  };
 
   const SearchResult = () => {
     return (
@@ -74,8 +73,10 @@ const Products = () => {
                 />
                 <div className={styles.details}>
                   <h1 className={styles.cod}>{product.product_cod}</h1>
-                  <h1 className={styles.price}>{`₹${product.product_price}`}</h1>
-                   <StockStatus data={product} />
+                  <h1
+                    className={styles.price}
+                  >{`₹${product.product_price}`}</h1>
+                  <StockStatus data={product} />
                 </div>
               </div>{" "}
             </Link>
@@ -86,7 +87,9 @@ const Products = () => {
   return (
     <>
       <div className={styles.header}>
-      <button className={styles.btnHome} onClick={()=> history.push('/')}>Home</button>
+        <button className={styles.btnHome} onClick={() => history.push("/")}>
+          Home
+        </button>
         <input
           type="text"
           placeholder="Search cod here"
@@ -95,18 +98,18 @@ const Products = () => {
         ></input>
       </div>
       {isLoading ? (
-          <div className={styles.loaderwraper}>
-            <Loader
-              type="Oval"
-              color="#0278ae"
-              height={50}
-              width={50}
-              visible={isLoading}
-            />
-          </div>
-        ) : (
-          <div></div>
-        )}
+        <div className={styles.loaderwraper}>
+          <Loader
+            type="Oval"
+            color="#0278ae"
+            height={50}
+            width={50}
+            visible={isLoading}
+          />
+        </div>
+      ) : (
+        <div></div>
+      )}
       <div className={styles.container}>
         {isProductsDisplayed ? (
           products.map((product, index) => (
@@ -123,17 +126,19 @@ const Products = () => {
                 />
                 <div className={styles.details}>
                   <h1 className={styles.cod}>{product.product_cod}</h1>
-                  <h1 className={styles.price}>{`₹${product.product_price}`}</h1>
+                  <h1
+                    className={styles.price}
+                  >{`₹${product.product_price}`}</h1>
                   <StockStatus data={product} />
                 </div>
               </div>
-            </Link>  
+            </Link>
           ))
         ) : (
           <SearchResult />
         )}
       </div>
-      <div style={{marginBottom : `20px`}} />
+      <div style={{ marginBottom: `20px` }} />
     </>
   );
 };
