@@ -16,7 +16,7 @@ $mb-3: 15px;
   display: flex;
   justify-content: $verticalAlign;
   align-items: $horizontalAlign;
-  flex-direction: $direction;
+  flex-wrap: $direction;
 }
 @mixin text($fontSize, $fontWieght) {
   font-size: $fontSize;

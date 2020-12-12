@@ -24,23 +24,10 @@
     border-radius: 4px;
     margin-top: $mt-3;
     border: none;
-    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#28abb9+10,0278ae+97 */
-    background: #28abb9; /* Old browsers */
-    background: -moz-linear-gradient(
-      -45deg,
-      #28abb9 10%,
-      #0278ae 97%
-    ); /* FF3.6-15 */
-    background: -webkit-linear-gradient(
-      -45deg,
-      #28abb9 10%,
-      #0278ae 97%
-    ); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(
-      135deg,
-      #28abb9 10%,
-      #0278ae 97%
-    ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    background: #28abb9;
+    background: -moz-linear-gradient(-45deg, #28abb9 10%, #0278ae 97%);
+    background: -webkit-linear-gradient(-45deg, #28abb9 10%, #0278ae 97%);
+    background: linear-gradient(135deg, #28abb9 10%, #0278ae 97%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#28abb9', endColorstr='#0278ae',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 
     @include flexCenter(row, center, center);

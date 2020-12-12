@@ -98,7 +98,7 @@ $color-form-highlight: #eeeeee;
       border-radius: 3px;
       border: none;
       display: flex;
-      flex-direction: row;
+      flex-wrap: row;
       justify-content: center;
       align-items: center;
       /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#87e0fd+0,00bc48+0,00b140+100 */
@@ -133,7 +133,7 @@ $color-form-highlight: #eeeeee;
       border-radius: 3px;
       border: none;
       display: flex;
-      flex-direction: row;
+      flex-wrap: row;
       justify-content: center;
       align-items: center;
       margin-top: 10px;
