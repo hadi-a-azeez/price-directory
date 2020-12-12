@@ -25,17 +25,12 @@
     margin-top: $mt-3;
     border: none;
     /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#28abb9+10,0278ae+97 */
-    background: #28abb9; /* Old browsers */
-    background: -moz-linear-gradient(
-      -45deg,
+    background: #28abb9; /* Old browsers */ /* FF3.6-15 */ /* Chrome10-25,Safari5.1-6 */
+    background: -o-linear-gradient(
+      315deg,
       #28abb9 10%,
       #0278ae 97%
-    ); /* FF3.6-15 */
-    background: -webkit-linear-gradient(
-      -45deg,
-      #28abb9 10%,
-      #0278ae 97%
-    ); /* Chrome10-25,Safari5.1-6 */
+    );
     background: linear-gradient(
       135deg,
       #28abb9 10%,

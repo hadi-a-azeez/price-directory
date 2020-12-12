@@ -24,6 +24,8 @@ $color-form-highlight: #eeeeee;
     .backIcon {
       width: 20px;
       height: auto;
+      -webkit-filter: invert(100%) sepia(0%) saturate(7440%) hue-rotate(297deg)
+        brightness(111%) contrast(114%);
       filter: invert(100%) sepia(0%) saturate(7440%) hue-rotate(297deg)
         brightness(111%) contrast(114%);
     }
@@ -37,8 +39,14 @@ $color-form-highlight: #eeeeee;
 }
 .loaderwraper {
   height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
 }
 .container {
@@ -47,7 +55,9 @@ $color-form-highlight: #eeeeee;
     width: 90%;
     height: 400px;
     margin-top: 70px;
+    -o-object-fit: contain;
     object-fit: contain;
+    -o-object-position: center;
     object-position: center;
   }
   .details {
@@ -90,18 +100,24 @@ $color-form-highlight: #eeeeee;
         border: 1px solid $color-form-highlight;
       }
       .tableHeader {
+        display: -webkit-box;
+        display: -ms-flexbox;
         display: flex;
         width: 100%;
         background: $primary-color;
         padding: ($half-spacing-unit * 1.5) 0;
       }
       .tableRow {
+        display: -webkit-box;
+        display: -ms-flexbox;
         display: flex;
         width: 100%;
         padding: ($half-spacing-unit * 1.5) 0;
         background: $color-form-highlight;
       }
       .tableData {
+        -webkit-box-flex: 1;
+        -ms-flex: 1 1 20%;
         flex: 1 1 20%;
         text-align: center;
       }
@@ -110,13 +126,21 @@ $color-form-highlight: #eeeeee;
         text-align: center;
       }
       .headerItem {
+        -webkit-box-flex: 1;
+        -ms-flex: 1 1 20%;
         flex: 1 1 20%;
         text-align: center;
       }
       .tableContent {
+        display: -webkit-box;
+        display: -ms-flexbox;
         display: flex;
         width: 100%;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
         justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
         align-items: center;
       }
       .headerText {
