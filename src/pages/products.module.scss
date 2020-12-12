@@ -32,7 +32,6 @@
   @include flexCenter(column, none, center);
   height: 100vh;
   margin-top: 150px;
-  flex-shrink: 0;
   .btnFloat {
     /* padding: 18px 18px; */
     width: 70px;
@@ -58,7 +57,7 @@
   }
   .card {
     @include flexCenter(row, none, center);
-    height: auto;
+    height: 115px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     width: 95%;
     margin-top: $mt-2;
@@ -74,7 +73,6 @@
       @include flexCenter(column, none, none);
       height: 100%;
       width: 100%;
-      flex-shrink: 0;
       .cod {
         @include text(20px, 300);
         margin-top: $mt-2;
