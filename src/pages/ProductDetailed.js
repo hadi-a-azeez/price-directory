@@ -6,8 +6,8 @@ import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { useHistory } from "react-router-dom";
 import { resellerCopy, instagramCopy } from "../components/CopyItems";
-import Whatsapp from '../assets/whatsapp.png';
-import Instagram from '../assets/instagram.png';
+import Whatsapp from "../assets/whatsapp.png";
+import Instagram from "../assets/instagram.png";
 
 const ProductDetailed = (props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,15 +20,46 @@ const ProductDetailed = (props) => {
   const [copySuccess, setCopySuccess] = useState("");
   const [copySuccessInsta, setcopySuccessInsta] = useState("");
 
-  const copyText = (text) => {
-    var input = document.createElement("textarea");
-    input.innerHTML = text;
-    document.body.appendChild(input);
-    input.select();
-    var result = document.execCommand("copy");
-    document.body.removeChild(input);
-    return result;
-  };
+  function copyText(textToCopy) {
+    var textArea;
+
+    function isOS() {
+      //can use a better detection logic here
+      return navigator.userAgent.match(/ipad|iphone/i);
+    }
+
+    function createTextArea(text) {
+      textArea = document.createElement("textArea");
+      textArea.readOnly = true;
+      textArea.contentEditable = true;
+      textArea.value = text;
+      document.body.appendChild(textArea);
+    }
+
+    function selectText() {
+      var range, selection;
+
+      if (isOS()) {
+        range = document.createRange();
+        range.selectNodeContents(textArea);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        textArea.setSelectionRange(0, 999999);
+      } else {
+        textArea.select();
+      }
+    }
+
+    function copyTo() {
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+    }
+
+    createTextArea(textToCopy);
+    selectText();
+    copyTo();
+  }
 
   useEffect(() => {
     setIsLoading(true);
@@ -129,7 +160,14 @@ const ProductDetailed = (props) => {
                   copyText(resellerCopy(product, sizeArr));
                   setCopySuccess("copied!");
                 }}
-              ><img src={Whatsapp} alt="whatsapp" width="20px" height="20px" style={{marginRight: `3px`}}/>
+              >
+                <img
+                  src={Whatsapp}
+                  alt="whatsapp"
+                  width="20px"
+                  height="20px"
+                  style={{ marginRight: `3px` }}
+                />
                 Copy For Resellers
               </button>
 
@@ -141,7 +179,13 @@ const ProductDetailed = (props) => {
                   setcopySuccessInsta("copied!");
                 }}
               >
-                <img src={Instagram} width="20px" alt="instagram" height="20px" style={{marginRight: `3px`}}/>
+                <img
+                  src={Instagram}
+                  width="20px"
+                  alt="instagram"
+                  height="20px"
+                  style={{ marginRight: `3px` }}
+                />
                 Copy For Instagram
               </button>
 
