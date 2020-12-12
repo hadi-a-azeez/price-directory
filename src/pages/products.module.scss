@@ -12,7 +12,6 @@
     padding: 10px 13px;
     font-size: 16px;
     border: none;
-    -ms-flex-item-align: end;
     align-self: flex-end;
     margin-right: 6%;
     margin-bottom: 5px;
@@ -25,14 +24,8 @@
 }
 .loaderwraper {
   height: 100vh;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
   justify-content: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
 }
 .container {
@@ -58,18 +51,13 @@
   .link {
     text-decoration: none;
     width: 100%;
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
     justify-content: center;
     color: black;
   }
   .card {
     @include flexCenter(row, none, center);
     height: auto;
-    -webkit-box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     width: 95%;
     margin-top: $mt-2;
@@ -77,9 +65,7 @@
       width: 100px;
       height: 100px;
       padding: 10px;
-      -o-object-fit: contain;
       object-fit: contain;
-      -o-object-position: center;
       object-position: center;
     }
     .details {
