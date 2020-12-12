@@ -6,6 +6,8 @@ import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { useHistory } from "react-router-dom";
 import { resellerCopy, instagramCopy } from "../components/CopyItems";
+import Whatsapp from '../assets/whatsapp.png';
+import Instagram from '../assets/instagram.png';
 
 const ProductDetailed = (props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -114,30 +116,33 @@ const ProductDetailed = (props) => {
               <h1 className={styles.cod}>{product.product_cod}</h1>
               <div className={styles.badgePrimary}>{product.type}</div>
               <h1 className={styles.price}>{`₹${product.product_price}`}</h1>
-              <h1 className={styles.fabric}>
+              <h1 className={styles.resellerPrice}>
                 Reseller Price:
-                {parseInt(
+                {` ₹${parseInt(
                   product.product_price - (product.product_price / 100) * 10
-                )}
+                )}`}
               </h1>
               <h1 className={styles.fabric}>{product.fabric}</h1>
               <button
+                className={styles.btnWtsp}
                 onClick={() => {
                   copyText(resellerCopy(product, sizeArr));
                   setCopySuccess("copied!");
                 }}
-              >
+              ><img src={Whatsapp} alt="whatsapp" width="20px" height="20px" style={{marginRight: `3px`}}/>
                 Copy For Resellers
               </button>
 
               <p>{copySuccess}</p>
               <button
+                className={styles.btnInstagram}
                 onClick={() => {
                   copyText(instagramCopy(product, sizeArr));
                   setcopySuccessInsta("copied!");
                 }}
               >
-                Copy For Insta
+                <img src={Instagram} width="20px" alt="instagram" height="20px" style={{marginRight: `3px`}}/>
+                Copy For Instagram
               </button>
 
               <p>{copySuccessInsta}</p>
