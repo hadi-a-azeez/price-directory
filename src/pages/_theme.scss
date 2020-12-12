@@ -17,15 +17,15 @@ $mb-3: 15px;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: $verticalAlign;
-      -ms-flex-pack: $verticalAlign;
-          justify-content: $verticalAlign;
+  -ms-flex-pack: $verticalAlign;
+  justify-content: $verticalAlign;
   -webkit-box-align: $horizontalAlign;
-      -ms-flex-align: $horizontalAlign;
-          align-items: $horizontalAlign;
+  -ms-flex-align: $horizontalAlign;
+  align-items: $horizontalAlign;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-      -ms-flex-direction: $direction;
-          flex-direction: $direction;
+  -ms-flex-direction: $direction;
+  flex-direction: $direction;
 }
 @mixin text($fontSize, $fontWieght) {
   font-size: $fontSize;

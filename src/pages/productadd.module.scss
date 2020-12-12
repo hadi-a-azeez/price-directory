@@ -2,9 +2,15 @@
 
 .loaderwraper {
   height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 .header {
   background-color: $primary-color;
@@ -24,7 +30,9 @@
     .backIcon {
       width: 20px;
       height: auto;
-      filter: invert(100%) sepia(0%) saturate(7440%) hue-rotate(297deg)
+      -webkit-filter: invert(100%) sepia(0%) saturate(7440%) hue-rotate(297deg)
+        brightness(111%) contrast(114%);
+              filter: invert(100%) sepia(0%) saturate(7440%) hue-rotate(297deg)
         brightness(111%) contrast(114%);
     }
   }
@@ -43,14 +51,17 @@
     width: 90%;
     height: 350px;
     margin-top: 10px;
-    object-fit: contain;
-    object-position: center;
+    -o-object-fit: contain;
+       object-fit: contain;
+    -o-object-position: center;
+       object-position: center;
   }
   label {
     margin-left: 10px;
     font-size: 20px;
     text-align: start;
-    align-content: flex-start;
+    -ms-flex-line-pack: start;
+        align-content: flex-start;
     width: 90%;
     margin-top: 10px;
     font-size: 18px;
@@ -71,9 +82,15 @@
     font-weight: 500;
     width: 83%;
     padding: 15px;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
   }
   .btnPrimary {
     background-color: $primary-color;
@@ -84,10 +101,19 @@
     border: none;
     width: 90%;
     margin-top: 15px;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
   }
   .btnDanger {
     background-color: $danger-color;
@@ -99,10 +125,19 @@
     width: 90%;
     margin-top: 10px;
     margin-bottom: 20px;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
   }
   .dropdown {
     width: 88%;
@@ -111,9 +146,15 @@
     margin-top: $mt-3;
   }
   .productSizeContainer {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
+    -webkit-box-align: start;
+        -ms-flex-align: start;
+            align-items: flex-start;
+    -webkit-box-pack: start;
+        -ms-flex-pack: start;
+            justify-content: flex-start;
     width: 90%;
     .sizeItem {
       width: 30%;

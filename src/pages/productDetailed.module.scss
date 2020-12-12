@@ -107,24 +107,27 @@ $color-form-highlight: #eeeeee;
       font-size: 15px;
       border-radius: 3px;
       border: none;
+      display: -webkit-box;
+      display: -ms-flexbox;
       display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+          -ms-flex-direction: row;
+              flex-direction: row;
+      -webkit-box-pack: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center;
       /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#87e0fd+0,00bc48+0,00b140+100 */
-      background: #87e0fd; /* Old browsers */
-      background: -moz-linear-gradient(
-        -45deg,
+      background: #87e0fd; /* Old browsers */ /* FF3.6-15 */ /* Chrome10-25,Safari5.1-6 */
+      background: -o-linear-gradient(
+        315deg,
         #87e0fd 0%,
         #00bc48 0%,
         #00b140 100%
-      ); /* FF3.6-15 */
-      background: -webkit-linear-gradient(
-        -45deg,
-        #87e0fd 0%,
-        #00bc48 0%,
-        #00b140 100%
-      ); /* Chrome10-25,Safari5.1-6 */
+      );
       background: linear-gradient(
         135deg,
         #87e0fd 0%,
@@ -142,26 +145,29 @@ $color-form-highlight: #eeeeee;
       font-size: 15px;
       border-radius: 3px;
       border: none;
+      display: -webkit-box;
+      display: -ms-flexbox;
       display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+          -ms-flex-direction: row;
+              flex-direction: row;
+      -webkit-box-pack: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center;
       margin-top: 10px;
       margin-bottom: 10px;
       /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#c13584+0,e1306c+47,fd1d1d+100 */
-      background: #c13584; /* Old browsers */
-      background: -moz-linear-gradient(
-        -45deg,
+      background: #c13584; /* Old browsers */ /* FF3.6-15 */ /* Chrome10-25,Safari5.1-6 */
+      background: -o-linear-gradient(
+        315deg,
         #c13584 0%,
         #e1306c 47%,
         #fd1d1d 100%
-      ); /* FF3.6-15 */
-      background: -webkit-linear-gradient(
-        -45deg,
-        #c13584 0%,
-        #e1306c 47%,
-        #fd1d1d 100%
-      ); /* Chrome10-25,Safari5.1-6 */
+      );
       background: linear-gradient(
         135deg,
         #c13584 0%,
