@@ -54,6 +54,8 @@
     display: flex;
     justify-content: center;
     color: black;
+    @include flexCenter(row, none, center);
+    flex-shrink: 0;
   }
   .card {
     @include flexCenter(row, none, center);
