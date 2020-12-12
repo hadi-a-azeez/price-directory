@@ -8,6 +8,7 @@ import { useHistory } from "react-router-dom";
 import { resellerCopy, instagramCopy } from "../components/CopyItems";
 import Whatsapp from "../assets/whatsapp.png";
 import Instagram from "../assets/instagram.png";
+import TableSize from "../components/TableSize";
 
 const ProductDetailed = (props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -35,11 +36,11 @@ const ProductDetailed = (props) => {
     { name: "XL", length: 44 },
     { name: "XXL", length: 46 },
   ];
+  //function for copying text to clipboard
   function copyText(textToCopy) {
     var textArea;
 
     function isOS() {
-      //can use a better detection logic here
       return navigator.userAgent.match(/ipad|iphone/i);
     }
 
@@ -197,7 +198,7 @@ const ProductDetailed = (props) => {
                 />
                 Copy For Resellers
               </button>
-
+              {/* show copied text status */}
               <p>{copySuccess}</p>
               <button
                 className={styles.btnInstagram}
@@ -215,81 +216,35 @@ const ProductDetailed = (props) => {
                 />
                 Copy For Instagram
               </button>
-
+              {/* show copied text status */}
               <p>{copySuccessInsta}</p>
               <div>
-                <div className={styles.table}>
-                  <div className={styles.tableHeader}>
-                    <div className={styles.headerItem}>
-                      <h1 className={styles.headerText}>Size</h1>
-                    </div>
-                    <div className={styles.headerItem}>
-                      <h1 className={styles.headerText}>Stock</h1>
-                    </div>
-                  </div>
-                  {availableSizesFiltered.map((size) => (
-                    <div className={styles.tableRow}>
-                      <div className={styles.tabelData}>
-                        <h1 className={styles.tableText}>{size.name}</h1>
-                      </div>
-                      <div className={styles.tabelData}>
-                        <h1 className={styles.tableText}>{size.stock}</h1>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <TableSize
+                  display="block"
+                  column1="Size"
+                  column2="Stock"
+                  list={availableSizesFiltered}
+                />
               </div>
               <h1 className={styles.fabric}>Size Chart </h1>
               <button className={styles.pantOrTop} onClick={handlePantToggle}>
                 Pant
               </button>
-              <div style={{ display: `${pantVisible}` }}>
-                <div className={styles.table}>
-                  <div className={styles.tableHeader}>
-                    <div className={styles.headerItem}>
-                      <h1 className={styles.headerText}>Size</h1>
-                    </div>
-                    <div className={styles.headerItem}>
-                      <h1 className={styles.headerText}>Length</h1>
-                    </div>
-                  </div>
-                  {pantSizesArr.map((size) => (
-                    <div className={styles.tableRow}>
-                      <div className={styles.tabelData}>
-                        <h1 className={styles.tableText}>{size.name}</h1>
-                      </div>
-                      <div className={styles.tabelData}>
-                        <h1 className={styles.tableText}>{size.length}</h1>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <TableSize
+                display={pantVisible}
+                column1="Size"
+                column2="Length"
+                list={pantSizesArr}
+              />
               <button className={styles.pantOrTop} onClick={handleTopToggle}>
                 Top
               </button>
-              <div style={{ display: `${topVisible}` }}>
-                <div className={styles.table}>
-                  <div className={styles.tableHeader}>
-                    <div className={styles.headerItem}>
-                      <h1 className={styles.headerText}>Size</h1>
-                    </div>
-                    <div className={styles.headerItem}>
-                      <h1 className={styles.headerText}>Length</h1>
-                    </div>
-                  </div>
-                  {topSizesArr.map((size) => (
-                    <div className={styles.tableRow}>
-                      <div className={styles.tabelData}>
-                        <h1 className={styles.tableText}>{size.name}</h1>
-                      </div>
-                      <div className={styles.tabelData}>
-                        <h1 className={styles.tableText}>{size.length}</h1>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <TableSize
+                display={topVisible}
+                column1="Size"
+                column2="Length"
+                list={topSizesArr}
+              />
             </div>
           </div>
           <div style={{ marginTop: `20px` }} />
