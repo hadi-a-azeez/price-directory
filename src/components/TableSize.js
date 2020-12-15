@@ -14,8 +14,8 @@ const TableSize = ({ display, column1, column2, list }) => {
               <h1 className={styles.headerText}>{column2}</h1>
             </div>
           </div>
-          {list.map((size) => (
-            <div className={styles.tableRow}>
+          {list.map((size, index) => (
+            <div className={styles.tableRow} key={index}>
               <div className={styles.tabelData}>
                 <h1 className={styles.tableText}>{size.name}</h1>
               </div>

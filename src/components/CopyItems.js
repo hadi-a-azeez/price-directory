@@ -6,7 +6,7 @@ export const resellerCopy = (product, sizeArr) => {
     product.product_price - (product.product_price / 100) * 10
   )}
 👉Fabric: ${product.fabric}
-👉Size:${sizeArr.toString().replace(/"/g, "")}
+👉Size:${sizeArr.toString()}
 🚚Shipping:3-7 Days 
 
 📩Message us for all your enquiries and orders`;

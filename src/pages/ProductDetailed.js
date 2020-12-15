@@ -38,7 +38,7 @@ const ProductDetailed = (props) => {
   ];
   //function for copying text to clipboard
   function copyText(textToCopy) {
-    var textArea;
+    let textArea;
 
     function isOS() {
       return navigator.userAgent.match(/ipad|iphone/i);
@@ -130,18 +130,8 @@ const ProductDetailed = (props) => {
     { XL: sizeXL },
     { XXL: sizeXXL },
   ];
-
-  //check avaialble size and converts it to text x,s,m like
-  let newArr = arr.filter((s) => {
-    if (JSON.stringify(s).split(":").pop().split("}")[0] !== 0) {
-      console.log(JSON.stringify(s).split(":").pop().split("}")[0]);
-      return true;
-    }
-  });
-  let sizeArr = newArr.map(
-    (s) => JSON.stringify(s).split("{").pop().split(":")[0]
-  );
-
+  let sizeArr = availableSizesFiltered.map((size) => size.name);
+  console.log(sizeArr);
   return (
     <>
       <div className={styles.header}>
@@ -203,7 +193,7 @@ const ProductDetailed = (props) => {
               <button
                 className={styles.btnInstagram}
                 onClick={() => {
-                  copyText(instagramCopy(product, sizeArr));
+                  copyText(instagramCopy(product));
                   setcopySuccessInsta("copied!");
                 }}
               >
