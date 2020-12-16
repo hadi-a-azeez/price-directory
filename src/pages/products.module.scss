@@ -2,11 +2,12 @@
 
 .header {
   @include flexCenter(column, center, center);
-  position: fixed;
+  position: sticky;
   top: 0;
   background-color: $primary-color;
-  height: 150px;
+  height: auto;
   width: 100%;
+  min-height: 150px;
   .btnHome {
     background-color: yellow;
     padding: 10px 13px;
@@ -15,6 +16,7 @@
     align-self: flex-end;
     margin-right: 6%;
     margin-bottom: 5px;
+    margin-top: 8px;
   }
   .search {
     width: 80%;
@@ -31,7 +33,7 @@
 .container {
   @include flexCenter(column, none, center);
   height: 100vh;
-  margin-top: 150px;
+  margin-top: 10px;
   .btnFloat {
     /* padding: 18px 18px; */
     width: 70px;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import imageCompression from "browser-image-compression";
 import styles from "./productadd.module.scss";
 import Placeholder from '../assets/placeholder.png';
@@ -22,19 +22,36 @@ const ProductAdd = () => {
   const [sizeXL, setXL] = useState(0);
   const [sizeXXL, setXXL] = useState(0);
   const [fabric, setFabric] = useState("");
+  const [category,setCategory] = useState("");
   const [type, setType] = useState("Top");
   const [isValidationError,setIsValidationError] = useState(false);
   const [isLoading,setIsLoading] = useState(false);
   const history = useHistory();
   const fabricsArray = ['cotton','Muslin','Rayon','Denim','Gorjet','Linen','Cotton mix','Linen cotton','Schifon'];
   const typeArray = ['Top','Pant','Set'];
+  const [categories, setCategories] = useState([]);
+  const db = firebase.firestore();
+
+  useEffect(() => {
+    const fetchCategories = async()=>{
+      setIsLoading(true);
+            const db = firebase.firestore();
+            const data = await db.collection("categories").get();
+            setCategories(
+              data.docs.map((category) => {
+                return { ...category.data(), id: category.id };
+              })
+            );
+            setIsLoading(false);
+    }
+    fetchCategories();
+  }, []);
 
   const addProduct = async () => {
     setIsLoading(true);
     const isValidate = validateFields();
     if(isValidate === true){
       let imageName = await imageToServer(product_image);
-      const db = firebase.firestore();
       db.collection("products").add({
         fabric,
         type,
@@ -47,6 +64,7 @@ const ProductAdd = () => {
         sizeL,
         sizeXL,
         sizeXXL,
+        category,
       });
       setIsLoading(false);
       history.push('/admin/products_admin');
@@ -102,7 +120,9 @@ const ProductAdd = () => {
     setType(val);
     console.log(val);
   };
-
+  const handleCategoryClick = (val) =>{
+    setCategory(val);
+  }
   return (
     <>
      <div className={styles.header}>
@@ -162,6 +182,23 @@ const ProductAdd = () => {
             {fabricsArray.map((fabric,index)=>(
               <option value={fabric} key={index}>
                 {fabric}
+              </option>
+            ))}
+          </select>
+          <select
+            name="categories"
+            id="categories"
+            className={styles.dropdown}
+            defaultValue={"DEFAULT"}
+            onChange={(e) => handleCategoryClick(e.target.value)}
+          >
+            <option value="DEFAULT" disabled>
+              Select a Category
+            </option>
+            {!isLoading &&
+            categories.map((category)=>(
+              <option value={category.category} key={category.id}>
+                {category.category}
               </option>
             ))}
           </select>

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { useHistory } from "react-router-dom";
+import TabHeader from '../components/tabHeader';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -97,6 +98,7 @@ const Products = () => {
           className={styles.search}
           onChange={(e) => doSearch(e)}
         ></input>
+        <TabHeader selected="products" />
       </div>
       {isLoading ? (
           <div className={styles.loaderwraper}>
