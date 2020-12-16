@@ -11,7 +11,7 @@ const Home = () => {
     history.push("/products");
   };
   const handleAdminClick = () => {
-    history.push("/admin/products_admin");
+    history.push("/admin/products");
   };
   return (
     <>

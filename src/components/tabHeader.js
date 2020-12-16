@@ -3,12 +3,20 @@ import {useHistory} from 'react-router-dom';
 
 const TabHeader = ({selected}) => {
     const history = useHistory();
+
+    const handleCategoriesClick = ()=>{
+        history.push('/admin/categories');
+    }
+    const handleProductsClick = ()=>{
+        history.push('/admin/products');
+    }
+
     return ( <>
         <div className={styles.container}>
             <button className={selected === "products" ? styles.btnSelected : styles.btn}
-            /* onClick={history.push('/admin/products_admin')} */>Products</button>
+            onClick={handleProductsClick}>Products</button>
             <button className={selected === "categories" ? styles.btnSelected : styles.btn}
-            /* onClick={history.push('/admin/categories')} */>Categoreis</button>
+            onClick={handleCategoriesClick}>Categoreis</button>
         </div>
     </> );
 }

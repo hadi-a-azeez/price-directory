@@ -36,7 +36,10 @@ const CategoryProducts = (props) => {
     };
 
     return ( <>
-            <div className={styles.header}>
+            <div className={styles.header}>            
+                <button className={styles.btnBack} onClick={() => history.goBack()}>
+                Back
+                </button>
                 <button className={styles.btnHome} onClick={() => history.push("/")}>
                 Home
                 </button>

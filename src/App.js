@@ -18,7 +18,7 @@ function App() {
           <Route path="/products" component={Products} />
           <Route path="/product_detailed/:id" component={ProductDetailed} />
           <Route path="/admin/product_add" component={ProductAdd} />
-          <Route path="/admin/products_admin" component={ProductsAdmin} />
+          <Route path="/admin/products" component={ProductsAdmin} />
           <Route path="/admin/categories" component={CategoriesAdmin} />
           <Route path="/admin/add_category" component={AddCategory} />
           <Route path="/admin/category_products/:category" component={CategoryProducts} />
