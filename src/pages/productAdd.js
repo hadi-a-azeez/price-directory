@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import imageCompression from "browser-image-compression";
 import styles from "./productadd.module.scss";
-import Placeholder from '../assets/placeholder.png';
+import Placeholder from "../assets/placeholder.png";
 import firebase from "../firebase";
 import { v4 as uuidv4 } from "uuid";
 import Loader from "react-loader-spinner";
@@ -24,8 +24,8 @@ const ProductAdd = () => {
   const [fabric, setFabric] = useState("");
   const [category,setCategory] = useState("");
   const [type, setType] = useState("Top");
-  const [isValidationError,setIsValidationError] = useState(false);
-  const [isLoading,setIsLoading] = useState(false);
+  const [isValidationError, setIsValidationError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
   const fabricsArray = ['cotton','Muslin','Rayon','Denim','Gorjet','Linen','Cotton mix','Linen cotton','Schifon'];
   const typeArray = ['Top','Pant','Set'];
@@ -50,9 +50,10 @@ const ProductAdd = () => {
   const addProduct = async () => {
     setIsLoading(true);
     const isValidate = validateFields();
-    if(isValidate === true){
+    if (isValidate === true) {
       let imageName = await imageToServer(product_image);
       db.collection("products").add({
+        date: Date.now(),
         fabric,
         type,
         product_image: imageName,
@@ -67,18 +68,16 @@ const ProductAdd = () => {
         category,
       });
       setIsLoading(false);
-      history.push('/admin/products_admin');
-    }
-    else setIsLoading(false);
+      history.push("/admin/products_admin");
+    } else setIsLoading(false);
   };
 
-  const validateFields = () =>{
-    if(product_cod === "" || product_price === 0){
+  const validateFields = () => {
+    if (product_cod === "" || product_price === 0) {
       setIsValidationError(true);
       return false;
-    }
-    else return true;
-  }
+    } else return true;
+  };
 
   const compressImage = async (event) => {
     //compresses image to below 1MB
@@ -125,67 +124,67 @@ const ProductAdd = () => {
   }
   return (
     <>
-     <div className={styles.header}>
+      <div className={styles.header}>
         <button className={styles.backButton} onClick={handleBackClick}>
           <img src={backIcon} className={styles.backIcon} alt="back_icon" />
         </button>
         <h1 className={styles.label}>Add Product</h1>
       </div>
       <div className={styles.container}>
-          {isImage ?
-            (<img
+        {isImage ? (
+          <img
             src={product_image_converted}
             className={styles.image}
             alt="image_preview"
-          />)
-        :(<img
-          src={Placeholder}
-          className={styles.image}
-          alt="image_preview"
-        />)}
-          <label htmlFor="file-upload" className={styles.customFileUpload}>Upload Image</label>
-          <input
-            type="file"
-            accept="image/*"
-            id="file-upload"
-            onChange={(event) => compressImage(event)}
           />
-          <label>Product cod</label>
-          <input type="text" onChange={(e) => setProductCod(e.target.value)} />
-          <select
-            name="type"
-            id="type"
-            className={styles.dropdown}
-            onChange={(e) => handleTypeClick(e.target.value)}
-          >
-            {typeArray.map((type,index)=>(
-              <option value={type} key={index}>
-                {type}
-              </option>
-            ))}
-          </select>
-          <label>Product Price</label>
-          <input
-            type="number"
-            onChange={(e) => setProductPrice(parseInt(e.target.value))}
-          />
-          <select
-            name="fabric"
-            id="fabrics"
-            className={styles.dropdown}
-            defaultValue={"DEFAULT"}
-            onChange={(e) => handleFabricClick(e.target.value)}
-          >
-            <option value="DEFAULT" disabled>
-              Select a fabric
+        ) : (
+          <img src={Placeholder} className={styles.image} alt="image_preview" />
+        )}
+        <label htmlFor="file-upload" className={styles.customFileUpload}>
+          Upload Image
+        </label>
+        <input
+          type="file"
+          accept="image/*"
+          id="file-upload"
+          onChange={(event) => compressImage(event)}
+        />
+        <label>Product cod</label>
+        <input type="text" onChange={(e) => setProductCod(e.target.value)} />
+        <select
+          name="type"
+          id="type"
+          className={styles.dropdown}
+          onChange={(e) => handleTypeClick(e.target.value)}
+        >
+          {typeArray.map((type, index) => (
+            <option value={type} key={index}>
+              {type}
             </option>
-            {fabricsArray.map((fabric,index)=>(
-              <option value={fabric} key={index}>
-                {fabric}
-              </option>
-            ))}
-          </select>
-          <select
+          ))}
+        </select>
+        <label>Product Price</label>
+        <input
+          type="number"
+          onChange={(e) => setProductPrice(parseInt(e.target.value))}
+        />
+        <select
+          name="fabric"
+          id="fabrics"
+          className={styles.dropdown}
+          defaultValue={"DEFAULT"}
+          onChange={(e) => handleFabricClick(e.target.value)}
+        >
+          <option value="DEFAULT" disabled>
+            Select a fabric
+          </option>
+          {fabricsArray.map((fabric, index) => (
+            <option value={fabric} key={index}>
+              {fabric}
+            </option>
+          ))}
+        </select>
+        <select
             name="categories"
             id="categories"
             className={styles.dropdown}
@@ -202,74 +201,78 @@ const ProductAdd = () => {
               </option>
             ))}
           </select>
-          <label>Product Sizes</label>
-          <div className={styles.productSizeContainer}>
-            <div className={styles.sizeItem}>
-              <label>XS</label>
-              <input
-                type="number"
-                className={styles.sizeField}
-                onChange={(e) => setXS(parseInt(e.target.value))}
-              />
-            </div>
-            <div className={styles.sizeItem}>
-              <label>S</label>
-              <input
-                type="number"
-                className={styles.sizeField}
-                onChange={(e) => setS(parseInt(e.target.value))}
-              />
-            </div>
-            <div className={styles.sizeItem}>
-              <label>M</label>
-              <input
-                type="number"
-                className={styles.sizeField}
-                onChange={(e) => setM(parseInt(e.target.value))}
-              />
-            </div>
-          </div>
-          <div className={styles.productSizeContainer}>
+        <label>Product Sizes</label>
+        <div className={styles.productSizeContainer}>
           <div className={styles.sizeItem}>
-              <label>L</label>
-              <input
-                type="number"
-                className={styles.sizeField}
-                onChange={(e) => setL(parseInt(e.target.value))}
-              />
-            </div>
-            <div className={styles.sizeItem}>
-              <label>XL</label>
-              <input
-                type="number"
-                className={styles.sizeField}
-                onChange={(e) => setXL(parseInt(e.target.value))}
-              />
-            </div>
-            <div className={styles.sizeItem}>
-              <label>XXL</label>
-              <input
-                type="number"
-                className={styles.sizeField}
-                onChange={(e) => setXXL(parseInt(e.target.value))}
-              />
-            </div>
+            <label>XS</label>
+            <input
+              type="number"
+              className={styles.sizeField}
+              onChange={(e) => setXS(parseInt(e.target.value))}
+            />
           </div>
-          {isValidationError &&
-            <h1 className={styles.validationError}>*Product cod and product price field must be filled</h1>}
-          <button onClick={addProduct} className={styles.btnPrimary}>
-            {isLoading ? (
-              <div className={styles.loader}>
-                <Loader
-                  type="Oval"
-                  color="white"
-                  height={18}
-                  width={18}
-                  visible={isLoading}
-                />
-              </div>
-            ) : 
-            <div>Add Product</div>}
+          <div className={styles.sizeItem}>
+            <label>S</label>
+            <input
+              type="number"
+              className={styles.sizeField}
+              onChange={(e) => setS(parseInt(e.target.value))}
+            />
+          </div>
+          <div className={styles.sizeItem}>
+            <label>M</label>
+            <input
+              type="number"
+              className={styles.sizeField}
+              onChange={(e) => setM(parseInt(e.target.value))}
+            />
+          </div>
+        </div>
+        <div className={styles.productSizeContainer}>
+          <div className={styles.sizeItem}>
+            <label>L</label>
+            <input
+              type="number"
+              className={styles.sizeField}
+              onChange={(e) => setL(parseInt(e.target.value))}
+            />
+          </div>
+          <div className={styles.sizeItem}>
+            <label>XL</label>
+            <input
+              type="number"
+              className={styles.sizeField}
+              onChange={(e) => setXL(parseInt(e.target.value))}
+            />
+          </div>
+          <div className={styles.sizeItem}>
+            <label>XXL</label>
+            <input
+              type="number"
+              className={styles.sizeField}
+              onChange={(e) => setXXL(parseInt(e.target.value))}
+            />
+          </div>
+        </div>
+        {isValidationError && (
+          <h1 className={styles.validationError}>
+            *Product cod and product price field must be filled
+          </h1>
+        )}
+        <button onClick={addProduct} className={styles.btnPrimary}>
+          {isLoading ? (
+            <div className={styles.loader}>
+              <Loader
+                type="Oval"
+                color="white"
+                height={18}
+                width={18}
+                visible={isLoading}
+              />
+            </div>
+          ) : (
+            <div>Add Product</div>
+          )}
         </button>
       </div>
     </>

@@ -8,6 +8,7 @@ import { useHistory } from "react-router-dom";
 import { resellerCopy, instagramCopy } from "../components/CopyItems";
 import Whatsapp from "../assets/whatsapp.png";
 import Instagram from "../assets/instagram.png";
+import TableSize from "../components/TableSize";
 
 const ProductDetailed = (props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -19,12 +20,27 @@ const ProductDetailed = (props) => {
   const id = props.match.params.id;
   const [copySuccess, setCopySuccess] = useState("");
   const [copySuccessInsta, setcopySuccessInsta] = useState("");
-
+  let pantSizesArr = [
+    { name: "XS", length: 26 },
+    { name: "S", length: 28 },
+    { name: "M", length: 30 },
+    { name: "L", length: 32 },
+    { name: "XL", length: 34 },
+    { name: "XXL", length: 36 },
+  ];
+  let topSizesArr = [
+    { name: "XS", length: 36 },
+    { name: "S", length: 38 },
+    { name: "M", length: 40 },
+    { name: "L", length: 42 },
+    { name: "XL", length: 44 },
+    { name: "XXL", length: 46 },
+  ];
+  //function for copying text to clipboard
   function copyText(textToCopy) {
-    var textArea;
+    let textArea;
 
     function isOS() {
-      //can use a better detection logic here
       return navigator.userAgent.match(/ipad|iphone/i);
     }
 
@@ -93,6 +109,18 @@ const ProductDetailed = (props) => {
     }
   };
   const { sizeXS, sizeS, sizeM, sizeL, sizeXL, sizeXXL } = product;
+  let availableSizesArr = [
+    { name: "XS", stock: sizeXS },
+    { name: "S", stock: sizeS },
+    { name: "M", stock: sizeM },
+    { name: "L", stock: sizeL },
+    { name: "XL", stock: sizeXL },
+    { name: "XXL", stock: sizeXXL },
+  ];
+  //filter array to size avaialable >0
+  let availableSizesFiltered = availableSizesArr.filter(
+    (size) => size.stock > 0
+  );
 
   let arr = [
     { XS: sizeXS },
@@ -102,18 +130,8 @@ const ProductDetailed = (props) => {
     { XL: sizeXL },
     { XXL: sizeXXL },
   ];
-
-  //check avaialble size and converts it to text x,s,m like
-  let newArr = arr.filter((s) => {
-    if (JSON.stringify(s).split(":").pop().split("}")[0] !== 0) {
-      console.log(JSON.stringify(s).split(":").pop().split("}")[0]);
-      return true;
-    }
-  });
-  let sizeArr = newArr.map(
-    (s) => JSON.stringify(s).split("{").pop().split(":")[0]
-  );
-
+  let sizeArr = availableSizesFiltered.map((size) => size.name);
+  console.log(sizeArr);
   return (
     <>
       <div className={styles.header}>
@@ -170,12 +188,12 @@ const ProductDetailed = (props) => {
                 />
                 Copy For Resellers
               </button>
-
+              {/* show copied text status */}
               <p>{copySuccess}</p>
               <button
                 className={styles.btnInstagram}
                 onClick={() => {
-                  copyText(instagramCopy(product, sizeArr));
+                  copyText(instagramCopy(product));
                   setcopySuccessInsta("copied!");
                 }}
               >
@@ -188,207 +206,35 @@ const ProductDetailed = (props) => {
                 />
                 Copy For Instagram
               </button>
-
+              {/* show copied text status */}
               <p>{copySuccessInsta}</p>
               <div>
-                <div className={styles.table}>
-                  <div className={styles.tableHeader}>
-                    <div className={styles.headerItem}>
-                      <h1 className={styles.headerText}>Size</h1>
-                    </div>
-                    <div className={styles.headerItem}>
-                      <h1 className={styles.headerText}>Stock</h1>
-                    </div>
-                  </div>
-                  <div className={styles.tableContent}>
-                    <div className={styles.tableRow}>
-                      <div className={styles.tabelData}>
-                        <h1 className={styles.tableText}>XS</h1>
-                      </div>
-                      <div className={styles.tabelData}>
-                        <h1 className={styles.tableText}>{product.sizeXS}</h1>
-                      </div>
-                    </div>
-                  </div>
-                  <div className={styles.tableRow}>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>S</h1>
-                    </div>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>{product.sizeS}</h1>
-                    </div>
-                  </div>
-                  <div className={styles.tableRow}>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>M</h1>
-                    </div>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>{product.sizeM}</h1>
-                    </div>
-                  </div>
-                  <div className={styles.tableRow}>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>L</h1>
-                    </div>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>{product.sizeL}</h1>
-                    </div>
-                  </div>
-                  <div className={styles.tableRow}>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>XL</h1>
-                    </div>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>{product.sizeXL}</h1>
-                    </div>
-                  </div>
-                  <div className={styles.tableContent}>
-                    <div className={styles.tableRow}>
-                      <div className={styles.tabelData}>
-                        <h1 className={styles.tableText}>XXL</h1>
-                      </div>
-                      <div className={styles.tabelData}>
-                        <h1 className={styles.tableText}>{product.sizeXXL}</h1>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <TableSize
+                  display="block"
+                  column1="Size"
+                  column2="Stock"
+                  list={availableSizesFiltered}
+                />
               </div>
               <h1 className={styles.fabric}>Size Chart </h1>
               <button className={styles.pantOrTop} onClick={handlePantToggle}>
                 Pant
               </button>
-              <div style={{ display: `${pantVisible}` }}>
-                <div className={styles.table}>
-                  <div className={styles.tableHeader}>
-                    <div className={styles.headerItem}>
-                      <h1 className={styles.headerText}>Size</h1>
-                    </div>
-                    <div className={styles.headerItem}>
-                      <h1 className={styles.headerText}>Length</h1>
-                    </div>
-                  </div>
-                  <div className={styles.tableContent}>
-                    <div className={styles.tableRow}>
-                      <div className={styles.tabelData}>
-                        <h1 className={styles.tableText}>XS</h1>
-                      </div>
-                      <div className={styles.tabelData}>
-                        <h1 className={styles.tableText}>26</h1>
-                      </div>
-                    </div>
-                  </div>
-                  <div className={styles.tableRow}>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>S</h1>
-                    </div>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>28</h1>
-                    </div>
-                  </div>
-                  <div className={styles.tableRow}>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>M</h1>
-                    </div>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>30</h1>
-                    </div>
-                  </div>
-                  <div className={styles.tableRow}>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>L</h1>
-                    </div>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>32</h1>
-                    </div>
-                  </div>
-                  <div className={styles.tableRow}>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>XL</h1>
-                    </div>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>34</h1>
-                    </div>
-                  </div>
-                  <div className={styles.tableContent}>
-                    <div className={styles.tableRow}>
-                      <div className={styles.tabelData}>
-                        <h1 className={styles.tableText}>XXL</h1>
-                      </div>
-                      <div className={styles.tabelData}>
-                        <h1 className={styles.tableText}>36</h1>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <TableSize
+                display={pantVisible}
+                column1="Size"
+                column2="Length"
+                list={pantSizesArr}
+              />
               <button className={styles.pantOrTop} onClick={handleTopToggle}>
                 Top
               </button>
-              <div style={{ display: `${topVisible}` }}>
-                <div className={styles.table}>
-                  <div className={styles.tableHeader}>
-                    <div className={styles.headerItem}>
-                      <h1 className={styles.headerText}>Size</h1>
-                    </div>
-                    <div className={styles.headerItem}>
-                      <h1 className={styles.headerText}>Length</h1>
-                    </div>
-                  </div>
-                  <div className={styles.tableContent}>
-                    <div className={styles.tableRow}>
-                      <div className={styles.tabelData}>
-                        <h1 className={styles.tableText}>XS</h1>
-                      </div>
-                      <div className={styles.tabelData}>
-                        <h1 className={styles.tableText}>36</h1>
-                      </div>
-                    </div>
-                  </div>
-                  <div className={styles.tableRow}>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>S</h1>
-                    </div>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>38</h1>
-                    </div>
-                  </div>
-                  <div className={styles.tableRow}>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>M</h1>
-                    </div>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>40</h1>
-                    </div>
-                  </div>
-                  <div className={styles.tableRow}>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>L</h1>
-                    </div>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>42</h1>
-                    </div>
-                  </div>
-                  <div className={styles.tableRow}>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>XL</h1>
-                    </div>
-                    <div className={styles.tabelData}>
-                      <h1 className={styles.tableText}>44</h1>
-                    </div>
-                  </div>
-                  <div className={styles.tableContent}>
-                    <div className={styles.tableRow}>
-                      <div className={styles.tabelData}>
-                        <h1 className={styles.tableText}>XXL</h1>
-                      </div>
-                      <div className={styles.tabelData}>
-                        <h1 className={styles.tableText}>46</h1>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <TableSize
+                display={topVisible}
+                column1="Size"
+                column2="Length"
+                list={topSizesArr}
+              />
             </div>
           </div>
           <div style={{ marginTop: `20px` }} />

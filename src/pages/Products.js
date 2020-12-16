@@ -20,7 +20,10 @@ const Products = () => {
     const fetchData = async () => {
       setIsLoading(true);
       const db = firebase.firestore();
-      const data = await db.collection("products").get();
+      const data = await db
+        .collection("products")
+        .orderBy("date", "desc")
+        .get();
       setProducts(
         data.docs.map((product) => {
           return { ...product.data(), id: product.id };
