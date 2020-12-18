@@ -8,11 +8,8 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { useHistory } from "react-router-dom";
 import backIcon from "../assets/backIcon.png";
 
-const ProductAdd = (props) => {
+const ProductAdmin = (props) => {
   const [product, setProduct] = useState({});
-  const [product_image, setProductImage] = useState("");
-  const [isImage, setIsImage] = useState(false);
-  const [product_image_converted, setProductImageConverted] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isUpdateLoading, setIsUpdateLoading] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
@@ -21,7 +18,6 @@ const ProductAdd = (props) => {
   const history = useHistory();
 
   useEffect(() => {
-    console.log(product_image);
     setIsLoading(true);
     const fetchData = async () => {
       const snapshot = await ref.doc(id).get();
@@ -32,24 +28,15 @@ const ProductAdd = (props) => {
     fetchData();
   }, []);
 
-  const addProduct = async () => {
+  const updateProduct = async () => {
     setIsUpdateLoading(true);
-    let imageName;
-    if (isImage) {
-      imageName = await imageToServer(product_image);
-    }
+
     const db = firebase.firestore();
-    if (isImage) {
-      db.collection("products")
-        .doc(id)
-        .set({ ...product, product_image: imageName });
-    } else {
-      db.collection("products")
-        .doc(id)
-        .set({ ...product });
-    }
+    db.collection("products")
+      .doc(id)
+      .set({ ...product });
     setIsUpdateLoading(false);
-    history.push("/admin/products_admin");
+    history.push("/admin/products");
   };
 
   const deleteProduct = () => {
@@ -60,33 +47,44 @@ const ProductAdd = (props) => {
     history.push("/admin/products_admin");
   };
 
-  const compressImage = async (event) => {
-    //compresses image to below 1MB
-    const imageFile = event.target.files[0];
-    const options = {
-      maxSizeMB: 1,
-      maxWidthOrHeight: 1920,
-      useWebWorker: true,
-    };
-    try {
-      const compressedFile = await imageCompression(imageFile, options);
-      setProductImage(compressedFile);
-      setIsImage(true);
-      setProductImageConverted(URL.createObjectURL(compressedFile));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const imageToServer = async (image) => {
-    //upload image to firebase storage
-    let storageRef = firebase.storage().ref();
-    // Points to 'images'
-    let imageName = uuidv4();
-    let imagesRef = storageRef.child("images");
-    var spaceRef = imagesRef.child(imageName);
-    await spaceRef.put(image);
-    return imageName;
-  };
+  // const compressImage = async (event) => {
+  //   //compresses image to below 1MB
+  //   let imagesFromInput = event.target.files;
+  //   const options = {
+  //     maxSizeMB: 1,
+  //     maxWidthOrHeight: 1280,
+  //     useWebWorker: true,
+  //   };
+  //   try {
+  //     for (let i = 0; i < imagesFromInput.length; i++) {
+  //       const compressedFile = await imageCompression(
+  //         imagesFromInput[i],
+  //         options
+  //       );
+  //       //look here
+  //       setProductImages((prevImages) => [...prevImages, compressedFile]);
+  //     }
+
+  //     // setProductImageConverted(URL.createObjectURL(compressedFile));
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // const imageToServer = async (image) => {
+  //   // Upload image to firebase storage
+  //   let storageRef = firebase.storage().ref();
+  //   let imagesRef = storageRef.child("images");
+  //   let imageNames = product.product_image;
+  //   // Points to 'images'
+  //   for (let i = 0; i < image.length; i++) {
+  //     let imageName = uuidv4();
+  //     let spaceRef = imagesRef.child(imageName);
+  //     let resp = await spaceRef.put(image[i]);
+  //     imageNames.push(imageName);
+  //   }
+  //   return imageNames;
+  // };
 
   const handleBackClick = () => {
     history.goBack();
@@ -116,28 +114,16 @@ const ProductAdd = (props) => {
       {!isLoading && (
         <>
           <div className={styles.container}>
-            {isImage ? (
-              <img
-                src={product_image_converted}
-                className={styles.image}
-                alt="image_preview"
-              />
-            ) : (
-              <img
-                src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${product.product_image}?alt=media`}
-                className={styles.image}
-                alt="image_preview"
-              />
-            )}
-            <label htmlFor="file-upload" className={styles.customFileUpload}>
-              Upload Image
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              id="file-upload"
-              onChange={(event) => compressImage(event)}
-            />
+            {product.product_image &&
+              product.product_image.map((image, index) => (
+                <img
+                  key={index}
+                  src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${image}?alt=media`}
+                  className={styles.image}
+                  alt="image_preview"
+                />
+              ))}
+
             <label>Product cod</label>
             <input
               type="text"
@@ -240,7 +226,7 @@ const ProductAdd = (props) => {
                 />
               </div>
             </div>
-            <button onClick={addProduct} className={styles.btnPrimary}>
+            <button onClick={updateProduct} className={styles.btnPrimary}>
               {isUpdateLoading ? (
                 <div className={styles.loader}>
                   <Loader
@@ -277,4 +263,4 @@ const ProductAdd = (props) => {
   );
 };
 
-export default ProductAdd;
+export default ProductAdmin;

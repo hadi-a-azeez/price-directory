@@ -12,9 +12,7 @@ import backIcon from "../assets/backIcon.png";
 const ProductAdd = () => {
   const [product_cod, setProductCod] = useState("");
   const [product_price, setProductPrice] = useState(0);
-  const [product_image, setProductImage] = useState("");
-  const [isImage, setIsImage] = useState(false);
-  const [product_image_converted, setProductImageConverted] = useState("");
+  const [product_image, setProductImage] = useState([]);
   const [sizeXS, setXS] = useState(0);
   const [sizeS, setS] = useState(0);
   const [sizeM, setM] = useState(0);
@@ -22,28 +20,38 @@ const ProductAdd = () => {
   const [sizeXL, setXL] = useState(0);
   const [sizeXXL, setXXL] = useState(0);
   const [fabric, setFabric] = useState("");
-  const [category,setCategory] = useState("");
+  const [category, setCategory] = useState("");
   const [type, setType] = useState("Top");
   const [isValidationError, setIsValidationError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
-  const fabricsArray = ['cotton','Muslin','Rayon','Denim','Gorjet','Linen','Cotton mix','Linen cotton','Schifon'];
-  const typeArray = ['Top','Pant','Set'];
+  const fabricsArray = [
+    "cotton",
+    "Muslin",
+    "Rayon",
+    "Denim",
+    "Gorjet",
+    "Linen",
+    "Cotton mix",
+    "Linen cotton",
+    "Schifon",
+  ];
+  const typeArray = ["Top", "Pant", "Set"];
   const [categories, setCategories] = useState([]);
   const db = firebase.firestore();
 
   useEffect(() => {
-    const fetchCategories = async()=>{
+    const fetchCategories = async () => {
       setIsLoading(true);
-            const db = firebase.firestore();
-            const data = await db.collection("categories").get();
-            setCategories(
-              data.docs.map((category) => {
-                return { ...category.data(), id: category.id };
-              })
-            );
-            setIsLoading(false);
-    }
+      const db = firebase.firestore();
+      const data = await db.collection("categories").get();
+      setCategories(
+        data.docs.map((category) => {
+          return { ...category.data(), id: category.id };
+        })
+      );
+      setIsLoading(false);
+    };
     fetchCategories();
   }, []);
 
@@ -68,8 +76,13 @@ const ProductAdd = () => {
         category,
       });
       setIsLoading(false);
-      history.push("/admin/products_admin");
+      history.push("/admin/products");
     } else setIsLoading(false);
+  };
+  const deleteImageFromArr = (image) => {
+    setProductImage((previmage) =>
+      previmage.filter((imageInState) => imageInState.name !== image.name)
+    );
   };
 
   const validateFields = () => {
@@ -81,17 +94,22 @@ const ProductAdd = () => {
 
   const compressImage = async (event) => {
     //compresses image to below 1MB
-    const imageFile = event.target.files[0];
+    let imagesFromInput = event.target.files;
     const options = {
       maxSizeMB: 1,
-      maxWidthOrHeight: 1920,
+      maxWidthOrHeight: 1280,
       useWebWorker: true,
     };
     try {
-      const compressedFile = await imageCompression(imageFile, options);
-      setProductImage(compressedFile);
-      setIsImage(true);
-      setProductImageConverted(URL.createObjectURL(compressedFile));
+      for (let i = 0; i < imagesFromInput.length; i++) {
+        const compressedFile = await imageCompression(
+          imagesFromInput[i],
+          options
+        );
+        setProductImage((oldArray) => [...oldArray, compressedFile]);
+      }
+
+      // setProductImageConverted(URL.createObjectURL(compressedFile));
     } catch (error) {
       console.log(error);
     }
@@ -99,12 +117,17 @@ const ProductAdd = () => {
   const imageToServer = async (image) => {
     //upload image to firebase storage
     let storageRef = firebase.storage().ref();
-    // Points to 'images'
-    let imageName = uuidv4();
     let imagesRef = storageRef.child("images");
-    var spaceRef = imagesRef.child(imageName);
-    await spaceRef.put(image);
-    return imageName;
+    let imageNames = [];
+    // Points to 'images'
+    for (let i = 0; i < image.length; i++) {
+      let imageName = uuidv4();
+      let spaceRef = imagesRef.child(imageName);
+      let resp = await spaceRef.put(image[i]);
+      console.log(resp);
+      imageNames.push(imageName);
+    }
+    return imageNames;
   };
 
   const handleBackClick = () => {
@@ -119,9 +142,9 @@ const ProductAdd = () => {
     setType(val);
     console.log(val);
   };
-  const handleCategoryClick = (val) =>{
+  const handleCategoryClick = (val) => {
     setCategory(val);
-  }
+  };
   return (
     <>
       <div className={styles.header}>
@@ -131,12 +154,16 @@ const ProductAdd = () => {
         <h1 className={styles.label}>Add Product</h1>
       </div>
       <div className={styles.container}>
-        {isImage ? (
-          <img
-            src={product_image_converted}
-            className={styles.image}
-            alt="image_preview"
-          />
+        {product_image.length > 0 ? (
+          product_image.map((image, index) => (
+            <img
+              key={index}
+              src={URL.createObjectURL(image)}
+              className={styles.image}
+              alt="image_preview"
+              onClick={() => deleteImageFromArr(image)}
+            />
+          ))
         ) : (
           <img src={Placeholder} className={styles.image} alt="image_preview" />
         )}
@@ -148,6 +175,7 @@ const ProductAdd = () => {
           accept="image/*"
           id="file-upload"
           onChange={(event) => compressImage(event)}
+          multiple
         />
         <label>Product cod</label>
         <input type="text" onChange={(e) => setProductCod(e.target.value)} />
@@ -185,22 +213,22 @@ const ProductAdd = () => {
           ))}
         </select>
         <select
-            name="categories"
-            id="categories"
-            className={styles.dropdown}
-            defaultValue={"DEFAULT"}
-            onChange={(e) => handleCategoryClick(e.target.value)}
-          >
-            <option value="DEFAULT" disabled>
-              Select a Category
-            </option>
-            {!isLoading &&
-            categories.map((category)=>(
+          name="categories"
+          id="categories"
+          className={styles.dropdown}
+          defaultValue={"DEFAULT"}
+          onChange={(e) => handleCategoryClick(e.target.value)}
+        >
+          <option value="DEFAULT" disabled>
+            Select a Category
+          </option>
+          {!isLoading &&
+            categories.map((category) => (
               <option value={category.category} key={category.id}>
                 {category.category}
               </option>
             ))}
-          </select>
+        </select>
         <label>Product Sizes</label>
         <div className={styles.productSizeContainer}>
           <div className={styles.sizeItem}>

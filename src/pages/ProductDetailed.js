@@ -82,8 +82,8 @@ const ProductDetailed = (props) => {
     const fetchData = async () => {
       setIsLoading(true);
       const snapshot = await ref.doc(id).get();
-      const data = snapshot.data();
-      setProduct(data);
+      const data = await snapshot.data();
+      await setProduct(data);
       setIsLoading(false);
     };
     fetchData();
@@ -156,11 +156,15 @@ const ProductDetailed = (props) => {
       {!isLoading && (
         <>
           <div className={styles.container}>
-            <img
-              src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${product.product_image}?alt=media`}
-              alt="product_image`"
-              className={styles.productImage}
-            />
+            {product.product_image &&
+              product.product_image.map((imageNew) => (
+                <img
+                  src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${imageNew}?alt=media`}
+                  className={styles.image}
+                  alt="image_preview"
+                />
+              ))}
+
             <div className={styles.details}>
               <h1 className={styles.cod}>{product.product_cod}</h1>
               <div className={styles.badgePrimary}>{product.type}</div>

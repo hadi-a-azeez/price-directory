@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import CategoriesAdmin from "./pages/categoriesAdmin";
 import AddCategory from "./pages/addCategoryAdmin";
 import CategoryProducts from "./pages/categoryProducts";
+import Script from "./pages/script";
 
 function App() {
   return (
@@ -16,12 +17,16 @@ function App() {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/products" component={Products} />
+
           <Route path="/product_detailed/:id" component={ProductDetailed} />
           <Route path="/admin/product_add" component={ProductAdd} />
           <Route path="/admin/products" component={ProductsAdmin} />
           <Route path="/admin/categories" component={CategoriesAdmin} />
           <Route path="/admin/add_category" component={AddCategory} />
-          <Route path="/admin/category_products/:category" component={CategoryProducts} />
+          <Route
+            path="/admin/category_products/:category"
+            component={CategoryProducts}
+          />
           <Route
             path="/admin/product_edit_admin/:id"
             component={ProductsEditAdmin}

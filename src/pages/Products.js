@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { useHistory } from "react-router-dom";
-import TabHeader from '../components/tabHeader';
+import TabHeader from "../components/tabHeader";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -70,11 +70,13 @@ const Products = () => {
               className={styles.link}
             >
               <div className={styles.card} key={index}>
-                <img
-                  src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${product.product_image}?alt=media`}
-                  alt="product_image`"
-                  className={styles.thumbnailImage}
-                />
+                {
+                  <img
+                    src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${product.product_image[0]}?alt=media`}
+                    alt="product_image`"
+                    className={styles.thumbnailImage}
+                  />
+                }
                 <div className={styles.details}>
                   <h1 className={styles.cod}>{product.product_cod}</h1>
                   <h1
@@ -125,10 +127,11 @@ const Products = () => {
             >
               <div className={styles.card}>
                 <img
-                  src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${product.product_image}?alt=media`}
+                  src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${product.product_image[0]}?alt=media`}
                   alt="product_image`"
                   className={styles.thumbnailImage}
                 />
+
                 <div className={styles.details}>
                   <h1 className={styles.cod}>{product.product_cod}</h1>
                   <h1

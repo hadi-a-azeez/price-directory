@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { useHistory } from "react-router-dom";
-import TabHeader from '../components/tabHeader';
+import TabHeader from "../components/tabHeader";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -20,7 +20,10 @@ const Products = () => {
     const fetchData = async () => {
       setIsLoading(true);
       const db = firebase.firestore();
-      const data = await db.collection("products").get();
+      const data = await db
+        .collection("products")
+        .orderBy("date", "desc")
+        .get();
       setProducts(
         data.docs.map((product) => {
           return { ...product.data(), id: product.id };
@@ -48,18 +51,17 @@ const Products = () => {
     }
   };
 
-  const StockStatus = (data) =>{
-    const {sizeXS,sizeS,sizeM,sizeL,sizeXL,sizeXXL} = data.data;
-    const totalStock = sizeXS+sizeS+sizeM+sizeL+sizeXL+sizeXXL;
-    if(totalStock>0){
-      return (<h1 className={styles.InStock}>In Stock</h1>)
-    }
-    else return (<h1 className={styles.OutOfStock}>Out Of Stock </h1>)
-  }
+  const StockStatus = (data) => {
+    const { sizeXS, sizeS, sizeM, sizeL, sizeXL, sizeXXL } = data.data;
+    const totalStock = sizeXS + sizeS + sizeM + sizeL + sizeXL + sizeXXL;
+    if (totalStock > 0) {
+      return <h1 className={styles.InStock}>In Stock</h1>;
+    } else return <h1 className={styles.OutOfStock}>Out Of Stock </h1>;
+  };
 
-  const handleFloatingButtonClick = ()=>{
-    history.push('/admin/product_add');
-  }
+  const handleFloatingButtonClick = () => {
+    history.push("/admin/product_add");
+  };
 
   const SearchResult = () => {
     return (
@@ -73,13 +75,16 @@ const Products = () => {
             >
               <div className={styles.card} key={index}>
                 <img
-                  src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${product.product_image}?alt=media`}
-                  alt="productImage"
+                  src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${product.product_image[0]}?alt=media`}
+                  alt="product_image`"
                   className={styles.thumbnailImage}
                 />
+
                 <div className={styles.details}>
                   <h1 className={styles.cod}>{product.product_cod}</h1>
-                  <h1 className={styles.price}>{`₹${product.product_price}`}</h1>
+                  <h1
+                    className={styles.price}
+                  >{`₹${product.product_price}`}</h1>
                   <StockStatus data={product} />
                 </div>
               </div>{" "}
@@ -91,7 +96,9 @@ const Products = () => {
   return (
     <>
       <div className={styles.header}>
-        <button className={styles.btnHome} onClick={()=> history.push('/')}>Home</button>
+        <button className={styles.btnHome} onClick={() => history.push("/")}>
+          Home
+        </button>
         <input
           type="text"
           placeholder="Search cod here"
@@ -101,20 +108,22 @@ const Products = () => {
         <TabHeader selected="products" />
       </div>
       {isLoading ? (
-          <div className={styles.loaderwraper}>
-            <Loader
-              type="Oval"
-              color="#0278ae"
-              height={50}
-              width={50}
-              visible={isLoading}
-            />
-          </div>
-        ) : (
-          <div></div>
-        )}
+        <div className={styles.loaderwraper}>
+          <Loader
+            type="Oval"
+            color="#0278ae"
+            height={50}
+            width={50}
+            visible={isLoading}
+          />
+        </div>
+      ) : (
+        <div></div>
+      )}
       <div className={styles.container}>
-      <button className={styles.btnFloat} onClick={handleFloatingButtonClick}>+</button>
+        <button className={styles.btnFloat} onClick={handleFloatingButtonClick}>
+          +
+        </button>
         {isProductsDisplayed ? (
           products.map((product, index) => (
             <Link
@@ -124,23 +133,26 @@ const Products = () => {
             >
               <div className={styles.card}>
                 <img
-                  src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${product.product_image}?alt=media`}
+                  src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${product.product_image[0]}?alt=media`}
                   alt="product_image`"
                   className={styles.thumbnailImage}
                 />
+
                 <div className={styles.details}>
                   <h1 className={styles.cod}>{product.product_cod}</h1>
-                  <h1 className={styles.price}>{`₹${product.product_price}`}</h1>
+                  <h1
+                    className={styles.price}
+                  >{`₹${product.product_price}`}</h1>
                   <StockStatus data={product} />
                 </div>
               </div>
-            </Link>  
+            </Link>
           ))
         ) : (
           <SearchResult />
         )}
       </div>
-      <div style={{marginTop : 20}} />
+      <div style={{ marginTop: 20 }} />
     </>
   );
 };
