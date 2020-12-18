@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import imageCompression from "browser-image-compression";
 import styles from "./productadd.module.scss";
 import firebase from "../firebase";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from "react-responsive-carousel";
 import { v4 as uuidv4 } from "uuid";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
@@ -114,16 +116,24 @@ const ProductAdmin = (props) => {
       {!isLoading && (
         <>
           <div className={styles.container}>
-            {product.product_image &&
-              product.product_image.map((image, index) => (
-                <img
-                  key={index}
-                  src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${image}?alt=media`}
-                  className={styles.image}
-                  alt="image_preview"
-                />
-              ))}
-
+            <Carousel
+              infiniteLoop
+              dynamicHeight
+              showThumbs={false}
+              showStatus={false}
+            >
+              {product.product_image &&
+                product.product_image.map((image, index) => (
+                  <div style={{ height: 300, backgroundColor: `white` }}>
+                    <img
+                      key={index}
+                      src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${image}?alt=media`}
+                      className={styles.image}
+                      alt="image_preview"
+                    />
+                  </div>
+                ))}
+            </Carousel>
             <label>Product cod</label>
             <input
               type="text"

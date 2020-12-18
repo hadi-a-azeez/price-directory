@@ -3,6 +3,8 @@ import styles from "./productDetailed.module.scss";
 import backIcon from "../assets/backIcon.png";
 import firebase from "../firebase";
 import Loader from "react-loader-spinner";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from "react-responsive-carousel";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { useHistory } from "react-router-dom";
 import { resellerCopy, instagramCopy } from "../components/CopyItems";
@@ -156,15 +158,23 @@ const ProductDetailed = (props) => {
       {!isLoading && (
         <>
           <div className={styles.container}>
-            {product.product_image &&
-              product.product_image.map((imageNew) => (
-                <img
-                  src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${imageNew}?alt=media`}
-                  className={styles.image}
-                  alt="image_preview"
-                />
-              ))}
-
+            <Carousel
+              infiniteLoop
+              dynamicHeight
+              showThumbs={false}
+              showStatus={false}
+            >
+              {product.product_image &&
+                product.product_image.map((imageNew) => (
+                  <div style={{ height: 300, backgroundColor: `white` }}>
+                    <img
+                      src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${imageNew}?alt=media`}
+                      className={styles.image}
+                      alt="image_preview"
+                    />
+                  </div>
+                ))}
+            </Carousel>
             <div className={styles.details}>
               <h1 className={styles.cod}>{product.product_cod}</h1>
               <div className={styles.badgePrimary}>{product.type}</div>
