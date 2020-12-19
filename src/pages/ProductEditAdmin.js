@@ -46,7 +46,7 @@ const ProductAdmin = (props) => {
     const db = firebase.firestore();
     db.collection("products").doc(id).delete();
     setIsDeleteLoading(false);
-    history.push("/admin/products_admin");
+    history.goBack();
   };
 
   // const compressImage = async (event) => {
