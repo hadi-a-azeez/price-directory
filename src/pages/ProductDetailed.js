@@ -163,10 +163,11 @@ const ProductDetailed = (props) => {
               dynamicHeight
               showThumbs={false}
               showStatus={false}
+              className={styles.carousel}
             >
               {product.product_image &&
                 product.product_image.map((imageNew) => (
-                  <div style={{ height: 300, backgroundColor: `white` }}>
+                  <div style={{ height: `500px`, backgroundColor: `white` }}>
                     <img
                       src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${imageNew}?alt=media`}
                       className={styles.image}

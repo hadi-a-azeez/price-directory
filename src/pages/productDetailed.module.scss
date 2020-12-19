@@ -12,6 +12,7 @@ $color-form-highlight: #eeeeee;
   position: fixed;
   top: 0;
   width: 100%;
+  z-index: 9;
   @include flexCenter(row, center, center);
   .backButton {
     background-color: $primary-color;
@@ -49,6 +50,11 @@ $color-form-highlight: #eeeeee;
     margin-top: 70px;
     object-fit: contain;
     object-position: center;
+  }
+  .carousel {
+    margin-top: 70px;
+    width: 95%;
+    height: 500px;
   }
   .details {
     @include flexCenter(column, none, flex-start);

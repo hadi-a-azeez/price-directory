@@ -121,6 +121,7 @@ const ProductAdmin = (props) => {
               dynamicHeight
               showThumbs={false}
               showStatus={false}
+              className={styles.carousel}
             >
               {product.product_image &&
                 product.product_image.map((image, index) => (
