@@ -70,6 +70,12 @@
     @include flexCenter(row, none, center);
     flex-shrink: 0;
   }
+  .dropdown {
+    width: 88%;
+    padding: 13px;
+    font-size: 18px;
+    margin-top: $mt-3;
+  }
   .card {
     @include flexCenter(row, none, center);
     height: 115px;
