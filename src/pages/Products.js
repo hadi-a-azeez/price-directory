@@ -13,27 +13,47 @@ const Products = () => {
   const [isSearchResultLoading, setIsSearchResultLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [lastDocFetched, setLastDocFetched] = useState();
+  const [isEmpty, setIsEmpty] = useState(false);
+  const [isMoreProductsLoading, setIsMoreProductLoading] = useState(false);
   const history = useHistory();
+  const db = firebase.firestore();
+  const productsRef = db.collection("products").orderBy("date", "desc");
 
   useEffect(() => {
     setIsProductsDisplayed(false);
     const fetchData = async () => {
       setIsLoading(true);
-      const db = firebase.firestore();
-      const data = await db
-        .collection("products")
-        .orderBy("date", "desc")
-        .get();
-      setProducts(
-        data.docs.map((product) => {
-          return { ...product.data(), id: product.id };
-        })
-      );
+      const data = await productsRef.limit(10).get();
+      updateProductsState(data);
       setIsProductsDisplayed(true);
       setIsLoading(false);
     };
     fetchData();
   }, []);
+
+  const updateProductsState = (data) => {
+    const isDataEmpty = data.size === 0;
+    if (!isDataEmpty) {
+      const lastDoc = data.docs[data.docs.length - 1];
+      setLastDocFetched(lastDoc);
+      setProducts([
+        ...products,
+        ...data.docs.map((product) => {
+          return { ...product.data(), id: product.id };
+        }),
+      ]);
+    } else {
+      setIsEmpty(true);
+    }
+    setIsMoreProductLoading(false);
+  };
+
+  const fetchMore = async () => {
+    setIsMoreProductLoading(true);
+    const data = await productsRef.startAfter(lastDocFetched).limit(10).get();
+    updateProductsState(data);
+  };
 
   const doSearch = (e) => {
     setIsProductsDisplayed(false);
@@ -59,34 +79,36 @@ const Products = () => {
     } else return <h1 className={styles.OutOfStock}>Out Of Stock </h1>;
   };
 
+  const ProductCard = ({ product }) => {
+    return (
+      <Link
+        to={`/product_detailed/${product.id}`}
+        key={product.id}
+        className={styles.link}
+      >
+        <div className={styles.card} key={product.id}>
+          {
+            <img
+              src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${product.product_image[0]}?alt=media`}
+              alt="product_image`"
+              className={styles.thumbnailImage}
+            />
+          }
+          <div className={styles.details}>
+            <h1 className={styles.cod}>{product.product_cod}</h1>
+            <h1 className={styles.price}>{`₹${product.product_price}`}</h1>
+            <StockStatus data={product} />
+          </div>
+        </div>{" "}
+      </Link>
+    );
+  };
+
   const SearchResult = () => {
     return (
       <>
         {!isSearchResultLoading &&
-          filteredProducts.map((product, index) => (
-            <Link
-              to={`/product_detailed/${product.id}`}
-              key={index}
-              className={styles.link}
-            >
-              <div className={styles.card} key={index}>
-                {
-                  <img
-                    src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${product.product_image[0]}?alt=media`}
-                    alt="product_image`"
-                    className={styles.thumbnailImage}
-                  />
-                }
-                <div className={styles.details}>
-                  <h1 className={styles.cod}>{product.product_cod}</h1>
-                  <h1
-                    className={styles.price}
-                  >{`₹${product.product_price}`}</h1>
-                  <StockStatus data={product} />
-                </div>
-              </div>{" "}
-            </Link>
-          ))}
+          filteredProducts.map((product) => <ProductCard product={product} />)}
       </>
     );
   };
@@ -119,34 +141,23 @@ const Products = () => {
       )}
       <div className={styles.container}>
         {isProductsDisplayed ? (
-          products.map((product, index) => (
-            <Link
-              to={`/product_detailed/${product.id}`}
-              key={index}
-              className={styles.link}
-            >
-              <div className={styles.card}>
-                <img
-                  src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${product.product_image[0]}?alt=media`}
-                  alt="product_image`"
-                  className={styles.thumbnailImage}
-                />
-
-                <div className={styles.details}>
-                  <h1 className={styles.cod}>{product.product_cod}</h1>
-                  <h1
-                    className={styles.price}
-                  >{`₹${product.product_price}`}</h1>
-                  <StockStatus data={product} />
-                </div>
-              </div>
-            </Link>
-          ))
+          <>
+            {products.map((product) => (
+              <ProductCard product={product} />
+            ))}
+            {!isMoreProductsLoading && !isEmpty && (
+              <button className={styles.btnLoadMore} onClick={fetchMore}>
+                More products
+              </button>
+            )}
+            {isMoreProductsLoading && <h1>Loading</h1>}
+            {isEmpty && <h1>No more products</h1>}
+          </>
         ) : (
           <SearchResult />
         )}
       </div>
-      <div style={{ marginBottom: `20px` }} />
+      <div style={{ marginTop: `20px` }} />
     </>
   );
 };
