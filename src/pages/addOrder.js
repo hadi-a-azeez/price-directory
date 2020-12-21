@@ -37,6 +37,7 @@ const AddOrder = () => {
     db.collection("orders").add({
       date: Date.now(),
       payment_method: paymentMethod,
+      order_status: "1",
       ...order,
     });
     setIsLoading(false);
@@ -83,7 +84,7 @@ const AddOrder = () => {
         <FormControl id="product_price" w="90%" mt="2" isRequired>
           <FormLabel>Product Price :</FormLabel>
           <Input
-            type="text"
+            type="number"
             size="lg"
             name="product_price"
             onChange={updateOrder}
