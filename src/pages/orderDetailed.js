@@ -181,7 +181,7 @@ const OrderDetailed = (props) => {
                 </Stack>
               </RadioGroup>
             </FormControl>
-            {paymentMethod !== "3" && (
+            {orderDetails.payment_method !== "3" && (
               <FormControl id="trasfer_details" w="90%" mt="2" isRequired>
                 <FormLabel>Transfer Details :</FormLabel>
                 <Textarea
