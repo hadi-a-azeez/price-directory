@@ -1,0 +1,75 @@
+@import "./theme";
+
+.header {
+  @include flexCenter(column, center, center);
+  position: sticky;
+  top: 0;
+  background-color: $primary-color;
+  height: auto;
+  width: 100%;
+  min-height: 150px;
+  .btnHome {
+    background-color: yellow;
+    padding: 10px 13px;
+    font-size: 16px;
+    border: none;
+    align-self: flex-end;
+    margin-right: 6%;
+    margin-bottom: 5px;
+    margin-top: 8px;
+  }
+  .btnBack {
+    background-color: white;
+    color: black;
+    padding: 10px 13px;
+    font-size: 16px;
+    border: none;
+    align-self: flex-end;
+    margin-right: 6%;
+    margin-bottom: 5px;
+    margin-top: 8px;
+  }
+  .search {
+    width: 80%;
+    padding: 14px;
+    font-size: 17px;
+  }
+}
+.container {
+  @include flexCenter(column, none, center);
+  height: 100vh;
+  margin-top: 10px;
+  .btnFloat {
+    /* padding: 18px 18px; */
+    width: 70px;
+    height: 70px;
+    border-radius: 100%;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    background-color: $primary-color;
+    margin-right: 20px;
+    margin-bottom: 30px;
+    border: none;
+    color: white;
+    font-size: 42px;
+    font-weight: 400;
+  }
+  .link {
+    text-decoration: none;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    color: black;
+    @include flexCenter(row, none, center);
+    flex-shrink: 0;
+    .card {
+      @include flexCenter(row, none, center);
+      height: 115px;
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+      width: 95%;
+      margin-top: $mt-2;
+      flex-shrink: 0;
+    }
+  }
+}

@@ -8,7 +8,8 @@ import Home from "./pages/Home";
 import CategoriesAdmin from "./pages/categoriesAdmin";
 import AddCategory from "./pages/addCategoryAdmin";
 import CategoryProducts from "./pages/categoryProducts";
-import Script from "./pages/script";
+import Order from "./pages/order";
+import AddOrder from "./pages/addOrder";
 
 function App() {
   return (
@@ -16,8 +17,9 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/" component={Home} />
+          <Route exact path="/orders" component={Order} />
+          <Route exact path="/add_order" component={AddOrder} />
           <Route path="/products" component={Products} />
-
           <Route path="/product_detailed/:id" component={ProductDetailed} />
           <Route path="/admin/product_add" component={ProductAdd} />
           <Route path="/admin/products" component={ProductsAdmin} />
