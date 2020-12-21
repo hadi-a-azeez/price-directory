@@ -8,8 +8,9 @@ import Home from "./pages/Home";
 import CategoriesAdmin from "./pages/categoriesAdmin";
 import AddCategory from "./pages/addCategoryAdmin";
 import CategoryProducts from "./pages/categoryProducts";
-import Order from "./pages/order";
+import Order from "./pages/orders";
 import AddOrder from "./pages/addOrder";
+import OrderDetialed from "./pages/orderDetailed";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/orders" component={Order} />
+          <Route exact path="/order_detailed/:id" component={OrderDetialed} />
           <Route exact path="/add_order" component={AddOrder} />
           <Route path="/products" component={Products} />
           <Route path="/product_detailed/:id" component={ProductDetailed} />
