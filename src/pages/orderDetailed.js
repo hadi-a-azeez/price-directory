@@ -280,7 +280,7 @@ const OrderDetailed = (props) => {
             <AlertDialog
               isOpen={isDeleteOpen}
               leastDestructiveRef={cancelRef}
-              onClose={() => isDeleteOpen(false)}
+              onClose={() => setIsDeleteOpen(false)}
             >
               <AlertDialogOverlay>
                 <AlertDialogContent w="90%" pos="center">
@@ -291,7 +291,10 @@ const OrderDetailed = (props) => {
                   <AlertDialogBody>{deleteModal.body}</AlertDialogBody>
 
                   <AlertDialogFooter>
-                    <Button ref={cancelRef} onClick={() => isDeleteOpen(false)}>
+                    <Button
+                      ref={cancelRef}
+                      onClick={() => setIsDeleteOpen(false)}
+                    >
                       Cancel
                     </Button>
                     <Button
