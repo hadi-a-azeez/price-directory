@@ -25,12 +25,11 @@ import {
 } from "@chakra-ui/react";
 
 const OrderDetailed = (props) => {
-  const [paymentMethod, setPaymentMethod] = useState("3");
   const [isUpdateOpen, setIsUpdateOpen] = useState(false); //setting state for update btn modal
   const [isDeleteOpen, setIsDeleteOpen] = useState(false); //setting state for delete btn modal
   const [isLoading, setIsLoading] = useState(false);
   const [order, setOrder, updateOrder] = useForm([]);
-  const [orderDetails, setOrderDetails] = useState([]);
+
   const [isBtnLoading, setIsBtnLoading] = useState(false);
   const [orderStatus, setOrderStatus] = useState("");
   const cancelRef = useRef();
@@ -57,7 +56,7 @@ const OrderDetailed = (props) => {
       setIsLoading(true);
       const snapshot = await ref.doc(id).get();
       const data = snapshot.data();
-      setOrderDetails(data);
+      setOrder(data);
       setOrderStatus(data.order_status);
       console.log(data);
       setIsLoading(false);
@@ -68,9 +67,7 @@ const OrderDetailed = (props) => {
   const handleUpdateOrder = async () => {
     setIsUpdateOpen(false);
     setIsBtnLoading(true);
-    const update = await ref
-      .doc(id)
-      .set({ ...orderDetails, order_status: orderStatus, ...order });
+    const update = await ref.doc(id).set(order);
     setIsBtnLoading(false);
     toast({
       title: "Order updated.",
@@ -111,13 +108,20 @@ const OrderDetailed = (props) => {
       <div className={styles.container}>
         {!isLoading && (
           <>
+            {order.product_image && (
+              <img
+                src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${order.product_image}?alt=media`}
+                alt="product_image`"
+                width="200px"
+              />
+            )}
             <FormControl id="customer_name" w="90%" mt="2" isRequired>
               <FormLabel>Customer Name :</FormLabel>
               <Input
                 type="text"
                 size="lg"
                 name="customer_name"
-                value={orderDetails.customer_name}
+                value={order.customer_name}
                 variant="filled"
                 disabled
               />
@@ -129,7 +133,7 @@ const OrderDetailed = (props) => {
                 size="lg"
                 rows="4"
                 name="customer_address"
-                value={orderDetails.customer_address}
+                value={order.customer_address}
                 variant="filled"
                 disabled
               />
@@ -141,7 +145,7 @@ const OrderDetailed = (props) => {
                 size="lg"
                 name="product_cod"
                 variant="filled"
-                value={orderDetails.product_cod}
+                value={order.product_cod}
                 disabled
               />
             </FormControl>
@@ -152,7 +156,7 @@ const OrderDetailed = (props) => {
                 size="lg"
                 name="product_price"
                 variant="filled"
-                value={orderDetails.product_price}
+                value={order.product_price}
                 disabled
               />
             </FormControl>
@@ -163,7 +167,7 @@ const OrderDetailed = (props) => {
                 size="lg"
                 name="product_size"
                 variant="filled"
-                value={orderDetails.product_size}
+                value={order.product_size}
                 disabled
               />
             </FormControl>
@@ -171,7 +175,7 @@ const OrderDetailed = (props) => {
               <FormLabel>Payment Method :</FormLabel>
               <RadioGroup
                 disabled
-                value={orderDetails.payment_method}
+                value={order.payment_method}
                 name="payement_method"
               >
                 <Stack direction="row">
@@ -190,22 +194,24 @@ const OrderDetailed = (props) => {
                 rows="2"
                 name="transfer_details"
                 variant="filled"
-                value={orderDetails.transfer_details || ""}
+                value={order.transfer_details || ""}
                 disabled
               />
             </FormControl>
 
             <FormControl id="order_status" w="90%" mt="2" isRequired>
               <FormLabel>Order Status :</FormLabel>
-              <RadioGroup
-                onChange={setOrderStatus}
-                value={orderStatus}
-                name="order_status"
-              >
+              <RadioGroup value={order.order_status}>
                 <Stack direction="row">
-                  <Radio value="1">Accepted</Radio>
-                  <Radio value="2">Dispatched</Radio>
-                  <Radio value="3">Delivered</Radio>
+                  <Radio value="1" onChange={updateOrder} name="order_status">
+                    Accepted
+                  </Radio>
+                  <Radio value="2" onChange={updateOrder} name="order_status">
+                    Dispatched
+                  </Radio>
+                  <Radio value="3" onChange={updateOrder} name="order_status">
+                    Delivered
+                  </Radio>
                 </Stack>
               </RadioGroup>
             </FormControl>
@@ -215,7 +221,7 @@ const OrderDetailed = (props) => {
                 type="text"
                 size="lg"
                 name="tracking_id"
-                value={orderDetails.tracking_id || ""}
+                value={order.tracking_id || ""}
                 onChange={updateOrder}
               />
             </FormControl>

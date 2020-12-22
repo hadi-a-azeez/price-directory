@@ -30,13 +30,13 @@ const Order = () => {
     return (
       <Link to={`/order_detailed/${order.id}`} className={styles.link}>
         <div className={styles.card}>
-          {
+          {order.product_image && (
             <img
-              src=""
+              src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${order.product_image}?alt=media`}
               alt="product_image`"
               className={styles.thumbnailImage}
             />
-          }
+          )}
           <div className={styles.details}>
             <h1 className={styles.cod}>{order.product_cod}</h1>
             <h1 className={styles.cod}>{order.customer_name}</h1>
@@ -80,7 +80,7 @@ const Order = () => {
           +
         </button>
         {orders.map((order) => (
-          <OrderCard order={order} />
+          <OrderCard order={order} key={order.date} />
         ))}
       </div>
     </>
