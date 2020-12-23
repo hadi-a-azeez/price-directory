@@ -73,8 +73,8 @@ const Products = () => {
 
   const StockStatus = (data) => {
     const { sizeXS, sizeS, sizeM, sizeL, sizeXL, sizeXXL } = data.data;
-    const totalStock = sizeXS + sizeS + sizeM + sizeL + sizeXL + sizeXXL;
-    if (totalStock > 0) {
+    const totalStock = [sizeXS, sizeS, sizeM, sizeL, sizeXL, sizeXXL];
+    if (totalStock.some((s) => s > 0)) {
       return <h1 className={styles.InStock}>In Stock</h1>;
     } else return <h1 className={styles.OutOfStock}>Out Of Stock </h1>;
   };

@@ -45,7 +45,7 @@ const ProductAdd = () => {
   const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
   const fabricsArray = [
-    "cotton",
+    "Cotton",
     "Muslin",
     "Rayon",
     "Denim",
@@ -70,6 +70,7 @@ const ProductAdd = () => {
         })
       );
       setIsLoading(false);
+      setProduct({ type: "Top", fabric: "Cotton" });
     };
     fetchCategories();
   }, []);
@@ -227,10 +228,9 @@ const ProductAdd = () => {
           name="categories"
           id="categories"
           className={styles.dropdown}
-          defaultValue={"DEFAULT"}
           onChange={updateProduct}
           name="category"
-          value={product.category || ""}
+          value={product.category || "DEFAULT"}
         >
           <option value="DEFAULT" disabled>
             Select a Category

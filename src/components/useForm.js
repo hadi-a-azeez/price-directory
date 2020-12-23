@@ -5,8 +5,8 @@ export const useForm = (initialValue) => {
 
   return [
     values,
-    (newVal) => {
-      setValues({ newVal });
+    (data) => {
+      setValues({ ...values, ...data });
     },
     (e) => {
       console.log(values);
