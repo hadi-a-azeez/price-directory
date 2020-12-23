@@ -85,7 +85,7 @@ const AddOrder = () => {
         <h1 className={styles.label}>Add Order</h1>
       </div>
       <div className={styles.container}>
-        <FormControl id="customer_name" w="90%" mt="2" isRequired>
+        <FormControl w="90%" mt="2" isRequired>
           <FormLabel>Customer Name :</FormLabel>
           <Input
             type="text"

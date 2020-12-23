@@ -8,20 +8,39 @@ import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { useHistory } from "react-router-dom";
 import backIcon from "../assets/backIcon.png";
+import { useForm } from "../components/useForm";
+import {
+  Input,
+  FormControl,
+  FormLabel,
+  Textarea,
+  Stack,
+  Radio,
+  RadioGroup,
+  Button,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+} from "@chakra-ui/react";
 
 const ProductAdd = () => {
-  const [product_cod, setProductCod] = useState("");
-  const [product_price, setProductPrice] = useState(0);
+  // const [product_cod, setProductCod] = useState("");
+  // const [product_price, setProductPrice] = useState(0);
   const [product_image, setProductImage] = useState([]);
-  const [sizeXS, setXS] = useState(0);
-  const [sizeS, setS] = useState(0);
-  const [sizeM, setM] = useState(0);
-  const [sizeL, setL] = useState(0);
-  const [sizeXL, setXL] = useState(0);
-  const [sizeXXL, setXXL] = useState(0);
-  const [fabric, setFabric] = useState("");
-  const [category, setCategory] = useState("");
-  const [type, setType] = useState("Top");
+  // const [sizeXS, setXS] = useState(0);
+  // const [sizeS, setS] = useState(0);
+  // const [sizeM, setM] = useState(0);
+  // const [sizeL, setL] = useState(0);
+  // const [sizeXL, setXL] = useState(0);
+  // const [sizeXXL, setXXL] = useState(0);
+  // const [fabric, setFabric] = useState("");
+  // const [category, setCategory] = useState("");
+  // const [type, setType] = useState("Top");
+
+  const [product, setProduct, updateProduct] = useForm({});
   const [isValidationError, setIsValidationError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
@@ -62,18 +81,8 @@ const ProductAdd = () => {
       let imageName = await imageToServer(product_image);
       db.collection("products").add({
         date: Date.now(),
-        fabric,
-        type,
+        ...product,
         product_image: imageName,
-        product_cod,
-        product_price,
-        sizeXS,
-        sizeS,
-        sizeM,
-        sizeL,
-        sizeXL,
-        sizeXXL,
-        category,
       });
       setIsLoading(false);
       history.push("/admin/products");
@@ -86,7 +95,7 @@ const ProductAdd = () => {
   };
 
   const validateFields = () => {
-    if (product_cod === "" || product_price === 0) {
+    if (product.product_cod === "" || product.product_price === 0) {
       setIsValidationError(true);
       return false;
     } else return true;
@@ -134,17 +143,6 @@ const ProductAdd = () => {
     history.goBack();
   };
 
-  const handleFabricClick = (val) => {
-    setFabric(val);
-    console.log(val);
-  };
-  const handleTypeClick = (val) => {
-    setType(val);
-    console.log(val);
-  };
-  const handleCategoryClick = (val) => {
-    setCategory(val);
-  };
   return (
     <>
       <div className={styles.header}>
@@ -177,13 +175,22 @@ const ProductAdd = () => {
           onChange={(event) => compressImage(event)}
           multiple
         />
-        <label>Product cod</label>
-        <input type="text" onChange={(e) => setProductCod(e.target.value)} />
+        <FormControl id="product_cod" w="90%" mt="2" isRequired>
+          <FormLabel>Product cod</FormLabel>
+          <Input
+            type="text"
+            onChange={updateProduct}
+            name="product_cod"
+            value={product.product_cod || ""}
+          />
+        </FormControl>
         <select
           name="type"
           id="type"
           className={styles.dropdown}
-          onChange={(e) => handleTypeClick(e.target.value)}
+          onChange={updateProduct}
+          name="type"
+          value={product.type || ""}
         >
           {typeArray.map((type, index) => (
             <option value={type} key={index}>
@@ -194,14 +201,18 @@ const ProductAdd = () => {
         <label>Product Price</label>
         <input
           type="number"
-          onChange={(e) => setProductPrice(parseInt(e.target.value))}
+          onChange={updateProduct}
+          value={product.product_price || ""}
+          name="product_price"
         />
         <select
           name="fabric"
           id="fabrics"
           className={styles.dropdown}
           defaultValue={"DEFAULT"}
-          onChange={(e) => handleFabricClick(e.target.value)}
+          onChange={updateProduct}
+          name="fabric"
+          value={product.fabric || ""}
         >
           <option value="DEFAULT" disabled>
             Select a fabric
@@ -217,7 +228,9 @@ const ProductAdd = () => {
           id="categories"
           className={styles.dropdown}
           defaultValue={"DEFAULT"}
-          onChange={(e) => handleCategoryClick(e.target.value)}
+          onChange={updateProduct}
+          name="category"
+          value={product.category || ""}
         >
           <option value="DEFAULT" disabled>
             Select a Category
@@ -236,7 +249,9 @@ const ProductAdd = () => {
             <input
               type="number"
               className={styles.sizeField}
-              onChange={(e) => setXS(parseInt(e.target.value))}
+              onChange={updateProduct}
+              name="sizeXS"
+              value={product.sizeXS || ""}
             />
           </div>
           <div className={styles.sizeItem}>
@@ -244,7 +259,9 @@ const ProductAdd = () => {
             <input
               type="number"
               className={styles.sizeField}
-              onChange={(e) => setS(parseInt(e.target.value))}
+              onChange={updateProduct}
+              name="sizeS"
+              value={product.sizeS || ""}
             />
           </div>
           <div className={styles.sizeItem}>
@@ -252,7 +269,9 @@ const ProductAdd = () => {
             <input
               type="number"
               className={styles.sizeField}
-              onChange={(e) => setM(parseInt(e.target.value))}
+              onChange={updateProduct}
+              name="sizeM"
+              value={product.sizeM || ""}
             />
           </div>
         </div>
@@ -262,7 +281,9 @@ const ProductAdd = () => {
             <input
               type="number"
               className={styles.sizeField}
-              onChange={(e) => setL(parseInt(e.target.value))}
+              onChange={updateProduct}
+              name="sizeL"
+              value={product.sizeL || ""}
             />
           </div>
           <div className={styles.sizeItem}>
@@ -270,7 +291,9 @@ const ProductAdd = () => {
             <input
               type="number"
               className={styles.sizeField}
-              onChange={(e) => setXL(parseInt(e.target.value))}
+              onChange={updateProduct}
+              name="sizeXL"
+              value={product.sizeXL || ""}
             />
           </div>
           <div className={styles.sizeItem}>
@@ -278,7 +301,9 @@ const ProductAdd = () => {
             <input
               type="number"
               className={styles.sizeField}
-              onChange={(e) => setXXL(parseInt(e.target.value))}
+              onChange={updateProduct}
+              name="sizeXXL"
+              value={product.sizeXXL || ""}
             />
           </div>
         </div>
