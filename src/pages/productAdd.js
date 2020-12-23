@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import imageCompression from "browser-image-compression";
 import styles from "./productadd.module.scss";
 import Placeholder from "../assets/placeholder.png";
@@ -13,11 +13,11 @@ import {
   Input,
   FormControl,
   FormLabel,
-  Textarea,
+  Select,
   Stack,
-  Radio,
-  RadioGroup,
+  Image,
   Button,
+  SimpleGrid,
   AlertDialog,
   AlertDialogBody,
   AlertDialogFooter,
@@ -43,7 +43,9 @@ const ProductAdd = () => {
   const [product, setProduct, updateProduct] = useForm({});
   const [isValidationError, setIsValidationError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const history = useHistory();
+  const cancelRef = useRef();
   const fabricsArray = [
     "Cotton",
     "Muslin",
@@ -70,12 +72,13 @@ const ProductAdd = () => {
         })
       );
       setIsLoading(false);
-      setProduct({ type: "Top", fabric: "Cotton" });
+      setProduct({ type: "Top" });
     };
     fetchCategories();
   }, []);
 
   const addProduct = async () => {
+    setIsOpen(false);
     setIsLoading(true);
     const isValidate = validateFields();
     if (isValidate === true) {
@@ -153,22 +156,25 @@ const ProductAdd = () => {
         <h1 className={styles.label}>Add Product</h1>
       </div>
       <div className={styles.container}>
-        {product_image.length > 0 ? (
-          product_image.map((image, index) => (
-            <img
-              key={index}
-              src={URL.createObjectURL(image)}
-              className={styles.image}
-              alt="image_preview"
-              onClick={() => deleteImageFromArr(image)}
-            />
-          ))
-        ) : (
-          <img src={Placeholder} className={styles.image} alt="image_preview" />
-        )}
-        <label htmlFor="file-upload" className={styles.customFileUpload}>
-          Upload Image
-        </label>
+        <SimpleGrid columns={3} spacing={2} mt="6" mb="6" w="90%">
+          {product_image.length > 0 ? (
+            product_image.map((image, index) => (
+              <Image
+                key={index}
+                src={URL.createObjectURL(image)}
+                boxSize="100px"
+                objectFit="cover"
+                alt="image_preview"
+                onClick={() => deleteImageFromArr(image)}
+              />
+            ))
+          ) : (
+            <Image src={Placeholder} boxSize="100px" alt="image_preview" />
+          )}
+          <label htmlFor="file-upload" className={styles.customFileUpload}>
+            +
+          </label>
+        </SimpleGrid>
         <input
           type="file"
           accept="image/*"
@@ -182,13 +188,16 @@ const ProductAdd = () => {
             type="text"
             onChange={updateProduct}
             name="product_cod"
+            size="lg"
             value={product.product_cod || ""}
           />
         </FormControl>
-        <select
+        <Select
           name="type"
           id="type"
-          className={styles.dropdown}
+          w="90%"
+          size="lg"
+          mt="4"
           onChange={updateProduct}
           name="type"
           value={product.type || ""}
@@ -198,18 +207,23 @@ const ProductAdd = () => {
               {type}
             </option>
           ))}
-        </select>
-        <label>Product Price</label>
-        <input
-          type="number"
-          onChange={updateProduct}
-          value={product.product_price || ""}
-          name="product_price"
-        />
-        <select
+        </Select>
+        <FormControl id="product_price" w="90%" mt="2" isRequired>
+          <FormLabel>Product Price</FormLabel>
+          <Input
+            type="number"
+            onChange={updateProduct}
+            value={product.product_price || ""}
+            name="product_price"
+            size="lg"
+          />
+        </FormControl>
+        <Select
           name="fabric"
           id="fabrics"
-          className={styles.dropdown}
+          w="90%"
+          size="lg"
+          mt="4"
           defaultValue={"DEFAULT"}
           onChange={updateProduct}
           name="fabric"
@@ -223,11 +237,13 @@ const ProductAdd = () => {
               {fabric}
             </option>
           ))}
-        </select>
-        <select
+        </Select>
+        <Select
           name="categories"
           id="categories"
-          className={styles.dropdown}
+          w="90%"
+          size="lg"
+          mt="4"
           onChange={updateProduct}
           name="category"
           value={product.category || "DEFAULT"}
@@ -241,92 +257,127 @@ const ProductAdd = () => {
                 {category.category}
               </option>
             ))}
-        </select>
-        <label>Product Sizes</label>
-        <div className={styles.productSizeContainer}>
-          <div className={styles.sizeItem}>
-            <label>XS</label>
-            <input
-              type="number"
-              className={styles.sizeField}
-              onChange={updateProduct}
-              name="sizeXS"
-              value={product.sizeXS || ""}
-            />
-          </div>
-          <div className={styles.sizeItem}>
-            <label>S</label>
-            <input
-              type="number"
-              className={styles.sizeField}
-              onChange={updateProduct}
-              name="sizeS"
-              value={product.sizeS || ""}
-            />
-          </div>
-          <div className={styles.sizeItem}>
-            <label>M</label>
-            <input
-              type="number"
-              className={styles.sizeField}
-              onChange={updateProduct}
-              name="sizeM"
-              value={product.sizeM || ""}
-            />
-          </div>
-        </div>
-        <div className={styles.productSizeContainer}>
-          <div className={styles.sizeItem}>
-            <label>L</label>
-            <input
-              type="number"
-              className={styles.sizeField}
-              onChange={updateProduct}
-              name="sizeL"
-              value={product.sizeL || ""}
-            />
-          </div>
-          <div className={styles.sizeItem}>
-            <label>XL</label>
-            <input
-              type="number"
-              className={styles.sizeField}
-              onChange={updateProduct}
-              name="sizeXL"
-              value={product.sizeXL || ""}
-            />
-          </div>
-          <div className={styles.sizeItem}>
-            <label>XXL</label>
-            <input
-              type="number"
-              className={styles.sizeField}
-              onChange={updateProduct}
-              name="sizeXXL"
-              value={product.sizeXXL || ""}
-            />
-          </div>
-        </div>
+        </Select>
+        <FormControl id="product_sizes" w="90%" mt="2" isRequired>
+          <FormLabel>Product Sizes</FormLabel>
+
+          <Stack direction="row">
+            <FormControl id="product_sizes" w="90%">
+              <FormLabel>XS</FormLabel>
+              <Input
+                type="number"
+                onChange={updateProduct}
+                name="sizeXS"
+                size="lg"
+                w="70%"
+                value={product.sizeXS || ""}
+              />
+            </FormControl>
+            <FormControl id="product_sizes" w="90%" mt="2">
+              <FormLabel>S</FormLabel>
+              <Input
+                type="number"
+                onChange={updateProduct}
+                name="sizeS"
+                size="lg"
+                w="70%"
+                value={product.sizeS || ""}
+              />
+            </FormControl>
+            <FormControl id="product_sizes" w="90%" mt="2">
+              <FormLabel>M</FormLabel>
+              <Input
+                type="number"
+                onChange={updateProduct}
+                name="sizeM"
+                size="lg"
+                w="70%"
+                value={product.sizeM || ""}
+              />
+            </FormControl>
+          </Stack>
+
+          <Stack direction="row">
+            <FormControl id="product_sizes" w="90%">
+              <FormLabel>L</FormLabel>
+              <Input
+                type="number"
+                onChange={updateProduct}
+                name="sizeL"
+                size="lg"
+                w="70%"
+                value={product.sizeL || ""}
+              />
+            </FormControl>
+            <FormControl id="product_sizes" w="90%" mt="2">
+              <FormLabel>XL</FormLabel>
+              <Input
+                type="number"
+                onChange={updateProduct}
+                name="sizeXL"
+                size="lg"
+                w="70%"
+                value={product.sizeXL || ""}
+              />
+            </FormControl>
+            <FormControl id="product_sizes" w="90%" mt="2">
+              <FormLabel>XXL</FormLabel>
+              <Input
+                type="number"
+                onChange={updateProduct}
+                name="sizeXXL"
+                size="lg"
+                w="70%"
+                value={product.sizeXXL || ""}
+              />
+            </FormControl>
+          </Stack>
+        </FormControl>
         {isValidationError && (
           <h1 className={styles.validationError}>
             *Product cod and product price field must be filled
           </h1>
         )}
-        <button onClick={addProduct} className={styles.btnPrimary}>
-          {isLoading ? (
-            <div className={styles.loader}>
-              <Loader
-                type="Oval"
-                color="white"
-                height={18}
-                width={18}
-                visible={isLoading}
-              />
-            </div>
-          ) : (
-            <div>Add Product</div>
-          )}
-        </button>
+        <Button
+          onClick={() => setIsOpen(true)}
+          colorScheme="teal"
+          variant="solid"
+          size="xs"
+          w="90%"
+          padding="6"
+          mt="6"
+          mb="6"
+          isLoading={isLoading}
+          loadingText="Uploading"
+        >
+          Add Product
+        </Button>
+        <AlertDialog
+          isOpen={isOpen}
+          leastDestructiveRef={cancelRef}
+          onClose={() => setIsOpen(false)}
+        >
+          <AlertDialogOverlay>
+            <AlertDialogContent w="90%" pos="center">
+              <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                Add Product
+              </AlertDialogHeader>
+
+              <AlertDialogBody>
+                Are you sure you want to add this Product ?
+              </AlertDialogBody>
+
+              <AlertDialogFooter>
+                <Button ref={cancelRef} onClick={() => setIsOpen(false)}>
+                  Cancel
+                </Button>
+                <Button colorScheme="green" ml={3} onClick={addProduct}>
+                  Add
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialogOverlay>
+        </AlertDialog>
       </div>
     </>
   );

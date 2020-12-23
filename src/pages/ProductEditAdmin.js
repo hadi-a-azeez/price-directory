@@ -9,6 +9,22 @@ import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { useHistory } from "react-router-dom";
 import backIcon from "../assets/backIcon.png";
+import {
+  Input,
+  FormControl,
+  FormLabel,
+  Select,
+  Stack,
+  Image,
+  Button,
+  SimpleGrid,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+} from "@chakra-ui/react";
 
 const ProductAdmin = (props) => {
   const [product, setProduct] = useState({});
@@ -135,22 +151,28 @@ const ProductAdmin = (props) => {
                   </div>
                 ))}
             </Carousel>
-            <label>Product cod</label>
-            <input
-              type="text"
-              value={product.product_cod}
-              onChange={(e) =>
-                setProduct({ ...product, product_cod: e.target.value })
-              }
-            />
-            <label>Product Price</label>
-            <input
-              type="number"
-              value={product.product_price}
-              onChange={(e) =>
-                setProduct({ ...product, product_price: e.target.value })
-              }
-            />
+            <FormControl id="product_cod" w="90%" mt="2" isRequired>
+              <FormLabel>Product cod</FormLabel>
+              <Input
+                type="text"
+                value={product.product_cod}
+                size="lg"
+                onChange={(e) =>
+                  setProduct({ ...product, product_cod: e.target.value })
+                }
+              />
+            </FormControl>
+            <FormControl id="product_price" w="90%" mt="2" isRequired>
+              <FormLabel>Product Price</FormLabel>
+              <Input
+                type="number"
+                size="lg"
+                value={product.product_price}
+                onChange={(e) =>
+                  setProduct({ ...product, product_price: e.target.value })
+                }
+              />
+            </FormControl>
             <label>Product Sizes</label>
             <div className={styles.productSizeContainer}>
               <div className={styles.sizeItem}>

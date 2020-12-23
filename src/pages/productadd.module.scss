@@ -12,6 +12,7 @@
   position: fixed;
   top: 0;
   width: 100%;
+  z-index: 9;
   @include flexCenter(row, center, center);
   .backButton {
     background-color: $primary-color;
@@ -46,7 +47,7 @@
     object-fit: contain;
     object-position: center;
   }
-  label {
+  /*  label {
     margin-left: 10px;
     font-size: 20px;
     text-align: start;
@@ -62,19 +63,27 @@
     padding: 13px;
     font-size: 18px;
     font-weight: 500;
-  }
+  } */
   input[type="file"] {
     display: none;
   }
   .customFileUpload {
-    background-color: $primary-color;
-    color: white;
-    font-weight: 500;
-    width: 83%;
-    padding: 15px;
+    background-color: white;
+    width: 100px;
+    height: 100px;
+    color: #e2e8f0;
+    font-weight: 400;
+    padding: 6px;
+    font-size: 60px;
+    border: 1px solid #e2e8f0;
+    border-radius: 3px;
     display: flex;
     align-items: center;
     justify-content: center;
+    &:hover {
+      background-color: #e2e8f0;
+      color: white;
+    }
   }
   .btnPrimary {
     background-color: $primary-color;
