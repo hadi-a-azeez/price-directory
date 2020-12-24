@@ -11,6 +11,7 @@ import CategoryProducts from "./pages/categoryProducts";
 import Order from "./pages/orders";
 import AddOrder from "./pages/addOrder";
 import OrderDetialed from "./pages/orderDetailed";
+import script from "./pages/script";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route exact path="/order_detailed/:id" component={OrderDetialed} />
           <Route exact path="/add_order" component={AddOrder} />
           <Route path="/products" component={Products} />
+
           <Route path="/product_detailed/:id" component={ProductDetailed} />
           <Route path="/admin/product_add" component={ProductAdd} />
           <Route path="/admin/products" component={ProductsAdmin} />

@@ -18,15 +18,27 @@ const Script = () => {
     );
     console.log(data);
   };
+  function reg(cod) {
+    var numberPattern = /\d+/g;
+    let cln = cod.match(numberPattern).join("");
+    var lttr = cod.match(/[a-zA-Z]+/g).join("");
+    return lttr + cln;
+  }
   const updateData = async () => {
     for (let i = 0; i < data.length; i++) {
       await db
         .collection("products")
         .doc(data[i].id)
-        .update({ product_image: [data[i].product_image] });
-      console.log();
+        .update({ product_cod: reg(data[i].product_cod) });
     }
+    console.log("finished");
   };
+  function reg(cod) {
+    var numberPattern = /\d+/g;
+    let cln = cod.match(numberPattern).join("");
+    var lttr = cod.match(/[a-zA-Z]+/g).join("");
+    return lttr + cln;
+  }
 
   return (
     <>

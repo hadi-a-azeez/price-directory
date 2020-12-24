@@ -55,7 +55,7 @@ const OrderDetailed = (props) => {
     const fetchData = async () => {
       setIsLoading(true);
       const snapshot = await ref.doc(id).get();
-      const data = snapshot.data();
+      const data = await snapshot.data();
       setOrder(data);
       setOrderStatus(data.order_status);
       console.log(data);

@@ -16,6 +16,7 @@ const Products = () => {
   const [lastDocFetched, setLastDocFetched] = useState();
   const [isEmpty, setIsEmpty] = useState(false);
   const [isMoreProductsLoading, setIsMoreProductLoading] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
   const history = useHistory();
   const db = firebase.firestore();
   const productsRef = db.collection("products").orderBy("date", "desc");
@@ -54,21 +55,25 @@ const Products = () => {
     const data = await productsRef.startAfter(lastDocFetched).limit(10).get();
     updateProductsState(data);
   };
-
-  const doSearch = (e) => {
-    setIsProductsDisplayed(false);
-    setIsSearchResultLoading(true);
-
-    const searchTerm = e.target.value.toLowerCase();
-    setFilteredProducts(
-      products.filter((product) => {
-        return product.product_cod.toLowerCase().indexOf(searchTerm) >= 0;
-      })
-    );
-    setIsSearchResultLoading(false);
-    if (searchTerm === "") {
+  useEffect(() => {
+    if (searchValue === "") {
       setIsProductsDisplayed(true);
     }
+  }, [searchValue]);
+  const doSearch = async (e) => {
+    setIsProductsDisplayed(false);
+    setIsSearchResultLoading(true);
+    let searchData = await db
+      .collection("products")
+      .where("product_cod", "==", `PNR${searchValue}`)
+      .get();
+    searchData.forEach((products) => {
+      setFilteredProducts([
+        ...filteredProducts,
+        { ...products.data(), id: products.id },
+      ]);
+    });
+    setIsSearchResultLoading(false);
   };
 
   const StockStatus = (data) => {
@@ -104,14 +109,6 @@ const Products = () => {
     );
   };
 
-  const SearchResult = () => {
-    return (
-      <>
-        {!isSearchResultLoading &&
-          filteredProducts.map((product) => <ProductCard product={product} />)}
-      </>
-    );
-  };
   return (
     <>
       <div className={styles.header}>
@@ -119,11 +116,15 @@ const Products = () => {
           Home
         </button>
         <input
-          type="text"
+          type="number"
           placeholder="Search cod here"
           className={styles.search}
-          onChange={(e) => doSearch(e)}
-        ></input>
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+        />
+        <button className={styles.btnHome} onClick={doSearch}>
+          Search
+        </button>
         <TabHeader selected="products" />
       </div>
       {isLoading ? (
@@ -154,7 +155,11 @@ const Products = () => {
             {isEmpty && <h1>No more products</h1>}
           </>
         ) : (
-          <SearchResult />
+          <>
+            {filteredProducts.map((product) => (
+              <ProductCard product={product} />
+            ))}
+          </>
         )}
       </div>
       <div style={{ marginTop: `20px` }} />

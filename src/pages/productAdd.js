@@ -27,19 +27,7 @@ import {
 } from "@chakra-ui/react";
 
 const ProductAdd = () => {
-  // const [product_cod, setProductCod] = useState("");
-  // const [product_price, setProductPrice] = useState(0);
   const [product_image, setProductImage] = useState([]);
-  // const [sizeXS, setXS] = useState(0);
-  // const [sizeS, setS] = useState(0);
-  // const [sizeM, setM] = useState(0);
-  // const [sizeL, setL] = useState(0);
-  // const [sizeXL, setXL] = useState(0);
-  // const [sizeXXL, setXXL] = useState(0);
-  // const [fabric, setFabric] = useState("");
-  // const [category, setCategory] = useState("");
-  // const [type, setType] = useState("Top");
-
   const [product, setProduct, updateProduct] = useForm({});
   const [isValidationError, setIsValidationError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -161,6 +149,7 @@ const ProductAdd = () => {
             product_image.map((image, index) => (
               <Image
                 key={index}
+                style={{ background: "#212121" }}
                 src={URL.createObjectURL(image)}
                 boxSize="100px"
                 objectFit="cover"
@@ -185,7 +174,7 @@ const ProductAdd = () => {
         <FormControl id="product_cod" w="90%" mt="2" isRequired>
           <FormLabel>Product cod</FormLabel>
           <Input
-            type="text"
+            type="number"
             onChange={updateProduct}
             name="product_cod"
             size="lg"
@@ -218,16 +207,25 @@ const ProductAdd = () => {
             size="lg"
           />
         </FormControl>
+        <FormControl id="product_length" w="90%" mt="2" isRequired>
+          <FormLabel>Product Length</FormLabel>
+          <Input
+            type="number"
+            onChange={updateProduct}
+            value={product.product_length || ""}
+            name="product_length"
+            size="lg"
+          />
+        </FormControl>
         <Select
           name="fabric"
           id="fabrics"
           w="90%"
           size="lg"
           mt="4"
-          defaultValue={"DEFAULT"}
           onChange={updateProduct}
           name="fabric"
-          value={product.fabric || ""}
+          value={product.fabric || "DEFAULT"}
         >
           <option value="DEFAULT" disabled>
             Select a fabric

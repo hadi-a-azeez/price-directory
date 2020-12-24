@@ -6,13 +6,16 @@ export const useForm = (initialValue) => {
   return [
     values,
     (data) => {
-      setValues({ ...values, ...data });
+      setValues((prevValues) => {
+        return { ...prevValues, ...data };
+      });
     },
     (e) => {
-      console.log(values);
-      setValues({
-        ...values,
-        [e.target.name]: e.target.value,
+      setValues((prevValues) => {
+        return {
+          ...prevValues,
+          [e.target.name]: e.target.value,
+        };
       });
     },
   ];

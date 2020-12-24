@@ -84,8 +84,9 @@ const ProductDetailed = (props) => {
     const fetchData = async () => {
       setIsLoading(true);
       const snapshot = await ref.doc(id).get();
-      const data = await snapshot.data();
-      await setProduct(data);
+      const data = snapshot.data();
+
+      setProduct(data);
       setIsLoading(false);
     };
     fetchData();

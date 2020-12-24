@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import imageCompression from "browser-image-compression";
+import { useForm } from "../components/useForm";
 import styles from "./productadd.module.scss";
 import firebase from "../firebase";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
@@ -27,7 +27,7 @@ import {
 } from "@chakra-ui/react";
 
 const ProductAdmin = (props) => {
-  const [product, setProduct] = useState({});
+  const [product, setProduct, updateProduct] = useForm({});
   const [isLoading, setIsLoading] = useState(false);
   const [isUpdateLoading, setIsUpdateLoading] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
@@ -46,7 +46,7 @@ const ProductAdmin = (props) => {
     fetchData();
   }, []);
 
-  const updateProduct = async () => {
+  const updateProductServer = async () => {
     setIsUpdateLoading(true);
 
     const db = firebase.firestore();
@@ -64,45 +64,6 @@ const ProductAdmin = (props) => {
     setIsDeleteLoading(false);
     history.goBack();
   };
-
-  // const compressImage = async (event) => {
-  //   //compresses image to below 1MB
-  //   let imagesFromInput = event.target.files;
-  //   const options = {
-  //     maxSizeMB: 1,
-  //     maxWidthOrHeight: 1280,
-  //     useWebWorker: true,
-  //   };
-  //   try {
-  //     for (let i = 0; i < imagesFromInput.length; i++) {
-  //       const compressedFile = await imageCompression(
-  //         imagesFromInput[i],
-  //         options
-  //       );
-  //       //look here
-  //       setProductImages((prevImages) => [...prevImages, compressedFile]);
-  //     }
-
-  //     // setProductImageConverted(URL.createObjectURL(compressedFile));
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // const imageToServer = async (image) => {
-  //   // Upload image to firebase storage
-  //   let storageRef = firebase.storage().ref();
-  //   let imagesRef = storageRef.child("images");
-  //   let imageNames = product.product_image;
-  //   // Points to 'images'
-  //   for (let i = 0; i < image.length; i++) {
-  //     let imageName = uuidv4();
-  //     let spaceRef = imagesRef.child(imageName);
-  //     let resp = await spaceRef.put(image[i]);
-  //     imageNames.push(imageName);
-  //   }
-  //   return imageNames;
-  // };
 
   const handleBackClick = () => {
     history.goBack();
@@ -141,9 +102,11 @@ const ProductAdmin = (props) => {
             >
               {product.product_image &&
                 product.product_image.map((image, index) => (
-                  <div style={{ height: 300, backgroundColor: `white` }}>
+                  <div
+                    style={{ height: 300, backgroundColor: `white` }}
+                    key={index}
+                  >
                     <img
-                      key={index}
                       src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${image}?alt=media`}
                       className={styles.image}
                       alt="image_preview"
@@ -157,9 +120,8 @@ const ProductAdmin = (props) => {
                 type="text"
                 value={product.product_cod}
                 size="lg"
-                onChange={(e) =>
-                  setProduct({ ...product, product_cod: e.target.value })
-                }
+                name="product_cod"
+                onChange={updateProduct}
               />
             </FormControl>
             <FormControl id="product_price" w="90%" mt="2" isRequired>
@@ -167,99 +129,98 @@ const ProductAdmin = (props) => {
               <Input
                 type="number"
                 size="lg"
+                name="product_price"
                 value={product.product_price}
-                onChange={(e) =>
-                  setProduct({ ...product, product_price: e.target.value })
-                }
+                onChange={updateProduct}
               />
             </FormControl>
-            <label>Product Sizes</label>
-            <div className={styles.productSizeContainer}>
-              <div className={styles.sizeItem}>
-                <label>XS</label>
-                <input
-                  type="number"
-                  value={product.sizeXS}
-                  className={styles.sizeField}
-                  onChange={(e) =>
-                    setProduct({ ...product, sizeXS: e.target.value })
-                  }
-                />
-              </div>
-              <div className={styles.sizeItem}>
-                <label>S</label>
-                <input
-                  type="number"
-                  value={product.sizeS}
-                  className={styles.sizeField}
-                  onChange={(e) =>
-                    setProduct({
-                      ...product,
-                      sizeS: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div className={styles.sizeItem}>
-                <label>M</label>
-                <input
-                  type="number"
-                  value={product.sizeM}
-                  className={styles.sizeField}
-                  onChange={(e) =>
-                    setProduct({
-                      ...product,
-                      sizeM: e.target.value,
-                    })
-                  }
-                />
-              </div>
-            </div>
-            <div className={styles.productSizeContainer}>
-              <div className={styles.sizeItem}>
-                <label>L</label>
-                <input
-                  type="number"
-                  value={product.sizeL}
-                  className={styles.sizeField}
-                  onChange={(e) =>
-                    setProduct({
-                      ...product,
-                      sizeL: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div className={styles.sizeItem}>
-                <label>XL</label>
-                <input
-                  type="number"
-                  value={product.sizeXL}
-                  className={styles.sizeField}
-                  onChange={(e) =>
-                    setProduct({
-                      ...product,
-                      sizeXL: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div className={styles.sizeItem}>
-                <label>XXL</label>
-                <input
-                  type="number"
-                  value={product.sizeXXL}
-                  className={styles.sizeField}
-                  onChange={(e) =>
-                    setProduct({
-                      ...product,
-                      sizeXXL: e.target.value,
-                    })
-                  }
-                />
-              </div>
-            </div>
-            <button onClick={updateProduct} className={styles.btnPrimary}>
+            <FormControl id="product_length" w="90%" mt="2" isRequired>
+              <FormLabel>Product Length</FormLabel>
+              <Input
+                type="number"
+                size="lg"
+                name="product_length"
+                value={product.product_length}
+                onChange={updateProduct}
+              />
+            </FormControl>
+
+            <FormControl id="product_sizes" w="90%" mt="2" isRequired>
+              <FormLabel>Product Sizes</FormLabel>
+
+              <Stack direction="row">
+                <FormControl id="product_sizes" w="90%">
+                  <FormLabel>XS</FormLabel>
+                  <Input
+                    type="number"
+                    onChange={updateProduct}
+                    name="sizeXS"
+                    size="lg"
+                    w="70%"
+                    value={product.sizeXS || ""}
+                  />
+                </FormControl>
+                <FormControl id="product_sizes" w="90%" mt="2">
+                  <FormLabel>S</FormLabel>
+                  <Input
+                    type="number"
+                    onChange={updateProduct}
+                    name="sizeS"
+                    size="lg"
+                    w="70%"
+                    value={product.sizeS || ""}
+                  />
+                </FormControl>
+                <FormControl id="product_sizes" w="90%" mt="2">
+                  <FormLabel>M</FormLabel>
+                  <Input
+                    type="number"
+                    onChange={updateProduct}
+                    name="sizeM"
+                    size="lg"
+                    w="70%"
+                    value={product.sizeM || ""}
+                  />
+                </FormControl>
+              </Stack>
+
+              <Stack direction="row">
+                <FormControl id="product_sizes" w="90%">
+                  <FormLabel>L</FormLabel>
+                  <Input
+                    type="number"
+                    onChange={updateProduct}
+                    name="sizeL"
+                    size="lg"
+                    w="70%"
+                    value={product.sizeL || ""}
+                  />
+                </FormControl>
+                <FormControl id="product_sizes" w="90%" mt="2">
+                  <FormLabel>XL</FormLabel>
+                  <Input
+                    type="number"
+                    onChange={updateProduct}
+                    name="sizeXL"
+                    size="lg"
+                    w="70%"
+                    value={product.sizeXL || ""}
+                  />
+                </FormControl>
+                <FormControl id="product_sizes" w="90%" mt="2">
+                  <FormLabel>XXL</FormLabel>
+                  <Input
+                    type="number"
+                    onChange={updateProduct}
+                    name="sizeXXL"
+                    size="lg"
+                    w="70%"
+                    value={product.sizeXXL || ""}
+                  />
+                </FormControl>
+              </Stack>
+            </FormControl>
+            <button onClick={updateProductServer} className={styles.btnPrimary}>
               {isUpdateLoading ? (
                 <div className={styles.loader}>
                   <Loader

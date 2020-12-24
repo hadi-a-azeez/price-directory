@@ -9,17 +9,19 @@ import TabHeader from "../components/tabHeader";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
   const [isProductsDisplayed, setIsProductsDisplayed] = useState(false);
   const [isSearchResultLoading, setIsSearchResultLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const history = useHistory();
+  const db = firebase.firestore();
 
   useEffect(() => {
     setIsProductsDisplayed(false);
     const fetchData = async () => {
       setIsLoading(true);
-      const db = firebase.firestore();
+
       const data = await db
         .collection("products")
         .orderBy("date", "desc")
@@ -34,21 +36,27 @@ const Products = () => {
     };
     fetchData();
   }, []);
-
-  const doSearch = (e) => {
-    setIsProductsDisplayed(false);
-    setIsSearchResultLoading(true);
-
-    const searchTerm = e.target.value.toLowerCase();
-    setFilteredProducts(
-      products.filter((product) => {
-        return product.product_cod.toLowerCase().indexOf(searchTerm) >= 0;
-      })
-    );
-    setIsSearchResultLoading(false);
-    if (searchTerm === "") {
+  //check if search box is empty then show products
+  useEffect(() => {
+    if (searchValue === "") {
       setIsProductsDisplayed(true);
     }
+  }, [searchValue]);
+  const doSearch = async (e) => {
+    setIsProductsDisplayed(false);
+    setIsSearchResultLoading(true);
+    let searchData = await db
+      .collection("products")
+      .where("product_cod", "==", `PNR${searchValue}`)
+      .get();
+    searchData.forEach((products) => {
+      setFilteredProducts([
+        ...filteredProducts,
+        { ...products.data(), id: products.id },
+      ]);
+    });
+    console.log(filteredProducts);
+    setIsSearchResultLoading(false);
   };
 
   const StockStatus = (data) => {
@@ -63,37 +71,6 @@ const Products = () => {
     history.push("/admin/product_add");
   };
 
-  const SearchResult = () => {
-    return (
-      <>
-        {!isSearchResultLoading &&
-          filteredProducts.map((product, index) => (
-            <Link
-              to={`/admin/product_edit_admin/${product.id}`}
-              key={index}
-              className={styles.link}
-            >
-              <div className={styles.card} key={index}>
-                {product.product_image && (
-                  <img
-                    src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${product.product_image[0]}?alt=media`}
-                    alt="product_image`"
-                    className={styles.thumbnailImage}
-                  />
-                )}
-                <div className={styles.details}>
-                  <h1 className={styles.cod}>{product.product_cod}</h1>
-                  <h1
-                    className={styles.price}
-                  >{`₹${product.product_price}`}</h1>
-                  <StockStatus data={product} />
-                </div>
-              </div>{" "}
-            </Link>
-          ))}
-      </>
-    );
-  };
   return (
     <>
       <div className={styles.header}>
@@ -104,8 +81,12 @@ const Products = () => {
           type="text"
           placeholder="Search cod here"
           className={styles.search}
-          onChange={(e) => doSearch(e)}
-        ></input>
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+        />
+        <button className={styles.btnHome} onClick={doSearch}>
+          Search
+        </button>
         <TabHeader selected="products" />
       </div>
       {isLoading ? (
@@ -151,7 +132,32 @@ const Products = () => {
             </Link>
           ))
         ) : (
-          <SearchResult />
+          <>
+            {filteredProducts.map((product, index) => (
+              <Link
+                to={`/admin/product_edit_admin/${product.id}`}
+                key={index}
+                className={styles.link}
+              >
+                <div className={styles.card}>
+                  {product.product_image && (
+                    <img
+                      src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${product.product_image[0]}?alt=media`}
+                      alt="product_image`"
+                      className={styles.thumbnailImage}
+                    />
+                  )}
+                  <div className={styles.details}>
+                    <h1 className={styles.cod}>{product.product_cod}</h1>
+                    <h1
+                      className={styles.price}
+                    >{`₹${product.product_price}`}</h1>
+                    <StockStatus data={product} />
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </>
         )}
       </div>
       <div style={{ marginTop: 20 }} />
