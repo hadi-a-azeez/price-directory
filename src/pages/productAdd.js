@@ -71,6 +71,7 @@ const ProductAdd = () => {
     const isValidate = validateFields();
     if (isValidate === true) {
       let imageName = await imageToServer(product_image);
+      console.log("PNR" + product.product_cod);
       db.collection("products").add({
         date: Date.now(),
         ...product,
@@ -174,7 +175,7 @@ const ProductAdd = () => {
         <FormControl id="product_cod" w="90%" mt="2" isRequired>
           <FormLabel>Product cod</FormLabel>
           <Input
-            type="number"
+            type="text"
             onChange={updateProduct}
             name="product_cod"
             size="lg"

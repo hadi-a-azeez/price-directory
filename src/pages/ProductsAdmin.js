@@ -36,10 +36,9 @@ const Products = () => {
     };
     fetchData();
   }, []);
-  //check if search box is empty then show products
   useEffect(() => {
-    if (searchValue === "") {
-      setIsProductsDisplayed(true);
+    if (searchValue == "") {
+      setFilteredProducts([]);
     }
   }, [searchValue]);
   const doSearch = async (e) => {
@@ -50,10 +49,7 @@ const Products = () => {
       .where("product_cod", "==", `PNR${searchValue}`)
       .get();
     searchData.forEach((products) => {
-      setFilteredProducts([
-        ...filteredProducts,
-        { ...products.data(), id: products.id },
-      ]);
+      setFilteredProducts([{ ...products.data(), id: products.id }]);
     });
     console.log(filteredProducts);
     setIsSearchResultLoading(false);
@@ -106,7 +102,7 @@ const Products = () => {
         <button className={styles.btnFloat} onClick={handleFloatingButtonClick}>
           +
         </button>
-        {isProductsDisplayed ? (
+        {searchValue.length < 1 ? (
           products.map((product, index) => (
             <Link
               to={`/admin/product_edit_admin/${product.id}`}
