@@ -8,7 +8,7 @@ import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { useHistory } from "react-router-dom";
 import backIcon from "../assets/backIcon.png";
-import { useForm } from "../components/useForm";
+import { useFormLocal } from "../components/useFormLocal";
 import {
   Input,
   FormControl,
@@ -28,7 +28,7 @@ import {
 
 const ProductAdd = () => {
   const [product_image, setProductImage] = useState([]);
-  const [product, setProduct, updateProduct] = useForm({});
+  const [product, setProduct, updateProduct] = useFormLocal({});
   const [isValidationError, setIsValidationError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);

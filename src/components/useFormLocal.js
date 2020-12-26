@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const useForm = (initialValue) => {
+export const useFormLocal = (initialValue) => {
   const [values, setValues] = useState(initialValue);
 
   return [

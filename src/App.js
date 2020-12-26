@@ -11,6 +11,7 @@ import CategoryProducts from "./pages/categoryProducts";
 import Order from "./pages/orders";
 import AddOrder from "./pages/addOrder";
 import OrderDetialed from "./pages/orderDetailed";
+
 import script from "./pages/script";
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
 
           <Route path="/product_detailed/:id" component={ProductDetailed} />
           <Route path="/admin/product_add" component={ProductAdd} />
+
           <Route path="/admin/products" component={ProductsAdmin} />
           <Route path="/admin/categories" component={CategoriesAdmin} />
           <Route path="/admin/add_category" component={AddCategory} />

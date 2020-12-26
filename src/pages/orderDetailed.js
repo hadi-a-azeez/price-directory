@@ -2,7 +2,7 @@ import { React, useRef, useState, useEffect } from "react";
 import styles from "./addOrder.module.scss";
 import { useHistory } from "react-router-dom";
 import backIcon from "../assets/backIcon.png";
-import { useForm } from "../components/useForm";
+import { useFormLocal } from "../components/useFormLocal";
 import firebase from "../firebase";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
@@ -28,7 +28,7 @@ const OrderDetailed = (props) => {
   const [isUpdateOpen, setIsUpdateOpen] = useState(false); //setting state for update btn modal
   const [isDeleteOpen, setIsDeleteOpen] = useState(false); //setting state for delete btn modal
   const [isLoading, setIsLoading] = useState(false);
-  const [order, setOrder, updateOrder] = useForm([]);
+  const [order, setOrder, updateOrder] = useFormLocal([]);
 
   const [isBtnLoading, setIsBtnLoading] = useState(false);
   const [orderStatus, setOrderStatus] = useState("");

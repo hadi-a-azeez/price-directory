@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useForm } from "../components/useForm";
+import { useFormLocal } from "../components/useFormLocal";
 import styles from "./productadd.module.scss";
 import firebase from "../firebase";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
@@ -27,7 +27,7 @@ import {
 } from "@chakra-ui/react";
 
 const ProductAdmin = (props) => {
-  const [product, setProduct, updateProduct] = useForm({});
+  const [product, setProduct, updateProduct] = useFormLocal({});
   const [isLoading, setIsLoading] = useState(false);
   const [isUpdateLoading, setIsUpdateLoading] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);

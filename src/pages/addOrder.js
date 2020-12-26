@@ -4,7 +4,7 @@ import imageCompression from "browser-image-compression";
 import { v4 as uuidv4 } from "uuid";
 import { useHistory } from "react-router-dom";
 import backIcon from "../assets/backIcon.png";
-import { useForm } from "../components/useForm";
+import { useFormLocal } from "../components/useFormLocal";
 import firebase from "../firebase";
 import {
   Input,
@@ -27,7 +27,7 @@ const AddOrder = () => {
   const [paymentMethod, setPaymentMethod] = useState("3");
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [order, setOrder, updateOrder] = useForm([]);
+  const [order, setOrder, updateOrder] = useFormLocal([]);
   const [imageConverted, setImageConverted] = useState();
   const cancelRef = useRef();
   const history = useHistory();

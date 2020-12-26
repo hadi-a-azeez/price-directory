@@ -15,7 +15,7 @@ const Order = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       setIsLoading(true);
-      const data = await db.collection("orders").get();
+      const data = await db.collection("orders").orderBy("date", "desc").get();
       setOrders(
         data.docs.map((order) => {
           return { ...order.data(), id: order.id };
