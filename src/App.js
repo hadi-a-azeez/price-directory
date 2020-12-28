@@ -12,8 +12,6 @@ import Order from "./pages/orders";
 import AddOrder from "./pages/addOrder";
 import OrderDetialed from "./pages/orderDetailed";
 
-import script from "./pages/script";
-
 function App() {
   return (
     <>

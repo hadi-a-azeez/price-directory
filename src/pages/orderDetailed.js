@@ -115,6 +115,28 @@ const OrderDetailed = (props) => {
                 width="200px"
               />
             )}
+            <FormControl id="date" w="90%" mt="2">
+              <FormLabel>Order Date</FormLabel>
+              <Input
+                type="text"
+                size="lg"
+                name="order"
+                value={new Date(order.date).toDateString()}
+                variant="filled"
+                disabled
+              />
+            </FormControl>
+            <FormControl id="customer_name" w="90%" mt="2" isRequired>
+              <FormLabel>Order ID:</FormLabel>
+              <Input
+                type="text"
+                size="lg"
+                name="customer_name"
+                value={order.order_no}
+                variant="filled"
+                disabled
+              />
+            </FormControl>
             <FormControl id="customer_name" w="90%" mt="2" isRequired>
               <FormLabel>Customer Name :</FormLabel>
               <Input

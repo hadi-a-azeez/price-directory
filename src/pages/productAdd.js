@@ -65,21 +65,23 @@ const ProductAdd = () => {
     fetchCategories();
   }, []);
 
+  // const validateSubmit = (runSubmit) => {
+  //   if (product.product_cod != "" || product.product_price != 0) {
+  //     runSubmit();
+  //   } else setIsValidationError(true);
+  // };
   const addProduct = async () => {
+    console.log("prodcut added");
     setIsOpen(false);
     setIsLoading(true);
-    const isValidate = validateFields();
-    if (isValidate === true) {
-      let imageName = await imageToServer(product_image);
-      console.log("PNR" + product.product_cod);
-      db.collection("products").add({
-        date: Date.now(),
-        ...product,
-        product_image: imageName,
-      });
-      setIsLoading(false);
-      history.push("/admin/products");
-    } else setIsLoading(false);
+    let imageName = await imageToServer(product_image);
+    db.collection("products").add({
+      date: Date.now(),
+      ...product,
+      product_image: imageName,
+    });
+    setIsLoading(false);
+    history.push("/admin/products");
   };
   const deleteImageFromArr = (image) => {
     setProductImage((previmage) =>
@@ -87,11 +89,16 @@ const ProductAdd = () => {
     );
   };
 
-  const validateFields = () => {
-    if (product.product_cod === "" || product.product_price === 0) {
+  const validateFields = (addCallback) => {
+    if (!product.product_cod || !product.product_price) {
+      setIsOpen(false);
       setIsValidationError(true);
-      return false;
-    } else return true;
+    } else {
+      setIsValidationError(false);
+      setIsOpen(false);
+      setIsValidationError(false);
+      addCallback();
+    }
   };
 
   const compressImage = async (event) => {
@@ -370,7 +377,11 @@ const ProductAdd = () => {
                 <Button ref={cancelRef} onClick={() => setIsOpen(false)}>
                   Cancel
                 </Button>
-                <Button colorScheme="green" ml={3} onClick={addProduct}>
+                <Button
+                  colorScheme="green"
+                  ml={3}
+                  onClick={() => validateFields(addProduct)}
+                >
                   Add
                 </Button>
               </AlertDialogFooter>

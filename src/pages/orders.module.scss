@@ -37,8 +37,9 @@
 }
 .container {
   @include flexCenter(column, none, center);
-  height: 100vh;
+  height: 100%;
   margin-top: 10px;
+
   .btnFloat {
     /* padding: 18px 18px; */
     width: 70px;

@@ -9,8 +9,6 @@ import TabHeader from "../components/tabHeader";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
-  const [isProductsDisplayed, setIsProductsDisplayed] = useState(false);
-  const [isSearchResultLoading, setIsSearchResultLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [lastDocFetched, setLastDocFetched] = useState();
@@ -22,12 +20,10 @@ const Products = () => {
   const productsRef = db.collection("products").orderBy("date", "desc");
 
   useEffect(() => {
-    setIsProductsDisplayed(false);
     const fetchData = async () => {
       setIsLoading(true);
       const data = await productsRef.limit(10).get();
       updateProductsState(data);
-      setIsProductsDisplayed(true);
       setIsLoading(false);
     };
     fetchData();
@@ -62,8 +58,6 @@ const Products = () => {
     }
   }, [searchValue]);
   const doSearch = async (e) => {
-    setIsProductsDisplayed(false);
-    setIsSearchResultLoading(true);
     let searchData = await db
       .collection("products")
       .where("product_cod", "==", `PNR${searchValue}`)
@@ -71,7 +65,6 @@ const Products = () => {
     searchData.forEach((products) => {
       setFilteredProducts([{ ...products.data(), id: products.id }]);
     });
-    setIsSearchResultLoading(false);
   };
 
   const StockStatus = (data) => {

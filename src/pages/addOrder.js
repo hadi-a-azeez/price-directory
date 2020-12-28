@@ -15,6 +15,9 @@ import {
   Radio,
   RadioGroup,
   Button,
+  Alert,
+  AlertIcon,
+  AlertTitle,
   AlertDialog,
   AlertDialogBody,
   AlertDialogFooter,
@@ -28,6 +31,7 @@ const AddOrder = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [order, setOrder, updateOrder] = useFormLocal([]);
+  const [isValidationError, setIsValidationError] = useState(false);
   const [imageConverted, setImageConverted] = useState();
   const cancelRef = useRef();
   const history = useHistory();
@@ -36,17 +40,41 @@ const AddOrder = () => {
   const addOrder = async () => {
     setIsOpen(false);
     setIsLoading(true);
-
     let imageName = await imageToServer(imageConverted);
-    db.collection("orders").add({
+    let orderData = await db.collection("--stats--").doc("orders").get();
+    let { order_count } = orderData.data();
+    await db.collection("orders").add({
       date: Date.now(),
       payment_method: paymentMethod,
       order_status: "1",
       product_image: imageName,
       ...order,
+      order_no: order_count,
     });
+    // increment order id in --stats-- collection
+
+    await db
+      .collection("--stats--")
+      .doc("orders")
+      .update({ order_count: firebase.firestore.FieldValue.increment(1) });
     setIsLoading(false);
     history.push("/orders");
+  };
+  const validateFields = async (addCallback) => {
+    if (
+      !order.customer_name ||
+      !order.customer_address ||
+      !order.product_cod ||
+      !order.product_size
+    ) {
+      setIsOpen(false);
+      setIsValidationError(true);
+    } else {
+      setIsValidationError(false);
+      setIsOpen(false);
+      setIsValidationError(false);
+      addCallback();
+    }
   };
   const compressImage = async (event) => {
     //compresses image to below 1MB
@@ -168,6 +196,12 @@ const AddOrder = () => {
             />
           </FormControl>
         )}
+        {isValidationError && (
+          <Alert status="error" mt={2}>
+            <AlertIcon />
+            <AlertTitle mr={2}>Please Fill All Fields!</AlertTitle>
+          </Alert>
+        )}
         <Button
           colorScheme="teal"
           variant="solid"
@@ -201,7 +235,11 @@ const AddOrder = () => {
                 <Button ref={cancelRef} onClick={() => setIsOpen(false)}>
                   Cancel
                 </Button>
-                <Button colorScheme="green" ml={3} onClick={addOrder}>
+                <Button
+                  colorScheme="green"
+                  ml={3}
+                  onClick={() => validateFields(addOrder)}
+                >
                   Add
                 </Button>
               </AlertDialogFooter>
