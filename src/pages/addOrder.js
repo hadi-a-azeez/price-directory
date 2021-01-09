@@ -1,4 +1,4 @@
-import { React, useRef, useState } from "react";
+import { React, useRef, useState, useEffect } from "react";
 import styles from "./addOrder.module.scss";
 import imageCompression from "browser-image-compression";
 import { v4 as uuidv4 } from "uuid";
@@ -6,6 +6,9 @@ import { useHistory } from "react-router-dom";
 import backIcon from "../assets/backIcon.png";
 import { useFormLocal } from "../components/useFormLocal";
 import firebase from "../firebase";
+import DatePicker from "react-date-picker";
+import "react-datepicker/dist/react-datepicker.css";
+
 import {
   Input,
   FormControl,
@@ -36,6 +39,10 @@ const AddOrder = () => {
   const cancelRef = useRef();
   const history = useHistory();
   const db = firebase.firestore();
+
+  useEffect(() => {
+    setOrder({ order_date: new Date() });
+  }, []);
 
   const addOrder = async () => {
     setIsOpen(false);
@@ -113,6 +120,17 @@ const AddOrder = () => {
         <h1 className={styles.label}>Add Order</h1>
       </div>
       <div className={styles.container}>
+        <FormControl w="90%" mt="2" isRequired>
+          <FormLabel>Order Date :</FormLabel>
+          <DatePicker
+            format="dd/MM/yyyy"
+            value={order.order_date}
+            onChange={(date) => {
+              setOrder({ order_date: date });
+            }}
+          />
+        </FormControl>
+
         <FormControl w="90%" mt="2" isRequired>
           <FormLabel>Customer Name :</FormLabel>
           <Input
@@ -196,6 +214,15 @@ const AddOrder = () => {
             />
           </FormControl>
         )}
+        <FormControl w="90%" mt="2">
+          <FormLabel>Order Note</FormLabel>
+          <Input
+            type="text"
+            size="lg"
+            name="order_note"
+            onChange={updateOrder}
+          />
+        </FormControl>
         {isValidationError && (
           <Alert status="error" mt={2}>
             <AlertIcon />

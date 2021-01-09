@@ -55,7 +55,7 @@ const OrderDetailed = (props) => {
     const fetchData = async () => {
       setIsLoading(true);
       const snapshot = await ref.doc(id).get();
-      const data = await snapshot.data();
+      const data = snapshot.data();
       setOrder(data);
       setOrderStatus(data.order_status);
       console.log(data);
@@ -117,14 +117,16 @@ const OrderDetailed = (props) => {
             )}
             <FormControl id="date" w="90%" mt="2">
               <FormLabel>Order Date</FormLabel>
-              <Input
-                type="text"
-                size="lg"
-                name="order"
-                value={new Date(order.date).toDateString()}
-                variant="filled"
-                disabled
-              />
+              {order.order_date && (
+                <Input
+                  type="text"
+                  size="lg"
+                  name="order"
+                  value={order.order_date.toDate().toLocaleDateString()}
+                  variant="filled"
+                  disabled
+                />
+              )}
             </FormControl>
             <FormControl id="customer_name" w="90%" mt="2" isRequired>
               <FormLabel>Order ID:</FormLabel>
@@ -246,6 +248,19 @@ const OrderDetailed = (props) => {
                 value={order.tracking_id || ""}
                 onChange={updateOrder}
               />
+            </FormControl>
+            <FormControl id="date" w="90%" mt="2">
+              <FormLabel>Order Note</FormLabel>
+              {order.order_note && (
+                <Input
+                  type="text"
+                  size="lg"
+                  name="order"
+                  value={order.order_note}
+                  variant="filled"
+                  disabled
+                />
+              )}
             </FormControl>
             <Button
               colorScheme="teal"
