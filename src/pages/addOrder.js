@@ -7,6 +7,7 @@ import backIcon from "../assets/backIcon.png";
 import { useFormLocal } from "../components/useFormLocal";
 import firebase from "../firebase";
 import DatePicker from "react-date-picker";
+
 import "react-datepicker/dist/react-datepicker.css";
 
 import {
