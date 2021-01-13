@@ -11,7 +11,7 @@ const Script = () => {
 
   const getData = async () => {
     const dataFetched = await db.collection("products").get();
-    await setData(
+    setData(
       dataFetched.docs.map((product) => {
         return { ...product.data(), id: product.id };
       })
@@ -31,14 +31,14 @@ const Script = () => {
         .doc(data[i].id)
         .update({ product_cod: reg(data[i].product_cod) });
     }
-    console.log("finished");
+    alert("finished");
   };
-  function reg(cod) {
-    var numberPattern = /\d+/g;
-    let cln = cod.match(numberPattern).join("");
-    var lttr = cod.match(/[a-zA-Z]+/g).join("");
-    return lttr + cln;
-  }
+  // function reg(cod) {
+  //   var numberPattern = /\d+/g;
+  //   let cln = cod.match(numberPattern).join("");
+  //   var lttr = cod.match(/[a-zA-Z]+/g).join("");
+  //   return lttr + cln;
+  // }
 
   return (
     <>

@@ -9,6 +9,7 @@ import CategoriesAdmin from "./pages/categoriesAdmin";
 import AddCategory from "./pages/addCategoryAdmin";
 import CategoryProducts from "./pages/categoryProducts";
 import Order from "./pages/orders";
+import Script from "./pages/script";
 import AddOrder from "./pages/addOrder";
 import OrderDetialed from "./pages/orderDetailed";
 

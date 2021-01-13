@@ -28,6 +28,8 @@ import {
 
 const ProductAdd = () => {
   const [product_image, setProductImage] = useState([]);
+  const [codeType, setCodeType] = useState("PNR");
+  const [productCod, setProductCod] = useState("");
   const [product, setProduct, updateProduct] = useFormLocal({});
   const [isValidationError, setIsValidationError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -79,6 +81,7 @@ const ProductAdd = () => {
       date: Date.now(),
       ...product,
       product_image: imageName,
+      product_cod: codeType + productCod,
     });
     setIsLoading(false);
     history.push("/admin/products");
@@ -90,7 +93,7 @@ const ProductAdd = () => {
   };
 
   const validateFields = (addCallback) => {
-    if (!product.product_cod || !product.product_price) {
+    if (!productCod || !product.product_price) {
       setIsOpen(false);
       setIsValidationError(true);
     } else {
@@ -181,30 +184,49 @@ const ProductAdd = () => {
         />
         <FormControl id="product_cod" w="90%" mt="2" isRequired>
           <FormLabel>Product cod</FormLabel>
-          <Input
-            type="text"
-            onChange={updateProduct}
-            name="product_cod"
-            size="lg"
-            value={product.product_cod || ""}
-          />
+          <Stack direction="row">
+            <Select
+              name="type"
+              id="type"
+              w="40%"
+              size="lg"
+              onChange={(e) => setCodeType(e.target.value)}
+              name="type"
+              value={codeType || ""}
+            >
+              <option value="PNR">PNR</option>
+              <option value="AB">AB</option>
+            </Select>
+            <Input
+              type="number"
+              onChange={(e) => {
+                setProductCod(e.target.value);
+              }}
+              name="product_cod"
+              size="lg"
+              value={productCod}
+            />
+          </Stack>
         </FormControl>
-        <Select
-          name="type"
-          id="type"
-          w="90%"
-          size="lg"
-          mt="4"
-          onChange={updateProduct}
-          name="type"
-          value={product.type || ""}
-        >
-          {typeArray.map((type, index) => (
-            <option value={type} key={index}>
-              {type}
-            </option>
-          ))}
-        </Select>
+        <FormControl id="product_cod" w="90%" mt="2" isRequired>
+          <FormLabel>Product Type</FormLabel>
+          <Select
+            name="type"
+            id="type"
+            w="90%"
+            size="lg"
+            mt="4"
+            onChange={updateProduct}
+            name="type"
+            value={product.type || ""}
+          >
+            {typeArray.map((type, index) => (
+              <option value={type} key={index}>
+                {type}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
         <FormControl id="product_price" w="90%" mt="2" isRequired>
           <FormLabel>Product Price</FormLabel>
           <Input
