@@ -12,6 +12,7 @@ import Whatsapp from "../assets/whatsapp.png";
 import Instagram from "../assets/instagram.png";
 import TableSize from "../components/TableSize";
 import { getSingleProduct } from "../API/product";
+import { apiRoot } from "../config";
 
 const ProductDetailed = (props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -177,7 +178,7 @@ const ProductDetailed = (props) => {
                 product.productimages.map((imageNew) => (
                   <div style={{ height: `500px`, backgroundColor: `white` }}>
                     <img
-                      src={`http://localhost:5000/api/product-images/min/${imageNew.name}`}
+                      src={`${apiRoot}/product-images/min/${imageNew.name}`}
                       className={styles.image}
                       alt="image_preview"
                     />

@@ -6,6 +6,7 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { useHistory } from "react-router-dom";
 import TabHeader from "../components/tabHeader";
 import { getProductAPI, searchProductAPI } from "../API/product";
+import { apiRoot } from "../config";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -54,7 +55,7 @@ const Products = () => {
         <div className={styles.card} key={product.id}>
           {product.productimages.length > 0 && (
             <img
-              src={`http://localhost:5000/api/product-images/min/${product.productimages[0].name}`}
+              src={`${apiRoot}/product-images/min/${product.productimages[0].name}`}
               alt="product_image`"
               className={styles.thumbnailImage}
             />

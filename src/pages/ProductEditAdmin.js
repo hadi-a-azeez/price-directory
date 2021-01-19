@@ -25,6 +25,7 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
 } from "@chakra-ui/react";
+import { apiRoot } from "../config";
 
 const ProductAdmin = (props) => {
   const [product, setProduct, updateProduct] = useFormLocal({});
@@ -102,7 +103,7 @@ const ProductAdmin = (props) => {
                     key={index}
                   >
                     <img
-                      src={`http://localhost:5000/api/product-images/min/${image.name}`}
+                      src={`${apiRoot}/product-images/min/${image.name}`}
                       className={styles.image}
                       alt="image_preview"
                     />

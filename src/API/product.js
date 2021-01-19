@@ -1,5 +1,5 @@
 import axios from "axios";
-import { apiRoot } from "./config";
+import { apiRoot } from "../config";
 
 //get all products
 export const getProductAPI = async () => {

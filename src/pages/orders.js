@@ -7,6 +7,7 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 import { ChakraProvider, Flex, Image, Text, Container } from "@chakra-ui/react";
 import { getOrderAPI, searchOrderAPI } from "../API/order";
+import { apiRoot } from "../config";
 
 const Order = () => {
   const history = useHistory();
@@ -54,7 +55,7 @@ const Order = () => {
               height="120px"
               width="140px"
               borderRadius="10px"
-              src={`http://localhost:5000/api/order-images/${order.orderproducts[0].image}.jpeg`}
+              src={`${apiRoot}/order-images/${order.orderproducts[0].image}.jpeg`}
               m={2}
               objectFit="cover"
             />

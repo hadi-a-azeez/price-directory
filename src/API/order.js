@@ -1,5 +1,5 @@
 import axios from "axios";
-import { apiRoot } from "./config";
+import { apiRoot } from "../config";
 
 //add a order
 export const addOrderAPI = async (order) => {
