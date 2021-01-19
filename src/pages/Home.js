@@ -19,15 +19,9 @@ const Home = () => {
           onClick={() => history.push("/products")}
         >
           <img src={User} className={styles.icon} alt="icon" />
-          <h1 className={styles.cardHeading}>User</h1>
+          <h1 className={styles.cardHeading}>Products</h1>
         </button>
-        <button
-          className={styles.card}
-          onClick={() => history.push("/admin/products")}
-        >
-          <img src={Admin} className={styles.icon} alt="icon" />
-          <h1 className={styles.cardHeading}>Admin</h1>
-        </button>
+
         <button className={styles.card} onClick={() => history.push("/orders")}>
           <img src={Orders} className={styles.icon} alt="icon" />
           <h1 className={styles.cardHeading}>Orders</h1>

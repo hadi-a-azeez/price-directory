@@ -29,6 +29,20 @@ $color-form-highlight: #eeeeee;
         brightness(111%) contrast(114%);
     }
   }
+  .editButton {
+    background-color: $primary-color;
+    border-radius: 30px;
+    padding: 8px;
+    border: none;
+    position: relative;
+    top: 2;
+    right: 3;
+    .editIcon {
+      width: 20px;
+      height: auto;
+    }
+  }
+
   .label {
     font-weight: 400;
     font-size: 20px;

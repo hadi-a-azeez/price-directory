@@ -1,29 +1,24 @@
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
-import firebase from "../firebase";
 import styles from "./products.module.scss";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import TabHeader from "../components/tabHeader";
+import { getcategoriesAPI } from "../API/category";
 
 const CategoriesAdmin = () => {
   const [isLoading, setIsLoading] = useState();
   const [categories, setCategories] = useState([]);
   const [filtered, setFiltered] = useState([]);
+  const [filter, setFilter] = useState("");
   const history = useHistory();
 
   useEffect(() => {
     const fetchCategories = async () => {
       setIsLoading(true);
-      const db = firebase.firestore();
-      const data = await db.collection("categories").get();
-      setCategories(
-        data.docs.map((category) => {
-          return { ...category.data(), id: category.id };
-        })
-      );
-
+      const categoriesResponse = await getcategoriesAPI();
+      setCategories(categoriesResponse.data);
       setIsLoading(false);
     };
 
@@ -33,8 +28,10 @@ const CategoriesAdmin = () => {
   useEffect(() => {
     handleFilter("Top");
   }, [categories]);
-  const handleFilter = async (cat) => {
+  const handleFilter = (cat) => {
     setFiltered(categories.filter((category) => category.type === cat));
+    console.log(cat);
+    console.log("nice", filtered);
   };
 
   const handleAddCategory = () => {
@@ -81,13 +78,13 @@ const CategoriesAdmin = () => {
         {!isLoading &&
           filtered.map((category) => (
             <Link
-              to={`/admin/category_products/${category.category}`}
+              to={`/admin/category_products/${category.id}`}
               key={category.id}
               className={styles.link}
             >
               <div className={styles.card}>
                 <h1 style={{ fontSize: `22px`, padding: `13px` }}>
-                  {category.category}
+                  {category.name}
                 </h1>
               </div>
             </Link>

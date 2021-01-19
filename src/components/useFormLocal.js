@@ -14,7 +14,10 @@ export const useFormLocal = (initialValue) => {
       setValues((prevValues) => {
         return {
           ...prevValues,
-          [e.target.name]: e.target.value,
+          [e.target.name]:
+            e.target.type === "number"
+              ? parseInt(e.target.value)
+              : e.target.value,
         };
       });
     },

@@ -1,10 +1,10 @@
 import { useState } from "react";
-import firebase from "../firebase";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { useHistory } from "react-router-dom";
 import backIcon from "../assets/backIcon.png";
 import styles from "./productadd.module.scss";
+import { addcategoriesAPI } from "../API/category";
 
 const AddCategory = () => {
   const [category, setCategory] = useState("");
@@ -14,12 +14,11 @@ const AddCategory = () => {
 
   const handleAddCategory = async () => {
     setIsLoading(true);
-    console.log(category);
-    const db = firebase.firestore();
-    await db.collection("categories").add({
+    const responseCategory = await addcategoriesAPI({
+      name: category,
       type: parentCategory,
-      category,
     });
+    console.log(responseCategory);
     setIsLoading(false);
     history.push("/admin/categories");
   };

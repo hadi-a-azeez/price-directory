@@ -3,9 +3,13 @@ import styles from "./addOrder.module.scss";
 import { useHistory } from "react-router-dom";
 import backIcon from "../assets/backIcon.png";
 import { useFormLocal } from "../components/useFormLocal";
-import firebase from "../firebase";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import {
+  getSingleOrderAPI,
+  updateOrderAPI,
+  deleteOrderAPI,
+} from "../API/order";
 import {
   Input,
   FormControl,
@@ -29,14 +33,13 @@ const OrderDetailed = (props) => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false); //setting state for delete btn modal
   const [isLoading, setIsLoading] = useState(false);
   const [order, setOrder, updateOrder] = useFormLocal([]);
+  const [orderTotal, setOrderTotal] = useState(0);
 
   const [isBtnLoading, setIsBtnLoading] = useState(false);
-  const [orderStatus, setOrderStatus] = useState("");
+
   const cancelRef = useRef();
   const history = useHistory();
-  const id = props.match.params.id;
-  const db = firebase.firestore();
-  const ref = db.collection("orders");
+  const orderId = props.match.params.id;
   const toast = useToast();
   const updateModal = {
     header: "Update Order",
@@ -54,11 +57,14 @@ const OrderDetailed = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      const snapshot = await ref.doc(id).get();
-      const data = snapshot.data();
-      setOrder(data);
-      setOrderStatus(data.order_status);
-      console.log(data);
+      const orderResponse = await getSingleOrderAPI(orderId);
+      console.log(orderResponse);
+      setOrder(orderResponse.data);
+      const amountFull = orderResponse.data.orderproducts.reduce(
+        (acc, curr) => acc + curr.price,
+        0
+      );
+      setOrderTotal(amountFull);
       setIsLoading(false);
     };
     fetchData();
@@ -67,7 +73,14 @@ const OrderDetailed = (props) => {
   const handleUpdateOrder = async () => {
     setIsUpdateOpen(false);
     setIsBtnLoading(true);
-    const update = await ref.doc(id).set(order);
+    const updateResponse = await updateOrderAPI(
+      {
+        status: order.status,
+        tracking_id: order.tracking_id,
+        order_note: order.order_note,
+      },
+      orderId
+    );
     setIsBtnLoading(false);
     toast({
       title: "Order updated.",
@@ -79,8 +92,8 @@ const OrderDetailed = (props) => {
     });
   };
 
-  const handlDeleteOrder = () => {
-    ref.doc(id).delete();
+  const handlDeleteOrder = async () => {
+    await deleteOrderAPI(orderId);
     history.goBack();
   };
 
@@ -108,21 +121,25 @@ const OrderDetailed = (props) => {
       <div className={styles.container}>
         {!isLoading && (
           <>
-            {order.product_image && (
-              <img
-                src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${order.product_image}?alt=media`}
-                alt="product_image`"
-                width="200px"
+            <FormControl w="90%" mt="2">
+              <FormLabel>Order Full Amount</FormLabel>
+              <Input
+                type="text"
+                size="lg"
+                name="order"
+                value={`₹${orderTotal}`}
+                variant="filled"
+                disabled
               />
-            )}
+            </FormControl>
             <FormControl id="date" w="90%" mt="2">
               <FormLabel>Order Date</FormLabel>
-              {order.order_date && (
+              {order.date && (
                 <Input
                   type="text"
                   size="lg"
                   name="order"
-                  value={order.order_date.toDate().toLocaleDateString()}
+                  value={new Date(order.date).toLocaleDateString()}
                   variant="filled"
                   disabled
                 />
@@ -134,7 +151,7 @@ const OrderDetailed = (props) => {
                 type="text"
                 size="lg"
                 name="customer_name"
-                value={order.order_no}
+                value={order.id}
                 variant="filled"
                 disabled
               />
@@ -145,7 +162,7 @@ const OrderDetailed = (props) => {
                 type="text"
                 size="lg"
                 name="customer_name"
-                value={order.customer_name}
+                value={order.name}
                 variant="filled"
                 disabled
               />
@@ -157,44 +174,52 @@ const OrderDetailed = (props) => {
                 size="lg"
                 rows="4"
                 name="customer_address"
-                value={order.customer_address}
+                value={order.address}
                 variant="filled"
                 disabled
               />
             </FormControl>
-            <FormControl id="product_cod" w="90%" mt="2" isRequired>
-              <FormLabel>Product Code:</FormLabel>
-              <Input
-                type="text"
-                size="lg"
-                name="product_cod"
-                variant="filled"
-                value={order.product_cod}
-                disabled
-              />
-            </FormControl>
-            <FormControl id="product_price" w="90%" mt="2" isRequired>
-              <FormLabel>Product Price :</FormLabel>
-              <Input
-                type="number"
-                size="lg"
-                name="product_price"
-                variant="filled"
-                value={order.product_price}
-                disabled
-              />
-            </FormControl>
-            <FormControl id="product_size" w="90%" mt="2" isRequired>
-              <FormLabel>Product Size :</FormLabel>
-              <Input
-                type="text"
-                size="lg"
-                name="product_size"
-                variant="filled"
-                value={order.product_size}
-                disabled
-              />
-            </FormControl>
+            <h1>Products</h1>
+            {order.orderproducts &&
+              order.orderproducts.map((product) => (
+                <div key={product.id} style={{ width: "90%" }}>
+                  <FormControl id="product_cod" w="90%" mt="2" isRequired>
+                    <FormLabel>Product Code:</FormLabel>
+                    <Input
+                      type="text"
+                      size="lg"
+                      name="product_cod"
+                      variant="filled"
+                      value={product.code}
+                      disabled
+                    />
+                  </FormControl>
+                  <Stack direction="row">
+                    <FormControl id="product_price" w="90%" mt="2" isRequired>
+                      <FormLabel>Product Price :</FormLabel>
+                      <Input
+                        type="number"
+                        size="lg"
+                        name="product_price"
+                        variant="filled"
+                        value={product.price}
+                        disabled
+                      />
+                    </FormControl>
+                    <FormControl id="product_size" w="90%" mt="2" isRequired>
+                      <FormLabel>Product Size :</FormLabel>
+                      <Input
+                        type="text"
+                        size="lg"
+                        name="product_size"
+                        variant="filled"
+                        value={product.size}
+                        disabled
+                      />
+                    </FormControl>
+                  </Stack>
+                </div>
+              ))}
             <FormControl id="payment_method" w="90%" mt="2" isRequired>
               <FormLabel>Payment Method :</FormLabel>
               <RadioGroup
@@ -203,9 +228,9 @@ const OrderDetailed = (props) => {
                 name="payement_method"
               >
                 <Stack direction="row">
-                  <Radio value="1">Gpay PhonePe</Radio>
-                  <Radio value="2">Account Transfer</Radio>
-                  <Radio value="3">COD</Radio>
+                  <Radio value="GPAY">Gpay PhonePe</Radio>
+                  <Radio value="ACCOUNT">Account Transfer</Radio>
+                  <Radio value="COD">COD</Radio>
                 </Stack>
               </RadioGroup>
             </FormControl>
@@ -225,15 +250,19 @@ const OrderDetailed = (props) => {
 
             <FormControl id="order_status" w="90%" mt="2" isRequired>
               <FormLabel>Order Status :</FormLabel>
-              <RadioGroup value={order.order_status}>
+              <RadioGroup value={order.status}>
                 <Stack direction="row">
-                  <Radio value="1" onChange={updateOrder} name="order_status">
+                  <Radio value="ACCEPTED" onChange={updateOrder} name="status">
                     Accepted
                   </Radio>
-                  <Radio value="2" onChange={updateOrder} name="order_status">
+                  <Radio
+                    value="DISPATCHED"
+                    onChange={updateOrder}
+                    name="status"
+                  >
                     Dispatched
                   </Radio>
-                  <Radio value="3" onChange={updateOrder} name="order_status">
+                  <Radio value="DELIVERED" onChange={updateOrder} name="status">
                     Delivered
                   </Radio>
                 </Stack>
@@ -251,16 +280,14 @@ const OrderDetailed = (props) => {
             </FormControl>
             <FormControl id="date" w="90%" mt="2">
               <FormLabel>Order Note</FormLabel>
-              {order.order_note && (
-                <Input
-                  type="text"
-                  size="lg"
-                  name="order"
-                  value={order.order_note}
-                  variant="filled"
-                  disabled
-                />
-              )}
+
+              <Input
+                type="text"
+                size="lg"
+                name="order_note"
+                value={order.order_note || ""}
+                onChange={updateOrder}
+              />
             </FormControl>
             <Button
               colorScheme="teal"

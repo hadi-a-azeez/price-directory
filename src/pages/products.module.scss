@@ -41,26 +41,27 @@
   justify-content: center;
   align-items: center;
 }
+.btnFloat {
+  /* padding: 18px 18px; */
+  width: 70px;
+  height: 70px;
+  border-radius: 100%;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  background-color: $primary-color;
+  margin-right: 20px;
+  margin-bottom: 30px;
+  border: none;
+  color: white;
+  font-size: 42px;
+  font-weight: 400;
+}
 .container {
   @include flexCenter(column, none, center);
   height: 100vh;
   margin-top: 10px;
-  .btnFloat {
-    /* padding: 18px 18px; */
-    width: 70px;
-    height: 70px;
-    border-radius: 100%;
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    background-color: $primary-color;
-    margin-right: 20px;
-    margin-bottom: 30px;
-    border: none;
-    color: white;
-    font-size: 42px;
-    font-weight: 400;
-  }
+
   .link {
     text-decoration: none;
     width: 100%;

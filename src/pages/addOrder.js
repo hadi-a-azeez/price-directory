@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from "uuid";
 import { useHistory } from "react-router-dom";
 import backIcon from "../assets/backIcon.png";
 import { useFormLocal } from "../components/useFormLocal";
-import firebase from "../firebase";
 import DatePicker from "react-date-picker";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -29,51 +28,77 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
 } from "@chakra-ui/react";
+import { addOrderAPI, uploadOrderImageAPI } from "../API/order";
 
 const AddOrder = () => {
-  const [paymentMethod, setPaymentMethod] = useState("3");
+  const [paymentMethod, setPaymentMethod] = useState("GPAY");
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [order, setOrder, updateOrder] = useFormLocal([]);
+  const [orderProducts, setOrderProducts] = useState([
+    { code: "", image: uuidv4(), price: 0, size: "" },
+  ]);
   const [isValidationError, setIsValidationError] = useState(false);
-  const [imageConverted, setImageConverted] = useState();
+  const [imageConverted, setImageConverted] = useState([]);
   const cancelRef = useRef();
   const history = useHistory();
-  const db = firebase.firestore();
 
   useEffect(() => {
-    setOrder({ order_date: new Date() });
+    setOrder({ date: new Date() });
   }, []);
 
+  //change or edit products array in state
+  const handleOrderProduct = (name, value, id) => {
+    setOrderProducts((currentProduct) =>
+      currentProduct.map((product) =>
+        product.id == id ? { ...product, [name]: value } : product
+      )
+    );
+  };
+
+  //add product to products state
+  const addOrderProduct = () => {
+    const id = uuidv4();
+    const newProducts = {
+      code: "",
+      image: id,
+      price: 0,
+      size: "",
+    };
+    setOrderProducts((old) => [...old, newProducts]);
+    console.log(orderProducts);
+  };
+
+  //add order to server
   const addOrder = async () => {
     setIsOpen(false);
     setIsLoading(true);
-    let imageName = await imageToServer(imageConverted);
-    let orderData = await db.collection("--stats--").doc("orders").get();
-    let { order_count } = orderData.data();
-    await db.collection("orders").add({
-      date: Date.now(),
-      payment_method: paymentMethod,
-      order_status: "1",
-      product_image: imageName,
-      ...order,
-      order_no: order_count,
-    });
-    // increment order id in --stats-- collection
 
-    await db
-      .collection("--stats--")
-      .doc("orders")
-      .update({ order_count: firebase.firestore.FieldValue.increment(1) });
+    console.log({
+      ...order,
+      payment_method: paymentMethod,
+      products: orderProducts,
+    });
+    const response = await addOrderAPI({
+      ...order,
+      payment_method: paymentMethod,
+      products: orderProducts,
+    });
+    await imageToServer(imageConverted);
+
     setIsLoading(false);
-    history.push("/orders");
+    // history.push("/orders");
+  };
+  const imageToServer = async (images) => {
+    await uploadOrderImageAPI(images);
   };
   const validateFields = async (addCallback) => {
     if (
-      !order.customer_name ||
-      !order.customer_address ||
-      !order.product_cod ||
-      !order.product_size
+      !order.name ||
+      !order.address ||
+      !order.code ||
+      !order.size ||
+      !imageConverted
     ) {
       setIsOpen(false);
       setIsValidationError(true);
@@ -84,7 +109,7 @@ const AddOrder = () => {
       addCallback();
     }
   };
-  const compressImage = async (event) => {
+  const compressImage = async (event, productId) => {
     //compresses image to below 1MB
     const options = {
       maxSizeMB: 1,
@@ -96,20 +121,32 @@ const AddOrder = () => {
         event.target.files[0],
         options
       );
-      setImageConverted(compressedFile);
-      // setProductImageConverted(URL.createObjectURL(compressedFile));
+      compressedFile.lastModifiedDate = new Date();
+      const convertedBlobFile = new File([compressedFile], productId, {
+        type: compressedFile.type,
+        lastModified: Date.now(),
+      });
+      setImageConverted((old) => [
+        ...old,
+        { name: productId, image: convertedBlobFile },
+      ]);
     } catch (error) {
       console.log(error);
     }
   };
-  const imageToServer = async (image) => {
-    //upload image to firebase storage
-    let storageRef = firebase.storage().ref();
-    let imagesRef = storageRef.child("images");
-    let imageName = uuidv4();
-    let spaceRef = imagesRef.child(imageName);
-    let resp = await spaceRef.put(image);
-    return imageName;
+
+  //product image component
+  const ProductImage = ({ productId }) => {
+    let imageObject = imageConverted.filter((image) => image.name == productId);
+    if (imageObject.length > 0) {
+      return (
+        <img
+          src={URL.createObjectURL(imageObject[0].image)}
+          width="200px"
+          alt="image_preview"
+        />
+      );
+    } else return <p>Uplaod Image</p>;
   };
 
   return (
@@ -125,21 +162,16 @@ const AddOrder = () => {
           <FormLabel>Order Date :</FormLabel>
           <DatePicker
             format="dd/MM/yyyy"
-            value={order.order_date}
+            value={order.date}
             onChange={(date) => {
-              setOrder({ order_date: date });
+              setOrder({ date: date });
             }}
           />
         </FormControl>
 
         <FormControl w="90%" mt="2" isRequired>
           <FormLabel>Customer Name :</FormLabel>
-          <Input
-            type="text"
-            size="lg"
-            name="customer_name"
-            onChange={updateOrder}
-          />
+          <Input type="text" size="lg" name="name" onChange={updateOrder} />
         </FormControl>
         <FormControl id="customer_address" w="90%" mt="2" isRequired>
           <FormLabel>Address :</FormLabel>
@@ -147,64 +179,95 @@ const AddOrder = () => {
             type="text"
             size="lg"
             rows="4"
-            name="customer_address"
+            name="address"
             onChange={updateOrder}
           />
         </FormControl>
-        <img
-          src={imageConverted && URL.createObjectURL(imageConverted)}
-          width="200px"
-          alt="image_preview"
-        />
-        <input
-          type="file"
-          accept="image/*"
-          id="file-upload"
-          onChange={(event) => compressImage(event)}
-        />
-        <FormControl id="product_cod" w="90%" mt="2" isRequired>
-          <FormLabel>Product Code:</FormLabel>
-          <Input
-            type="text"
-            size="lg"
-            name="product_cod"
-            onChange={updateOrder}
-          />
-        </FormControl>
-        <FormControl id="product_price" w="90%" mt="2" isRequired>
-          <FormLabel>Product Price :</FormLabel>
-          <Input
-            type="number"
-            size="lg"
-            name="product_price"
-            onChange={updateOrder}
-          />
-        </FormControl>
-        <FormControl id="product_size" w="90%" mt="2" isRequired>
-          <FormLabel>Product Size :</FormLabel>
-          <Input
-            type="text"
-            size="lg"
-            name="product_size"
-            onChange={updateOrder}
-          />
-        </FormControl>
+
+        {/* products start */}
+        {/* productt.image is used as id */}
+        {orderProducts.length > 0 &&
+          orderProducts.map((product) => (
+            <div key={product.image}>
+              <ProductImage productId={product.image} />
+              <input
+                type="file"
+                accept="image/*"
+                id="file-upload"
+                name="order-image"
+                onChange={(event) => compressImage(event, product.image)}
+              />
+              <FormControl id="product_cod" w="90%" mt="2" isRequired>
+                <FormLabel>Product Code:</FormLabel>
+                <Input
+                  type="text"
+                  size="lg"
+                  name="code"
+                  value={product.code}
+                  onChange={(e) =>
+                    handleOrderProduct(
+                      e.target.name,
+                      e.target.value,
+                      product.image
+                    )
+                  }
+                />
+              </FormControl>
+              <Stack direction="row">
+                <FormControl id="product_price" w="50%" isRequired>
+                  <FormLabel>Product Price :</FormLabel>
+                  <Input
+                    type="number"
+                    size="lg"
+                    name="price"
+                    value={product.price}
+                    onChange={(e) =>
+                      handleOrderProduct(
+                        e.target.name,
+                        parseInt(e.target.value),
+                        product.image
+                      )
+                    }
+                  />
+                </FormControl>
+                <FormControl id="product_size" w="50%" isRequired>
+                  <FormLabel>Product Size :</FormLabel>
+                  <Input
+                    type="text"
+                    size="lg"
+                    name="size"
+                    value={product.size}
+                    onChange={(e) =>
+                      handleOrderProduct(
+                        e.target.name,
+                        e.target.value,
+                        product.image
+                      )
+                    }
+                  />
+                </FormControl>
+              </Stack>
+            </div>
+          ))}
+        <Button onClick={addOrderProduct}>Add Prduct</Button>
+        {/* products end */}
+
         <FormControl id="payment_method" w="90%" mt="2" isRequired>
           <FormLabel>Payment Method :</FormLabel>
           <RadioGroup
             onChange={setPaymentMethod}
             value={paymentMethod}
-            name="payement_method"
+            name="payment_method"
           >
             <Stack direction="row">
-              <Radio value="1">Gpay PhonePe</Radio>
-              <Radio value="2">Account Transfer</Radio>
-              <Radio value="3">COD</Radio>
+              <Radio value="GPAY">Gpay PhonePe</Radio>
+              <Radio value="ACCOUNT">Account Transfer</Radio>
+              <Radio value="COD">COD</Radio>
             </Stack>
           </RadioGroup>
         </FormControl>
-        {paymentMethod !== "3" && (
-          <FormControl id="trasfer_details" w="90%" mt="2" isRequired>
+        {paymentMethod !== "COD" && (
+          <FormControl w="90%" mt="2" isRequired>
             <FormLabel>Transfer Details :</FormLabel>
             <Textarea
               type="text"
@@ -263,11 +326,7 @@ const AddOrder = () => {
                 <Button ref={cancelRef} onClick={() => setIsOpen(false)}>
                   Cancel
                 </Button>
-                <Button
-                  colorScheme="green"
-                  ml={3}
-                  onClick={() => validateFields(addOrder)}
-                >
+                <Button colorScheme="green" ml={3} onClick={() => addOrder()}>
                   Add
                 </Button>
               </AlertDialogFooter>

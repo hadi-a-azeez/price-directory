@@ -2,12 +2,13 @@ import { useState, useEffect, useRef } from "react";
 import imageCompression from "browser-image-compression";
 import styles from "./productadd.module.scss";
 import Placeholder from "../assets/placeholder.png";
-import firebase from "../firebase";
+
 import { v4 as uuidv4 } from "uuid";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { useHistory } from "react-router-dom";
 import backIcon from "../assets/backIcon.png";
+import { getcategoriesAPI } from "../API/category";
 import { useFormLocal } from "../components/useFormLocal";
 import {
   Input,
@@ -25,6 +26,7 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
 } from "@chakra-ui/react";
+import { addProductAPI, uploadImagesAPI } from "../API/product";
 
 const ProductAdd = () => {
   const [product_image, setProductImage] = useState([]);
@@ -49,51 +51,43 @@ const ProductAdd = () => {
   ];
   const typeArray = ["Top", "Pant", "Set"];
   const [categories, setCategories] = useState([]);
-  const db = firebase.firestore();
 
   useEffect(() => {
     const fetchCategories = async () => {
       setIsLoading(true);
-      const db = firebase.firestore();
-      const data = await db.collection("categories").get();
-      setCategories(
-        data.docs.map((category) => {
-          return { ...category.data(), id: category.id };
-        })
-      );
+
+      const categories = await getcategoriesAPI();
+      setCategories(categories.data);
       setIsLoading(false);
       setProduct({ type: "Top" });
     };
     fetchCategories();
   }, []);
 
-  // const validateSubmit = (runSubmit) => {
-  //   if (product.product_cod != "" || product.product_price != 0) {
-  //     runSubmit();
-  //   } else setIsValidationError(true);
-  // };
   const addProduct = async () => {
-    console.log("prodcut added");
     setIsOpen(false);
     setIsLoading(true);
-    let imageName = await imageToServer(product_image);
-    db.collection("products").add({
-      date: Date.now(),
+    const productResponse = await addProductAPI({
       ...product,
-      product_image: imageName,
-      product_cod: codeType + productCod,
+      code: codeType + productCod,
     });
+    let imageNames = await uploadImagesAPI(
+      product_image,
+      productResponse.data.id
+    );
     setIsLoading(false);
-    history.push("/admin/products");
+    // history.push("/admin/products");
   };
   const deleteImageFromArr = (image) => {
     setProductImage((previmage) =>
-      previmage.filter((imageInState) => imageInState.name !== image.name)
+      previmage.filter(
+        (imageInState) => imageInState.imageName !== image.imageName
+      )
     );
   };
 
   const validateFields = (addCallback) => {
-    if (!productCod || !product.product_price) {
+    if (!productCod || !product.price) {
       setIsOpen(false);
       setIsValidationError(true);
     } else {
@@ -118,28 +112,26 @@ const ProductAdd = () => {
           imagesFromInput[i],
           options
         );
-        setProductImage((oldArray) => [...oldArray, compressedFile]);
+        let imageName = uuidv4();
+        compressedFile.lastModifiedDate = new Date();
+        const convertedBlobFile = new File(
+          [compressedFile],
+          imagesFromInput[i].name,
+          {
+            type: imagesFromInput[i].type,
+            lastModified: Date.now(),
+          }
+        );
+        setProductImage((oldArray) => [
+          ...oldArray,
+          { image: convertedBlobFile, imageName },
+        ]);
       }
 
       // setProductImageConverted(URL.createObjectURL(compressedFile));
     } catch (error) {
       console.log(error);
     }
-  };
-  const imageToServer = async (image) => {
-    //upload image to firebase storage
-    let storageRef = firebase.storage().ref();
-    let imagesRef = storageRef.child("images");
-    let imageNames = [];
-    // Points to 'images'
-    for (let i = 0; i < image.length; i++) {
-      let imageName = uuidv4();
-      let spaceRef = imagesRef.child(imageName);
-      let resp = await spaceRef.put(image[i]);
-      console.log(resp);
-      imageNames.push(imageName);
-    }
-    return imageNames;
   };
 
   const handleBackClick = () => {
@@ -161,7 +153,7 @@ const ProductAdd = () => {
               <Image
                 key={index}
                 style={{ background: "#212121" }}
-                src={URL.createObjectURL(image)}
+                src={URL.createObjectURL(image.image)}
                 boxSize="100px"
                 objectFit="cover"
                 alt="image_preview"
@@ -186,12 +178,9 @@ const ProductAdd = () => {
           <FormLabel>Product cod</FormLabel>
           <Stack direction="row">
             <Select
-              name="type"
-              id="type"
               w="40%"
               size="lg"
               onChange={(e) => setCodeType(e.target.value)}
-              name="type"
               value={codeType || ""}
             >
               <option value="PNR">PNR</option>
@@ -217,7 +206,6 @@ const ProductAdd = () => {
             size="lg"
             mt="4"
             onChange={updateProduct}
-            name="type"
             value={product.type || ""}
           >
             {typeArray.map((type, index) => (
@@ -231,9 +219,9 @@ const ProductAdd = () => {
           <FormLabel>Product Price</FormLabel>
           <Input
             type="number"
-            onChange={updateProduct}
-            value={product.product_price || ""}
-            name="product_price"
+            onChange={(e) => setProduct({ price: +e.target.value })}
+            value={product.price || ""}
+            name="price"
             size="lg"
           />
         </FormControl>
@@ -241,9 +229,9 @@ const ProductAdd = () => {
           <FormLabel>Product Length</FormLabel>
           <Input
             type="number"
-            onChange={updateProduct}
-            value={product.product_length || ""}
-            name="product_length"
+            onChange={(e) => setProduct({ length: +e.target.value })}
+            value={product.length || ""}
+            name="length"
             size="lg"
           />
         </FormControl>
@@ -267,22 +255,20 @@ const ProductAdd = () => {
           ))}
         </Select>
         <Select
-          name="categories"
-          id="categories"
+          name="categoryId"
           w="90%"
           size="lg"
           mt="4"
-          onChange={updateProduct}
-          name="category"
-          value={product.category || "DEFAULT"}
+          onChange={(e) => setProduct({ categoryId: +e.target.value })}
+          value={product.categoryId || "DEFAULT"}
         >
           <option value="DEFAULT" disabled>
             Select a Category
           </option>
           {!isLoading &&
             categories.map((category) => (
-              <option value={category.category} key={category.id}>
-                {category.category}
+              <option value={category.id} key={category.id}>
+                {category.name}
               </option>
             ))}
         </Select>
@@ -294,7 +280,7 @@ const ProductAdd = () => {
               <FormLabel>XS</FormLabel>
               <Input
                 type="number"
-                onChange={updateProduct}
+                onChange={(e) => setProduct({ sizeXS: +e.target.value })}
                 name="sizeXS"
                 size="lg"
                 w="70%"
@@ -305,7 +291,7 @@ const ProductAdd = () => {
               <FormLabel>S</FormLabel>
               <Input
                 type="number"
-                onChange={updateProduct}
+                onChange={(e) => setProduct({ sizeS: +e.target.value })}
                 name="sizeS"
                 size="lg"
                 w="70%"
@@ -316,7 +302,7 @@ const ProductAdd = () => {
               <FormLabel>M</FormLabel>
               <Input
                 type="number"
-                onChange={updateProduct}
+                onChange={(e) => setProduct({ sizeM: +e.target.value })}
                 name="sizeM"
                 size="lg"
                 w="70%"
@@ -330,7 +316,7 @@ const ProductAdd = () => {
               <FormLabel>L</FormLabel>
               <Input
                 type="number"
-                onChange={updateProduct}
+                onChange={(e) => setProduct({ sizeL: +e.target.value })}
                 name="sizeL"
                 size="lg"
                 w="70%"
@@ -341,7 +327,7 @@ const ProductAdd = () => {
               <FormLabel>XL</FormLabel>
               <Input
                 type="number"
-                onChange={updateProduct}
+                onChange={(e) => setProduct({ sizeXL: +e.target.value })}
                 name="sizeXL"
                 size="lg"
                 w="70%"
@@ -352,7 +338,7 @@ const ProductAdd = () => {
               <FormLabel>XXL</FormLabel>
               <Input
                 type="number"
-                onChange={updateProduct}
+                onChange={(e) => setProduct({ sizeXXL: +e.target.value })}
                 name="sizeXXL"
                 size="lg"
                 w="70%"

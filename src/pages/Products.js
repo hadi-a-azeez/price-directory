@@ -1,70 +1,39 @@
 import { useEffect, useState } from "react";
 import styles from "./products.module.scss";
-import firebase from "../firebase";
 import { Link } from "react-router-dom";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { useHistory } from "react-router-dom";
 import TabHeader from "../components/tabHeader";
+import { getProductAPI, searchProductAPI } from "../API/product";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [lastDocFetched, setLastDocFetched] = useState();
-  const [isEmpty, setIsEmpty] = useState(false);
-  const [isMoreProductsLoading, setIsMoreProductLoading] = useState(false);
+
   const [searchValue, setSearchValue] = useState("");
   const history = useHistory();
-  const db = firebase.firestore();
-  const productsRef = db.collection("products").orderBy("date", "desc");
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      const data = await productsRef.limit(10).get();
-      updateProductsState(data);
+      const productsResponse = await getProductAPI();
+      setProducts(productsResponse);
+
       setIsLoading(false);
     };
     fetchData();
   }, []);
-
-  const updateProductsState = (data) => {
-    const isDataEmpty = data.size === 0;
-    if (!isDataEmpty) {
-      const lastDoc = data.docs[data.docs.length - 1];
-      setLastDocFetched(lastDoc);
-      setProducts([
-        ...products,
-        ...data.docs.map((product) => {
-          return { ...product.data(), id: product.id };
-        }),
-      ]);
-    } else {
-      setIsEmpty(true);
-    }
-    setIsMoreProductLoading(false);
-  };
-
-  const fetchMore = async () => {
-    setIsMoreProductLoading(true);
-    const data = await productsRef.startAfter(lastDocFetched).limit(10).get();
-    updateProductsState(data);
-  };
 
   useEffect(() => {
     if (searchValue == "") {
       setFilteredProducts([]);
     }
   }, [searchValue]);
-  const doSearch = async (e) => {
-    let searchData = await db
-      .collection("products")
-      .where("product_cod", "==", `PNR${searchValue}`)
-      .get();
-    searchData.forEach((products) => {
-      setFilteredProducts([{ ...products.data(), id: products.id }]);
-    });
+  const doSearch = async () => {
+    const searchResponse = await searchProductAPI(searchValue);
+    setFilteredProducts(searchResponse);
   };
 
   const StockStatus = (data) => {
@@ -83,16 +52,16 @@ const Products = () => {
         className={styles.link}
       >
         <div className={styles.card} key={product.id}>
-          {product.product_image && (
+          {product.productimages.length > 0 && (
             <img
-              src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${product.product_image[0]}?alt=media`}
+              src={`http://localhost:5000/api/product-images/min/${product.productimages[0].name}`}
               alt="product_image`"
               className={styles.thumbnailImage}
             />
           )}
           <div className={styles.details}>
-            <h1 className={styles.cod}>{product.product_cod}</h1>
-            <h1 className={styles.price}>{`₹${product.product_price}`}</h1>
+            <h1 className={styles.cod}>{product.code}</h1>
+            <h1 className={styles.price}>{`₹${product.price}`}</h1>
             <StockStatus data={product} />
           </div>
         </div>{" "}
@@ -135,25 +104,24 @@ const Products = () => {
         {searchValue.length < 1 ? (
           <>
             {products.map((product) => (
-              <ProductCard product={product} />
+              <ProductCard product={product} key={product.id} />
             ))}
-            {!isMoreProductsLoading && !isEmpty && (
-              <button className={styles.btnLoadMore} onClick={fetchMore}>
-                More products
-              </button>
-            )}
-            {isMoreProductsLoading && <h1>Loading</h1>}
-            {isEmpty && <h1>No more products</h1>}
           </>
         ) : (
           <>
             {filteredProducts.map((product) => (
-              <ProductCard product={product} />
+              <ProductCard product={product} key={product.id} />
             ))}
           </>
         )}
       </div>
       <div style={{ marginTop: `20px` }} />
+      <button
+        onClick={() => history.push("/admin/product_add")}
+        className={styles.btnFloat}
+      >
+        +
+      </button>
     </>
   );
 };

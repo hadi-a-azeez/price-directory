@@ -1,10 +1,8 @@
 export const resellerCopy = (product, sizeArr) => {
   return `📢Daily stock update
 
-👉Product code: ${product.product_cod}
-👉Price: ₹${parseInt(
-    product.product_price - (product.product_price / 100) * 10
-  )}
+👉Product code: ${product.code}
+👉Price: ₹${parseInt(product.price - (product.price / 100) * 10)}
 👉Fabric: ${product.fabric}
 👉Size:${sizeArr.toString()}
 🚚Shipping:3-7 Days 
@@ -29,8 +27,8 @@ let cta = [
 export const instagramCopy = (product) => {
   return `DM for order & queries
 
-Product Code: ${product.product_cod}
-Price: ${product.product_price}/ -
+Product Code: ${product.code}
+Price: ${product.price}/ -
 
 ${cta[Math.floor(Math.random() * cta.length)]}
 

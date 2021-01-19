@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useFormLocal } from "../components/useFormLocal";
 import styles from "./productadd.module.scss";
-import firebase from "../firebase";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import { v4 as uuidv4 } from "uuid";
@@ -9,6 +8,7 @@ import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { useHistory } from "react-router-dom";
 import backIcon from "../assets/backIcon.png";
+import { getSingleProduct, updateProductAPI } from "../API/product";
 import {
   Input,
   FormControl,
@@ -31,16 +31,15 @@ const ProductAdmin = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isUpdateLoading, setIsUpdateLoading] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
-  const ref = firebase.firestore().collection("products");
-  const id = props.match.params.id;
+
+  const productId = props.match.params.id;
   const history = useHistory();
 
   useEffect(() => {
     setIsLoading(true);
     const fetchData = async () => {
-      const snapshot = await ref.doc(id).get();
-      const data = await snapshot.data();
-      setProduct(data);
+      const productResponse = await getSingleProduct(productId);
+      setProduct(productResponse);
       setIsLoading(false);
     };
     fetchData();
@@ -48,21 +47,17 @@ const ProductAdmin = (props) => {
 
   const updateProductServer = async () => {
     setIsUpdateLoading(true);
-
-    const db = firebase.firestore();
-    db.collection("products")
-      .doc(id)
-      .set({ ...product });
+    const responseUpdate = await updateProductAPI(product);
+    console.log(responseUpdate);
     setIsUpdateLoading(false);
-    history.push("/admin/products");
+    // history.push("/admin/products");
   };
 
   const deleteProduct = () => {
     setIsDeleteLoading(true);
-    const db = firebase.firestore();
-    db.collection("products").doc(id).delete();
+
     setIsDeleteLoading(false);
-    history.goBack();
+    history.push("/products");
   };
 
   const handleBackClick = () => {
@@ -100,14 +95,14 @@ const ProductAdmin = (props) => {
               showStatus={false}
               className={styles.carousel}
             >
-              {product.product_image &&
-                product.product_image.map((image, index) => (
+              {product.ProductImage &&
+                product.ProductImage.map((image, index) => (
                   <div
                     style={{ height: 300, backgroundColor: `white` }}
                     key={index}
                   >
                     <img
-                      src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${image}?alt=media`}
+                      src={`http://localhost:5000/api/product-images/min/${image.name}`}
                       className={styles.image}
                       alt="image_preview"
                     />
@@ -118,9 +113,9 @@ const ProductAdmin = (props) => {
               <FormLabel>Product cod</FormLabel>
               <Input
                 type="text"
-                value={product.product_cod}
+                value={product.code}
                 size="lg"
-                name="product_cod"
+                name="code"
                 onChange={updateProduct}
               />
             </FormControl>
@@ -129,8 +124,18 @@ const ProductAdmin = (props) => {
               <Input
                 type="number"
                 size="lg"
-                name="product_price"
-                value={product.product_price}
+                name="price"
+                value={product.price}
+                onChange={updateProduct}
+              />
+            </FormControl>
+            <FormControl w="90%" mt="2" isRequired>
+              <FormLabel>Product Fabric</FormLabel>
+              <Input
+                type="text"
+                size="lg"
+                name="fabric"
+                value={product.fabric || ""}
                 onChange={updateProduct}
               />
             </FormControl>
@@ -139,8 +144,8 @@ const ProductAdmin = (props) => {
               <Input
                 type="number"
                 size="lg"
-                name="product_length"
-                value={product.product_length}
+                name="length"
+                value={product.length || ""}
                 onChange={updateProduct}
               />
             </FormControl>
@@ -157,7 +162,7 @@ const ProductAdmin = (props) => {
                     name="sizeXS"
                     size="lg"
                     w="70%"
-                    value={product.sizeXS || ""}
+                    value={product.sizeXS}
                   />
                 </FormControl>
                 <FormControl id="product_sizes" w="90%" mt="2">
@@ -168,7 +173,7 @@ const ProductAdmin = (props) => {
                     name="sizeS"
                     size="lg"
                     w="70%"
-                    value={product.sizeS || ""}
+                    value={product.sizeS}
                   />
                 </FormControl>
                 <FormControl id="product_sizes" w="90%" mt="2">
@@ -179,7 +184,7 @@ const ProductAdmin = (props) => {
                     name="sizeM"
                     size="lg"
                     w="70%"
-                    value={product.sizeM || ""}
+                    value={product.sizeM}
                   />
                 </FormControl>
               </Stack>
@@ -193,7 +198,7 @@ const ProductAdmin = (props) => {
                     name="sizeL"
                     size="lg"
                     w="70%"
-                    value={product.sizeL || ""}
+                    value={product.sizeL}
                   />
                 </FormControl>
                 <FormControl id="product_sizes" w="90%" mt="2">
@@ -204,7 +209,7 @@ const ProductAdmin = (props) => {
                     name="sizeXL"
                     size="lg"
                     w="70%"
-                    value={product.sizeXL || ""}
+                    value={product.sizeXL}
                   />
                 </FormControl>
                 <FormControl id="product_sizes" w="90%" mt="2">
@@ -215,7 +220,7 @@ const ProductAdmin = (props) => {
                     name="sizeXXL"
                     size="lg"
                     w="70%"
-                    value={product.sizeXXL || ""}
+                    value={product.sizeXXL}
                   />
                 </FormControl>
               </Stack>

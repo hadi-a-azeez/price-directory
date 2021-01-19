@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./productDetailed.module.scss";
+import editIcon from "../assets/edit.png";
 import backIcon from "../assets/backIcon.png";
-import firebase from "../firebase";
 import Loader from "react-loader-spinner";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
@@ -11,6 +11,7 @@ import { resellerCopy, instagramCopy } from "../components/CopyItems";
 import Whatsapp from "../assets/whatsapp.png";
 import Instagram from "../assets/instagram.png";
 import TableSize from "../components/TableSize";
+import { getSingleProduct } from "../API/product";
 
 const ProductDetailed = (props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,8 +19,7 @@ const ProductDetailed = (props) => {
   const [pantVisible, setPantVisible] = useState("none");
   const [topVisible, setTopVisible] = useState("none");
   const history = useHistory();
-  const ref = firebase.firestore().collection("products");
-  const id = props.match.params.id;
+  const productId = props.match.params.id;
   const [copySuccess, setCopySuccess] = useState("");
   const [copySuccessInsta, setcopySuccessInsta] = useState("");
   let pantSizesArr = [
@@ -83,10 +83,8 @@ const ProductDetailed = (props) => {
     setIsLoading(true);
     const fetchData = async () => {
       setIsLoading(true);
-      const snapshot = await ref.doc(id).get();
-      const data = snapshot.data();
-
-      setProduct(data);
+      const product = await getSingleProduct(productId);
+      setProduct(product);
       setIsLoading(false);
     };
     fetchData();
@@ -141,7 +139,16 @@ const ProductDetailed = (props) => {
         <button className={styles.backButton} onClick={handleBackClick}>
           <img src={backIcon} className={styles.backIcon} alt="back_icon" />
         </button>
+
         <h1 className={styles.label}>Product</h1>
+        <button
+          className={styles.editButton}
+          onClick={() =>
+            history.push(`/admin/product_edit_admin/${product.id}`)
+          }
+        >
+          <img src={editIcon} className={styles.editIcon} alt="back_icon" />
+        </button>
       </div>
       {isLoading ? (
         <div className={styles.loaderwraper}>
@@ -166,11 +173,11 @@ const ProductDetailed = (props) => {
               showStatus={false}
               className={styles.carousel}
             >
-              {product.product_image &&
-                product.product_image.map((imageNew) => (
+              {product.productimages &&
+                product.productimages.map((imageNew) => (
                   <div style={{ height: `500px`, backgroundColor: `white` }}>
                     <img
-                      src={`https://firebasestorage.googleapis.com/v0/b/abony-price-directory.appspot.com/o/images%2F${imageNew}?alt=media`}
+                      src={`http://localhost:5000/api/product-images/min/${imageNew.name}`}
                       className={styles.image}
                       alt="image_preview"
                     />
@@ -178,14 +185,12 @@ const ProductDetailed = (props) => {
                 ))}
             </Carousel>
             <div className={styles.details}>
-              <h1 className={styles.cod}>{product.product_cod}</h1>
+              <h1 className={styles.cod}>{product.code}</h1>
               <div className={styles.badgePrimary}>{product.type}</div>
-              <h1 className={styles.price}>{`₹${product.product_price}`}</h1>
+              <h1 className={styles.price}>{`₹${product.price}`}</h1>
               <h1 className={styles.resellerPrice}>
                 Reseller Price:
-                {` ₹${parseInt(
-                  product.product_price - (product.product_price / 100) * 10
-                )}`}
+                {` ₹${parseInt(product.price - (product.price / 100) * 10)}`}
               </h1>
               <h1 className={styles.fabric}>{product.fabric}</h1>
               <button

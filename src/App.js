@@ -2,14 +2,14 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ProductDetailed from "./pages/ProductDetailed";
 import Products from "./pages/Products.js";
 import ProductAdd from "./pages/productAdd";
-import ProductsAdmin from "./pages/ProductsAdmin";
+
 import ProductsEditAdmin from "./pages/ProductEditAdmin";
 import Home from "./pages/Home";
 import CategoriesAdmin from "./pages/categoriesAdmin";
 import AddCategory from "./pages/addCategoryAdmin";
 import CategoryProducts from "./pages/categoryProducts";
 import Order from "./pages/orders";
-import Script from "./pages/script";
+
 import AddOrder from "./pages/addOrder";
 import OrderDetialed from "./pages/orderDetailed";
 
@@ -27,7 +27,6 @@ function App() {
           <Route path="/product_detailed/:id" component={ProductDetailed} />
           <Route path="/admin/product_add" component={ProductAdd} />
 
-          <Route path="/admin/products" component={ProductsAdmin} />
           <Route path="/admin/categories" component={CategoriesAdmin} />
           <Route path="/admin/add_category" component={AddCategory} />
           <Route
