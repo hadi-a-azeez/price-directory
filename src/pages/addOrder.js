@@ -49,11 +49,13 @@ const AddOrder = () => {
 
   //change or edit products array in state
   const handleOrderProduct = (name, value, id) => {
-    setOrderProducts((currentProduct) =>
-      currentProduct.map((product) =>
-        product.id == id ? { ...product, [name]: value } : product
-      )
-    );
+    let index = orderProducts.findIndex((product) => product.image == id);
+    let newArray = [...orderProducts];
+    newArray[index] = {
+      ...newArray[index],
+      [name]: value,
+    };
+    setOrderProducts(newArray);
   };
 
   //add product to products state
