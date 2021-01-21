@@ -202,7 +202,7 @@ const ProductAdd = () => {
           <Select
             name="type"
             id="type"
-            w="90%"
+            w="100%"
             size="lg"
             mt="4"
             onChange={updateProduct}
@@ -235,43 +235,48 @@ const ProductAdd = () => {
             size="lg"
           />
         </FormControl>
-        <Select
-          name="fabric"
-          id="fabrics"
-          w="90%"
-          size="lg"
-          mt="4"
-          onChange={updateProduct}
-          name="fabric"
-          value={product.fabric || "DEFAULT"}
-        >
-          <option value="DEFAULT" disabled>
-            Select a fabric
-          </option>
-          {fabricsArray.map((fabric, index) => (
-            <option value={fabric} key={index}>
-              {fabric}
+        <FormControl w="90%" mt="2" isRequired>
+          <FormLabel>Fabrics</FormLabel>
+          <Select
+            name="fabric"
+            id="fabrics"
+            w="100%"
+            size="lg"
+            onChange={updateProduct}
+            name="fabric"
+            value={product.fabric || "DEFAULT"}
+          >
+            <option value="DEFAULT" disabled>
+              Select a fabric
             </option>
-          ))}
-        </Select>
-        <Select
-          name="categoryId"
-          w="90%"
-          size="lg"
-          mt="4"
-          onChange={(e) => setProduct({ categoryId: +e.target.value })}
-          value={product.categoryId || "DEFAULT"}
-        >
-          <option value="DEFAULT" disabled>
-            Select a Category
-          </option>
-          {!isLoading &&
-            categories.map((category) => (
-              <option value={category.id} key={category.id}>
-                {category.name}
+            {fabricsArray.map((fabric, index) => (
+              <option value={fabric} key={index}>
+                {fabric}
               </option>
             ))}
-        </Select>
+          </Select>
+        </FormControl>
+        <FormControl w="90%" mt="2" isRequired>
+          <FormLabel>Categories</FormLabel>
+          <Select
+            name="categoryId"
+            w="100%"
+            size="lg"
+            mt="4"
+            onChange={(e) => setProduct({ categoryId: +e.target.value })}
+            value={product.categoryId || "DEFAULT"}
+          >
+            <option value="DEFAULT" disabled>
+              Select a Category
+            </option>
+            {!isLoading &&
+              categories.map((category) => (
+                <option value={category.id} key={category.id}>
+                  {category.name}
+                </option>
+              ))}
+          </Select>
+        </FormControl>
         <FormControl id="product_sizes" w="90%" mt="2" isRequired>
           <FormLabel>Product Sizes</FormLabel>
 

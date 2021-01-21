@@ -6,6 +6,14 @@ import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import TabHeader from "../components/tabHeader";
 import { getcategoriesAPI } from "../API/category";
+import {
+  Input,
+  InputGroup,
+  InputRightElement,
+  IconButton,
+  Box,
+  Select,
+} from "@chakra-ui/react";
 
 const CategoriesAdmin = () => {
   const [isLoading, setIsLoading] = useState();
@@ -66,15 +74,16 @@ const CategoriesAdmin = () => {
         <div></div>
       )}
       <div className={styles.container}>
-        <select
+        <Select
           name="parent_categories"
           id="parent_categories"
-          className={styles.dropdown}
+          size="lg"
+          w="95%"
           onChange={(e) => handleFilter(e.target.value)}
         >
           <option value="Top">Top</option>
           <option value="Pant">Pant</option>
-        </select>
+        </Select>
         {!isLoading &&
           filtered.map((category) => (
             <Link
@@ -82,11 +91,23 @@ const CategoriesAdmin = () => {
               key={category.id}
               className={styles.link}
             >
-              <div className={styles.card}>
+              <Box
+                rounded="md"
+                bg="white"
+                boxShadow="xs"
+                justifyContent="center"
+                w="95%"
+                flexShrink="0"
+                padding="3"
+                mt="3"
+                height="auto"
+                mt="2"
+                key={category.id}
+              >
                 <h1 style={{ fontSize: `22px`, padding: `13px` }}>
                   {category.name}
                 </h1>
-              </div>
+              </Box>
             </Link>
           ))}
         <button onClick={handleAddCategory} className={styles.btnFloat}>

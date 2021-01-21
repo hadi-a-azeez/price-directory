@@ -9,17 +9,17 @@
     background-color: $primary-color;
     width: 50%;
     color: white;
-    font-size: 20px;
+    font-size: 18px;
+    color: rgb(230, 225, 225);
     border: none;
-    padding: 13px;
+    padding: 8px;
   }
   .btnSelected {
-    background-color: $primary-color-dark;
     width: 50%;
     color: white;
-    font-size: 20px;
+    font-size: 18px;
     border: none;
-    padding: 13px;
+    padding: 8px;
     border-bottom: solid white 4px;
   }
 }

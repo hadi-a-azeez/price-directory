@@ -5,6 +5,16 @@ import { useHistory } from "react-router-dom";
 import backIcon from "../assets/backIcon.png";
 import styles from "./productadd.module.scss";
 import { addcategoriesAPI } from "../API/category";
+import {
+  Input,
+  InputGroup,
+  InputRightElement,
+  IconButton,
+  Box,
+  Select,
+  FormControl,
+  FormLabel,
+} from "@chakra-ui/react";
 
 const AddCategory = () => {
   const [category, setCategory] = useState("");
@@ -39,18 +49,27 @@ const AddCategory = () => {
         <h1 className={styles.label}>Add Category</h1>
       </div>
       <div className={styles.container}>
-        <label>Parent category:</label>
-        <select
-          name="parent_categories"
-          id="parent_categories"
-          className={styles.dropdown}
-          onChange={(e) => handleParentCategoryClick(e.target.value)}
-        >
-          <option value="Top">Top</option>
-          <option value="Pant">Pant</option>
-        </select>
-        <label>Category Name:</label>
-        <input type="text" onChange={(e) => setCategory(e.target.value)} />
+        <FormControl w="90%" mt="2" isRequired>
+          <FormLabel>Parent Category</FormLabel>
+          <Select
+            name="parent_categories"
+            id="parent_categories"
+            w="100%"
+            size="lg"
+            onChange={(e) => handleParentCategoryClick(e.target.value)}
+          >
+            <option value="Top">Top</option>
+            <option value="Pant">Pant</option>
+          </Select>
+        </FormControl>
+        <FormControl w="90%" mt="2" isRequired>
+          <FormLabel>Category Name</FormLabel>
+          <Input
+            type="text"
+            size="lg"
+            onChange={(e) => setCategory(e.target.value)}
+          />
+        </FormControl>
         <button onClick={handleAddCategory} className={styles.btnPrimary}>
           {isLoading ? (
             <div className={styles.loader}>

@@ -7,6 +7,15 @@ import { useHistory } from "react-router-dom";
 import TabHeader from "../components/tabHeader";
 import { getProductAPI, searchProductAPI } from "../API/product";
 import { apiRoot } from "../config";
+import {
+  Input,
+  InputGroup,
+  InputRightElement,
+  IconButton,
+  Box,
+} from "@chakra-ui/react";
+import { SearchIcon, ArrowBackIcon } from "@chakra-ui/icons";
+import Placeholder from "../assets/placeholder.png";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -52,20 +61,34 @@ const Products = () => {
         key={product.id}
         className={styles.link}
       >
-        <div className={styles.card} key={product.id}>
-          {product.productimages.length > 0 && (
+        <Box
+          rounded="md"
+          bg="white"
+          boxShadow="xs"
+          key={product.id}
+          d="flex"
+          direction="row"
+          justifyContent="center"
+          w="95%"
+          flexShrink="0"
+          mt="3"
+          height="115px"
+        >
+          {product.productimages.length > 0 ? (
             <img
               src={`${apiRoot}/product-images/min/${product.productimages[0].name}`}
               alt="product_image`"
               className={styles.thumbnailImage}
             />
+          ) : (
+            <img src={Placeholder} className={styles.thumbnailImage} />
           )}
           <div className={styles.details}>
             <h1 className={styles.cod}>{product.code}</h1>
             <h1 className={styles.price}>{`₹${product.price}`}</h1>
             <StockStatus data={product} />
           </div>
-        </div>{" "}
+        </Box>{" "}
       </Link>
     );
   };
@@ -73,10 +96,16 @@ const Products = () => {
   return (
     <>
       <div className={styles.header}>
-        <button className={styles.btnHome} onClick={() => history.push("/")}>
-          Home
-        </button>
-        <input
+        <IconButton
+          borderRadius="full"
+          colorScheme="blue"
+          ml="4"
+          mt="2"
+          alignSelf="flex-start"
+          icon={<ArrowBackIcon color="white" />}
+          onClick={() => history.push("/")}
+        />
+        {/* <input
           type="number"
           placeholder="Search cod here"
           className={styles.search}
@@ -85,7 +114,33 @@ const Products = () => {
         />
         <button className={styles.btnHome} onClick={doSearch}>
           Search
-        </button>
+        </button> */}
+        <InputGroup
+          w="90%"
+          mb="3"
+          mt="2"
+          size="lg"
+          backgroundColor="white"
+          borderRadius="6px"
+        >
+          <InputRightElement
+            children={
+              <IconButton
+                backgroundColor="white"
+                borderRadius="30px"
+                onClick={doSearch}
+                icon={<SearchIcon />}
+              />
+            }
+          />
+          <Input
+            type="number"
+            placeholder="search in this store"
+            borderRadius="6px"
+            borderColor="white"
+            onChange={(e) => setSearchValue(e.target.value)}
+          />
+        </InputGroup>
         <TabHeader selected="products" />
       </div>
       {isLoading ? (
