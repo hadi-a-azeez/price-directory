@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import styles from "./products.module.scss";
 import Loader from "react-loader-spinner";
+import { SearchIcon, ArrowBackIcon } from "@chakra-ui/icons";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import TabHeader from "../components/tabHeader";
 import { getcategoriesAPI } from "../API/category";
@@ -49,15 +50,16 @@ const CategoriesAdmin = () => {
   return (
     <>
       <div className={styles.header}>
-        <button className={styles.btnHome} onClick={() => history.push("/")}>
-          Home
-        </button>
-        <input
-          type="text"
-          placeholder="Search cod here"
-          className={styles.search}
-          /* onChange={(e) => doSearch(e)} */
-        ></input>
+        <IconButton
+          borderRadius="full"
+          colorScheme="blue"
+          ml="4"
+          mt="2"
+          alignSelf="flex-start"
+          icon={<ArrowBackIcon color="white" />}
+          onClick={() => history.push("/")}
+        />
+
         <TabHeader selected="categories" />
       </div>
       {isLoading ? (

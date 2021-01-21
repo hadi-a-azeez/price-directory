@@ -5,8 +5,17 @@ import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { useHistory } from "react-router-dom";
 import TabHeader from "../components/tabHeader";
+import { SearchIcon, ArrowBackIcon } from "@chakra-ui/icons";
 import { apiRoot } from "../config";
 import { getProductByCategoryAPI, searchProductAPI } from "../API/product";
+import Placeholder from "../assets/placeholder.png";
+import {
+  Input,
+  InputGroup,
+  InputRightElement,
+  IconButton,
+  Box,
+} from "@chakra-ui/react";
 
 const Products = (props) => {
   const [products, setProducts] = useState([]);
@@ -46,21 +55,39 @@ const Products = (props) => {
 
   const ProductCard = ({ product }) => {
     return (
-      <Link to={`/product_detailed/${product.id}`} className={styles.link}>
-        <div className={styles.card} key={product.id}>
-          {product.productimages[0] && (
+      <Link
+        to={`/product_detailed/${product.id}`}
+        key={product.id}
+        className={styles.link}
+      >
+        <Box
+          rounded="md"
+          bg="white"
+          boxShadow="xs"
+          key={product.id}
+          d="flex"
+          direction="row"
+          justifyContent="center"
+          w="95%"
+          flexShrink="0"
+          mt="3"
+          height="115px"
+        >
+          {product.productimages.length > 0 ? (
             <img
               src={`${apiRoot}/product-images/min/${product.productimages[0].name}`}
               alt="product_image`"
               className={styles.thumbnailImage}
             />
+          ) : (
+            <img src={Placeholder} className={styles.thumbnailImage} />
           )}
           <div className={styles.details}>
             <h1 className={styles.cod}>{product.code}</h1>
             <h1 className={styles.price}>{`₹${product.price}`}</h1>
             <StockStatus data={product} />
           </div>
-        </div>{" "}
+        </Box>{" "}
       </Link>
     );
   };
@@ -68,19 +95,42 @@ const Products = (props) => {
   return (
     <>
       <div className={styles.header}>
-        <button className={styles.btnHome} onClick={() => history.push("/")}>
-          Home
-        </button>
-        <input
-          type="number"
-          placeholder="Search cod here"
-          className={styles.search}
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
+        <IconButton
+          borderRadius="full"
+          colorScheme="blue"
+          ml="4"
+          mt="2"
+          alignSelf="flex-start"
+          icon={<ArrowBackIcon color="white" />}
+          onClick={() => history.push("/")}
         />
-        <button className={styles.btnHome} onClick={doSearch}>
-          Search
-        </button>
+
+        <InputGroup
+          w="90%"
+          mb="3"
+          mt="2"
+          size="lg"
+          backgroundColor="white"
+          borderRadius="6px"
+        >
+          <InputRightElement
+            children={
+              <IconButton
+                backgroundColor="white"
+                borderRadius="30px"
+                onClick={doSearch}
+                icon={<SearchIcon />}
+              />
+            }
+          />
+          <Input
+            type="number"
+            placeholder="search in this store"
+            borderRadius="6px"
+            borderColor="white"
+            onChange={(e) => setSearchValue(e.target.value)}
+          />
+        </InputGroup>
       </div>
       {isLoading ? (
         <div className={styles.loaderwraper}>

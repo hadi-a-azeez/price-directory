@@ -2,24 +2,27 @@
 
 .container {
   width: 100%;
+  border-top: 0.5px solid white;
   display: flex;
   flex-direction: row;
   margin-top: 5px;
   .btn {
-    background-color: $primary-color;
+    background-color: $primary-color-dark;
     width: 50%;
     color: white;
+
     font-size: 18px;
     color: rgb(230, 225, 225);
     border: none;
     padding: 8px;
   }
   .btnSelected {
+    background-color: $primary-color;
     width: 50%;
     color: white;
     font-size: 18px;
     border: none;
     padding: 8px;
-    border-bottom: solid white 4px;
+    border-bottom: solid #e7d9ea 4px;
   }
 }

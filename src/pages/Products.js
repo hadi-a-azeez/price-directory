@@ -115,6 +115,8 @@ const Products = () => {
         <button className={styles.btnHome} onClick={doSearch}>
           Search
         </button> */}
+
+        <TabHeader selected="products" />
         <InputGroup
           w="90%"
           mb="3"
@@ -141,7 +143,6 @@ const Products = () => {
             onChange={(e) => setSearchValue(e.target.value)}
           />
         </InputGroup>
-        <TabHeader selected="products" />
       </div>
       {isLoading ? (
         <div className={styles.loaderwraper}>

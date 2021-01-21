@@ -4,7 +4,15 @@ import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-
+import {
+  Input,
+  InputGroup,
+  InputRightElement,
+  IconButton,
+  Box,
+} from "@chakra-ui/react";
+import { SearchIcon, ArrowBackIcon } from "@chakra-ui/icons";
+import Placeholder from "../assets/placeholder.png";
 import { ChakraProvider, Flex, Image, Text, Container } from "@chakra-ui/react";
 import { getOrderAPI, searchOrderAPI } from "../API/order";
 import { apiRoot } from "../config";
@@ -86,19 +94,41 @@ const Order = () => {
   return (
     <>
       <div className={styles.header}>
-        <button className={styles.btnHome} onClick={() => history.push("/")}>
-          Home
-        </button>
-        <input
-          type="text"
-          placeholder="Search cod here"
-          className={styles.search}
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
+        <IconButton
+          borderRadius="full"
+          colorScheme="blue"
+          ml="4"
+          mt="2"
+          alignSelf="flex-start"
+          icon={<ArrowBackIcon color="white" />}
+          onClick={() => history.push("/")}
         />
-        <button className={styles.btnHome} onClick={doSearch}>
-          Search
-        </button>
+        <InputGroup
+          w="90%"
+          mb="3"
+          mt="2"
+          size="lg"
+          backgroundColor="white"
+          borderRadius="6px"
+        >
+          <InputRightElement
+            children={
+              <IconButton
+                backgroundColor="white"
+                borderRadius="30px"
+                onClick={doSearch}
+                icon={<SearchIcon />}
+              />
+            }
+          />
+          <Input
+            type="text"
+            placeholder="search in this store"
+            borderRadius="6px"
+            borderColor="white"
+            onChange={(e) => setSearchValue(e.target.value)}
+          />
+        </InputGroup>
       </div>
       {isLoading ? (
         <div className={styles.loaderwraper}>

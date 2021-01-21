@@ -10,6 +10,7 @@ import DatePicker from "react-date-picker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import {
+  Box,
   Input,
   FormControl,
   FormLabel,
@@ -136,6 +137,80 @@ const AddOrder = () => {
       console.log(error);
     }
   };
+  const OrderProductCard = ({ product }) => {
+    return (
+      <Box
+        rounded="md"
+        bg="white"
+        boxShadow="xs"
+        key={product.image}
+        d="flex"
+        direction="row"
+        justifyContent="center"
+        w="95%"
+        flexShrink="0"
+        mt="3"
+      >
+        <div key={product.image}>
+          <ProductImage productId={product.image} />
+          <input
+            type="file"
+            accept="image/*"
+            id="file-upload"
+            name="order-image"
+            onChange={(event) => compressImage(event, product.image)}
+          />
+          <FormControl id="product_cod" w="90%" mt="2" isRequired>
+            <FormLabel>Product Code:</FormLabel>
+            <Input
+              type="text"
+              size="lg"
+              name="code"
+              value={product.code}
+              onChange={(e) =>
+                handleOrderProduct(e.target.name, e.target.value, product.image)
+              }
+            />
+          </FormControl>
+          <Stack direction="row" m="1">
+            <FormControl id="product_price" w="100%" isRequired>
+              <FormLabel>Product Price :</FormLabel>
+              <Input
+                type="number"
+                size="lg"
+                ml="2"
+                name="price"
+                value={product.price}
+                onChange={(e) =>
+                  handleOrderProduct(
+                    e.target.name,
+                    parseInt(e.target.value),
+                    product.image
+                  )
+                }
+              />
+            </FormControl>
+            <FormControl id="product_size" w="100%" isRequired>
+              <FormLabel>Product Size :</FormLabel>
+              <Input
+                type="text"
+                size="lg"
+                name="size"
+                value={product.size}
+                onChange={(e) =>
+                  handleOrderProduct(
+                    e.target.name,
+                    e.target.value,
+                    product.image
+                  )
+                }
+              />
+            </FormControl>
+          </Stack>
+        </div>
+      </Box>
+    );
+  };
 
   //product image component
   const ProductImage = ({ productId }) => {
@@ -190,66 +265,7 @@ const AddOrder = () => {
         {/* productt.image is used as id */}
         {orderProducts.length > 0 &&
           orderProducts.map((product) => (
-            <div key={product.image}>
-              <ProductImage productId={product.image} />
-              <input
-                type="file"
-                accept="image/*"
-                id="file-upload"
-                name="order-image"
-                onChange={(event) => compressImage(event, product.image)}
-              />
-              <FormControl id="product_cod" w="90%" mt="2" isRequired>
-                <FormLabel>Product Code:</FormLabel>
-                <Input
-                  type="text"
-                  size="lg"
-                  name="code"
-                  value={product.code}
-                  onChange={(e) =>
-                    handleOrderProduct(
-                      e.target.name,
-                      e.target.value,
-                      product.image
-                    )
-                  }
-                />
-              </FormControl>
-              <Stack direction="row">
-                <FormControl id="product_price" w="50%" isRequired>
-                  <FormLabel>Product Price :</FormLabel>
-                  <Input
-                    type="number"
-                    size="lg"
-                    name="price"
-                    value={product.price}
-                    onChange={(e) =>
-                      handleOrderProduct(
-                        e.target.name,
-                        parseInt(e.target.value),
-                        product.image
-                      )
-                    }
-                  />
-                </FormControl>
-                <FormControl id="product_size" w="50%" isRequired>
-                  <FormLabel>Product Size :</FormLabel>
-                  <Input
-                    type="text"
-                    size="lg"
-                    name="size"
-                    value={product.size}
-                    onChange={(e) =>
-                      handleOrderProduct(
-                        e.target.name,
-                        e.target.value,
-                        product.image
-                      )
-                    }
-                  />
-                </FormControl>
-              </Stack>
-            </div>
+            <OrderProductCard product={product} />
           ))}
         <Button onClick={addOrderProduct}>Add Prduct</Button>
         {/* products end */}
