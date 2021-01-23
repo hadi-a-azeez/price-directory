@@ -10,6 +10,16 @@ import { useHistory } from "react-router-dom";
 import backIcon from "../assets/backIcon.png";
 import { getSingleProduct, updateProductAPI } from "../API/product";
 import {
+  Box,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+} from "@chakra-ui/react";
+import {
   Input,
   FormControl,
   FormLabel,
@@ -52,6 +62,33 @@ const ProductAdmin = (props) => {
     console.log(responseUpdate);
     setIsUpdateLoading(false);
     // history.push("/admin/products");
+  };
+
+  //component for textbox with plus button
+  const SizeProduct = ({ name, title }) => {
+    return (
+      <Tr>
+        <Td>{title}</Td>
+        <Td>
+          <Button
+            size="xs"
+            colorScheme="red"
+            onClick={() => setProduct({ [name]: --product[name] })}
+            mr="5"
+          >
+            -
+          </Button>
+          {product[name] || 0}
+          <Button
+            ml="5"
+            colorScheme="teal"
+            onClick={() => setProduct({ [name]: ++product[name] })}
+          >
+            +
+          </Button>
+        </Td>
+      </Tr>
+    );
   };
 
   const deleteProduct = () => {
@@ -154,77 +191,35 @@ const ProductAdmin = (props) => {
             <FormControl id="product_sizes" w="90%" mt="2" isRequired>
               <FormLabel>Product Sizes</FormLabel>
 
-              <Stack direction="row">
-                <FormControl id="product_sizes" w="90%">
-                  <FormLabel>XS</FormLabel>
-                  <Input
-                    type="number"
-                    onChange={updateProduct}
-                    name="sizeXS"
-                    size="lg"
-                    w="70%"
-                    value={product.sizeXS}
-                  />
-                </FormControl>
-                <FormControl id="product_sizes" w="90%" mt="2">
-                  <FormLabel>S</FormLabel>
-                  <Input
-                    type="number"
-                    onChange={updateProduct}
-                    name="sizeS"
-                    size="lg"
-                    w="70%"
-                    value={product.sizeS}
-                  />
-                </FormControl>
-                <FormControl id="product_sizes" w="90%" mt="2">
-                  <FormLabel>M</FormLabel>
-                  <Input
-                    type="number"
-                    onChange={updateProduct}
-                    name="sizeM"
-                    size="lg"
-                    w="70%"
-                    value={product.sizeM}
-                  />
-                </FormControl>
-              </Stack>
-
-              <Stack direction="row">
-                <FormControl id="product_sizes" w="90%">
-                  <FormLabel>L</FormLabel>
-                  <Input
-                    type="number"
-                    onChange={updateProduct}
-                    name="sizeL"
-                    size="lg"
-                    w="70%"
-                    value={product.sizeL}
-                  />
-                </FormControl>
-                <FormControl id="product_sizes" w="90%" mt="2">
-                  <FormLabel>XL</FormLabel>
-                  <Input
-                    type="number"
-                    onChange={updateProduct}
-                    name="sizeXL"
-                    size="lg"
-                    w="70%"
-                    value={product.sizeXL}
-                  />
-                </FormControl>
-                <FormControl id="product_sizes" w="90%" mt="2">
-                  <FormLabel>XXL</FormLabel>
-                  <Input
-                    type="number"
-                    onChange={updateProduct}
-                    name="sizeXXL"
-                    size="lg"
-                    w="70%"
-                    value={product.sizeXXL}
-                  />
-                </FormControl>
-              </Stack>
+              <Box
+                rounded="md"
+                bg="white"
+                boxShadow="xs"
+                key={product.id}
+                d="flex"
+                direction="row"
+                justifyContent="center"
+                w="95%"
+                flexShrink="0"
+                mt="3"
+              >
+                <Table variant="striped" colorScheme="blue">
+                  <Thead>
+                    <Tr>
+                      <Th>Size</Th>
+                      <Th>Stock</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    <SizeProduct name="sizeXS" title="XS" />
+                    <SizeProduct name="sizeS" title="S" />
+                    <SizeProduct name="sizeM" title="M" />
+                    <SizeProduct name="sizeL" title="L" />
+                    <SizeProduct name="sizeXL" title="XL" />
+                    <SizeProduct name="sizeXXL" title="XXL" />
+                  </Tbody>
+                </Table>
+              </Box>
             </FormControl>
             <button onClick={updateProductServer} className={styles.btnPrimary}>
               {isUpdateLoading ? (

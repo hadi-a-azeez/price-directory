@@ -11,6 +11,18 @@ import backIcon from "../assets/backIcon.png";
 import { getcategoriesAPI } from "../API/category";
 import { useFormLocal } from "../components/useFormLocal";
 import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+} from "@chakra-ui/react";
+import {
+  Box,
+  InputGroup,
+  InputRightElement,
   Input,
   FormControl,
   FormLabel,
@@ -96,6 +108,31 @@ const ProductAdd = () => {
       setIsValidationError(false);
       addCallback();
     }
+  };
+  const SizeProduct = ({ name, title }) => {
+    return (
+      <Tr>
+        <Td>{title}</Td>
+        <Td>
+          <Button
+            size="xs"
+            colorScheme="red"
+            onClick={() => setProduct({ [name]: --product[name] || 0 })}
+            mr="5"
+          >
+            -
+          </Button>
+          {product[name] || 0}
+          <Button
+            ml="5"
+            colorScheme="teal"
+            onClick={() => setProduct({ [name]: ++product[name] || 1 })}
+          >
+            +
+          </Button>
+        </Td>
+      </Tr>
+    );
   };
 
   const compressImage = async (event) => {
@@ -279,78 +316,35 @@ const ProductAdd = () => {
         </FormControl>
         <FormControl id="product_sizes" w="90%" mt="2" isRequired>
           <FormLabel>Product Sizes</FormLabel>
-
-          <Stack direction="row">
-            <FormControl id="product_sizes" w="90%">
-              <FormLabel>XS</FormLabel>
-              <Input
-                type="number"
-                onChange={(e) => setProduct({ sizeXS: +e.target.value })}
-                name="sizeXS"
-                size="lg"
-                w="70%"
-                value={product.sizeXS || ""}
-              />
-            </FormControl>
-            <FormControl id="product_sizes" w="90%" mt="2">
-              <FormLabel>S</FormLabel>
-              <Input
-                type="number"
-                onChange={(e) => setProduct({ sizeS: +e.target.value })}
-                name="sizeS"
-                size="lg"
-                w="70%"
-                value={product.sizeS || ""}
-              />
-            </FormControl>
-            <FormControl id="product_sizes" w="90%" mt="2">
-              <FormLabel>M</FormLabel>
-              <Input
-                type="number"
-                onChange={(e) => setProduct({ sizeM: +e.target.value })}
-                name="sizeM"
-                size="lg"
-                w="70%"
-                value={product.sizeM || ""}
-              />
-            </FormControl>
-          </Stack>
-
-          <Stack direction="row">
-            <FormControl id="product_sizes" w="90%">
-              <FormLabel>L</FormLabel>
-              <Input
-                type="number"
-                onChange={(e) => setProduct({ sizeL: +e.target.value })}
-                name="sizeL"
-                size="lg"
-                w="70%"
-                value={product.sizeL || ""}
-              />
-            </FormControl>
-            <FormControl id="product_sizes" w="90%" mt="2">
-              <FormLabel>XL</FormLabel>
-              <Input
-                type="number"
-                onChange={(e) => setProduct({ sizeXL: +e.target.value })}
-                name="sizeXL"
-                size="lg"
-                w="70%"
-                value={product.sizeXL || ""}
-              />
-            </FormControl>
-            <FormControl id="product_sizes" w="90%" mt="2">
-              <FormLabel>XXL</FormLabel>
-              <Input
-                type="number"
-                onChange={(e) => setProduct({ sizeXXL: +e.target.value })}
-                name="sizeXXL"
-                size="lg"
-                w="70%"
-                value={product.sizeXXL || ""}
-              />
-            </FormControl>
-          </Stack>
+          <Box
+            rounded="md"
+            bg="white"
+            boxShadow="xs"
+            key={product.id}
+            d="flex"
+            direction="row"
+            justifyContent="center"
+            w="95%"
+            flexShrink="0"
+            mt="3"
+          >
+            <Table colorScheme="blue" variant="striped">
+              <Thead>
+                <Tr>
+                  <Th>Size</Th>
+                  <Th>Stock</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                <SizeProduct name="sizeXS" title="XS" />
+                <SizeProduct name="sizeS" title="S" />
+                <SizeProduct name="sizeM" title="M" />
+                <SizeProduct name="sizeL" title="L" />
+                <SizeProduct name="sizeXL" title="XL" />
+                <SizeProduct name="sizeXXL" title="XXL" />
+              </Tbody>
+            </Table>
+          </Box>
         </FormControl>
         {isValidationError && (
           <h1 className={styles.validationError}>

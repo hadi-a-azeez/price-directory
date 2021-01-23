@@ -13,6 +13,16 @@ import Instagram from "../assets/instagram.png";
 import TableSize from "../components/TableSize";
 import { getSingleProduct } from "../API/product";
 import { apiRoot } from "../config";
+import {
+  Box,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+} from "@chakra-ui/react";
 
 const ProductDetailed = (props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -133,7 +143,7 @@ const ProductDetailed = (props) => {
     { XXL: sizeXXL },
   ];
   let sizeArr = availableSizesFiltered.map((size) => size.name);
-  console.log(sizeArr);
+  console.log(availableSizesFiltered);
   return (
     <>
       <div className={styles.header}>
@@ -231,12 +241,36 @@ const ProductDetailed = (props) => {
               {/* show copied text status */}
               <p>{copySuccessInsta}</p>
               <div>
-                <TableSize
-                  display="block"
-                  column1="Size"
-                  column2="Stock"
-                  list={availableSizesFiltered}
-                />
+                <Box
+                  rounded="md"
+                  bg="white"
+                  boxShadow="xs"
+                  key={product.id}
+                  d="flex"
+                  direction="row"
+                  justifyContent="center"
+                  w="95%"
+                  flexShrink="0"
+                  mt="3"
+                >
+                  <Table variant="striped" colorScheme="teal">
+                    <Thead>
+                      <Tr>
+                        <Th>Size</Th>
+                        <Th>Stock</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {availableSizesFiltered &&
+                        availableSizesFiltered.map((size, index) => (
+                          <Tr key={index}>
+                            <Td>{size.name}</Td>
+                            <Td>{size.stock}</Td>
+                          </Tr>
+                        ))}
+                    </Tbody>
+                  </Table>
+                </Box>
               </div>
               <h1 className={styles.fabric}>Size Chart </h1>
               <button className={styles.pantOrTop} onClick={handlePantToggle}>
