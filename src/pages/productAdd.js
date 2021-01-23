@@ -139,7 +139,7 @@ const ProductAdd = () => {
     //compresses image to below 1MB
     let imagesFromInput = event.target.files;
     const options = {
-      maxSizeMB: 1,
+      maxSizeMB: 3,
       maxWidthOrHeight: 1280,
       useWebWorker: true,
     };

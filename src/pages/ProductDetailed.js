@@ -22,6 +22,7 @@ import {
   Th,
   Td,
   TableCaption,
+  Button,
 } from "@chakra-ui/react";
 
 const ProductDetailed = (props) => {
@@ -100,6 +101,9 @@ const ProductDetailed = (props) => {
     };
     fetchData();
   }, []);
+
+  //download all images
+  const downloadAll = () => {};
 
   const handleBackClick = () => {
     history.goBack();
@@ -196,6 +200,7 @@ const ProductDetailed = (props) => {
                 ))}
             </Carousel>
             <div className={styles.details}>
+              <Button onClick={() => downloadAll()}>Download Images</Button>
               <h1 className={styles.cod}>{product.code}</h1>
               <div className={styles.badgePrimary}>{product.type}</div>
               <h1 className={styles.price}>{`₹${product.price}`}</h1>
