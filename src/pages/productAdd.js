@@ -88,7 +88,7 @@ const ProductAdd = () => {
       productResponse.data.id
     );
     setIsLoading(false);
-    // history.push("/admin/products");
+    history.push("/products");
   };
   const deleteImageFromArr = (image) => {
     setProductImage((previmage) =>

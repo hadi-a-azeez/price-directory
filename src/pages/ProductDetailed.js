@@ -13,7 +13,12 @@ import Instagram from "../assets/instagram.png";
 import TableSize from "../components/TableSize";
 import { getSingleProduct } from "../API/product";
 import { apiRoot } from "../config";
+import { saveAs } from "file-saver";
+import { DownloadIcon } from "@chakra-ui/icons";
 import {
+  Tag,
+  Text,
+  Heading,
   Box,
   Table,
   Thead,
@@ -23,6 +28,7 @@ import {
   Td,
   TableCaption,
   Button,
+  Badge,
 } from "@chakra-ui/react";
 
 const ProductDetailed = (props) => {
@@ -32,6 +38,7 @@ const ProductDetailed = (props) => {
   const [topVisible, setTopVisible] = useState("none");
   const history = useHistory();
   const productId = props.match.params.id;
+  const [currentImage, setCurrentImage] = useState(0);
   const [copySuccess, setCopySuccess] = useState("");
   const [copySuccessInsta, setcopySuccessInsta] = useState("");
   let pantSizesArr = [
@@ -103,7 +110,12 @@ const ProductDetailed = (props) => {
   }, []);
 
   //download all images
-  const downloadAll = () => {};
+  const downloadAll = () => {
+    saveAs(
+      `${apiRoot}/product-images/${product.productimages[currentImage].name}`,
+      product.code + "- " + currentImage
+    );
+  };
 
   const handleBackClick = () => {
     history.goBack();
@@ -147,7 +159,6 @@ const ProductDetailed = (props) => {
     { XXL: sizeXXL },
   ];
   let sizeArr = availableSizesFiltered.map((size) => size.name);
-  console.log(availableSizesFiltered);
   return (
     <>
       <div className={styles.header}>
@@ -185,6 +196,7 @@ const ProductDetailed = (props) => {
               infiniteLoop
               dynamicHeight
               showThumbs={false}
+              onChange={(i) => setCurrentImage(i)}
               showStatus={false}
               className={styles.carousel}
             >
@@ -200,15 +212,30 @@ const ProductDetailed = (props) => {
                 ))}
             </Carousel>
             <div className={styles.details}>
-              <Button onClick={() => downloadAll()}>Download Images</Button>
-              <h1 className={styles.cod}>{product.code}</h1>
-              <div className={styles.badgePrimary}>{product.type}</div>
-              <h1 className={styles.price}>{`₹${product.price}`}</h1>
-              <h1 className={styles.resellerPrice}>
-                Reseller Price:
+              <Button
+                leftIcon={<DownloadIcon />}
+                colorScheme="blue"
+                mt="3"
+                onClick={() => downloadAll()}
+              >
+                Download Image
+              </Button>
+              <Tag colorScheme="green" mt="8" size="lg">
+                {product.type}
+              </Tag>
+              <Heading mb={1}>{product.code}</Heading>
+
+              <Heading color="red.500" fontSize="3xl">
+                {" "}
+                {`₹${product.price}`}
+              </Heading>
+              <Text fontSize="2xl">
+                Reseller :
                 {` ₹${parseInt(product.price - (product.price / 100) * 10)}`}
-              </h1>
-              <h1 className={styles.fabric}>{product.fabric}</h1>
+              </Text>
+              <Text fontSize="2xl" mb="5">
+                Fabric: {product.fabric}
+              </Text>
               <button
                 className={styles.btnWtsp}
                 onClick={() => {

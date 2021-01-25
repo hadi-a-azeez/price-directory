@@ -5,6 +5,7 @@ import backIcon from "../assets/backIcon.png";
 import { useFormLocal } from "../components/useFormLocal";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import { apiRoot } from "../config";
 import {
   getSingleOrderAPI,
   updateOrderAPI,
@@ -26,6 +27,7 @@ import {
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
+  border,
 } from "@chakra-ui/react";
 
 const OrderDetailed = (props) => {
@@ -182,7 +184,20 @@ const OrderDetailed = (props) => {
             <h1>Products</h1>
             {order.orderproducts &&
               order.orderproducts.map((product) => (
-                <div key={product.id} style={{ width: "90%" }}>
+                <div
+                  key={product.id}
+                  style={{
+                    width: "90%",
+                    border: "1px solid grey",
+                    borderRadius: "5px",
+                    padding: "15px",
+                    marginBottom: "8px",
+                  }}
+                >
+                  <img
+                    src={`${apiRoot}/order-images/${product.image}.jpeg`}
+                    width="100"
+                  />
                   <FormControl id="product_cod" w="90%" mt="2" isRequired>
                     <FormLabel>Product Code:</FormLabel>
                     <Input

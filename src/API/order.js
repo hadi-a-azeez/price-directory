@@ -51,7 +51,7 @@ export const uploadOrderImageAPI = async (images) => {
   try {
     const formData = new FormData();
     images.map((image) => {
-      formData.append("order-image", image.image);
+      formData.append("order-image", image);
     });
     return await axios.post(`${apiRoot}/order/image`, formData, {
       headers: {

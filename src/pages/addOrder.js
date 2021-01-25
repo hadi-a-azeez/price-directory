@@ -41,7 +41,7 @@ const AddOrder = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [order, setOrder, updateOrder] = useFormLocal([]);
   const [orderProducts, setOrderProducts] = useState([
-    { code: "", image: uuidv4(), price: 0, size: "" },
+    { code: "", image: uuidv4(), convertedimage: "", price: 0, size: "" },
   ]);
   const [isValidationError, setIsValidationError] = useState(false);
   const [imageConverted, setImageConverted] = useState([]);
@@ -63,11 +63,19 @@ const AddOrder = () => {
     setOrderProducts(newArray);
   };
 
+  const deleteOrderProduct = (id) => {
+    let newArr = orderProducts.filter((product) => product.image != id);
+    let newImageArr = imageConverted.filter((image) => image.name != id);
+    setImageConverted(newImageArr);
+    setOrderProducts(newArr);
+  };
+
   //add product to products state
   const addOrderProduct = () => {
     const id = uuidv4();
     const newProducts = {
       code: "",
+      convertedimage: "",
       image: id,
       price: 0,
       size: "",
@@ -91,22 +99,21 @@ const AddOrder = () => {
       payment_method: paymentMethod,
       products: orderProducts,
     });
-    await imageToServer(imageConverted);
+    await imageToServer();
 
     setIsLoading(false);
-    // history.push("/orders");
+    history.push("/orders");
   };
-  const imageToServer = async (images) => {
-    await uploadOrderImageAPI(images);
+  const imageToServer = async () => {
+    let imagesArr = orderProducts.map((product) => product.convertedimage);
+    console.log(imagesArr);
+    await uploadOrderImageAPI(imagesArr);
   };
   const validateFields = async (addCallback) => {
-    if (
-      !order.name ||
-      !order.address ||
-      !order.code ||
-      !order.size ||
-      !imageConverted
-    ) {
+    const isproducts = orderProducts.filter(
+      (product) => !product.code || !product.price || !product.size
+    );
+    if (!order.name || !order.address || isproducts.length > 0) {
       setIsOpen(false);
       setIsValidationError(true);
     } else {
@@ -119,7 +126,7 @@ const AddOrder = () => {
   const compressImage = async (event, productId) => {
     //compresses image to below 1MB
     const options = {
-      maxSizeMB: 1,
+      maxSizeMB: 0.6,
       maxWidthOrHeight: 1280,
       useWebWorker: true,
     };
@@ -133,10 +140,12 @@ const AddOrder = () => {
         type: compressedFile.type,
         lastModified: Date.now(),
       });
-      setImageConverted((old) => [
-        ...old,
-        { name: productId, image: convertedBlobFile },
-      ]);
+      handleOrderProduct("convertedimage", convertedBlobFile, productId);
+
+      // setImageConverted((old) => [
+      //   ...old,
+      //   { name: productId, image: convertedBlobFile },
+      // ]);
     } catch (error) {
       console.log(error);
     }
@@ -216,8 +225,14 @@ const AddOrder = () => {
                   top="2"
                   right="2"
                   borderRadius="full"
+                  onClick={() => deleteOrderProduct(product.image)}
                 />
-                <ProductImage productId={product.image} />
+                {product.convertedimage && (
+                  <img
+                    src={URL.createObjectURL(product.convertedimage)}
+                    width="100"
+                  />
+                )}
                 <input
                   type="file"
                   accept="image/*"
@@ -366,7 +381,11 @@ const AddOrder = () => {
                 <Button ref={cancelRef} onClick={() => setIsOpen(false)}>
                   Cancel
                 </Button>
-                <Button colorScheme="green" ml={3} onClick={() => addOrder()}>
+                <Button
+                  colorScheme="green"
+                  ml={3}
+                  onClick={() => validateFields(addOrder)}
+                >
                   Add
                 </Button>
               </AlertDialogFooter>
