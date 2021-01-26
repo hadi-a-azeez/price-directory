@@ -9,6 +9,16 @@ export const getProductAPI = async () => {
   } catch (error) {}
 };
 
+//delete a product
+export const deleteSingleProductAPI = async (productId) => {
+  try {
+    const response = await axios.delete(`${apiRoot}/product/${productId}`);
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 //get products by category
 export const getProductByCategoryAPI = async (categoryId) => {
   try {

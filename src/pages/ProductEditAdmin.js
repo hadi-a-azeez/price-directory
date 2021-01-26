@@ -8,7 +8,11 @@ import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { useHistory } from "react-router-dom";
 import backIcon from "../assets/backIcon.png";
-import { getSingleProduct, updateProductAPI } from "../API/product";
+import {
+  getSingleProduct,
+  updateProductAPI,
+  deleteSingleProductAPI,
+} from "../API/product";
 import {
   Box,
   Table,
@@ -91,9 +95,9 @@ const ProductAdmin = (props) => {
     );
   };
 
-  const deleteProduct = () => {
+  const deleteProduct = async () => {
     setIsDeleteLoading(true);
-
+    await deleteSingleProductAPI(productId);
     setIsDeleteLoading(false);
     history.push("/products");
   };
