@@ -11,7 +11,7 @@ import { resellerCopy, instagramCopy } from "../components/CopyItems";
 import Whatsapp from "../assets/whatsapp.png";
 import Instagram from "../assets/instagram.png";
 import TableSize from "../components/TableSize";
-import { getSingleProduct } from "../API/product";
+import { downloadProductImageAPI, getSingleProduct } from "../API/product";
 import { apiRoot } from "../config";
 import { saveAs } from "file-saver";
 import { DownloadIcon } from "@chakra-ui/icons";
@@ -110,11 +110,14 @@ const ProductDetailed = (props) => {
   }, []);
 
   //download all images
-  const downloadAll = () => {
-    saveAs(
-      `${apiRoot}/product-images/${product.productimages[currentImage].name}`,
-      product.code + "- " + currentImage
-    );
+  const downloadAll = async () => {
+    const image = `${apiRoot}/product-images/${product.productimages[currentImage].name}`;
+    var link = document.createElement("a");
+    link.href = image;
+    link.download = "Download.jpg";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const handleBackClick = () => {
