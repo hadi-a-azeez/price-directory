@@ -30,7 +30,6 @@ const Order = () => {
       const orderResponse = await getOrderAPI();
       console.log(orderResponse);
       setOrders(orderResponse.data);
-
       setIsLoading(false);
     };
     fetchOrders();

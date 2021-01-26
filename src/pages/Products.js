@@ -39,6 +39,8 @@ const Products = () => {
   useEffect(() => {
     if (searchValue == "") {
       setFilteredProducts([]);
+    } else {
+      doSearch();
     }
   }, [searchValue]);
   const doSearch = async () => {
