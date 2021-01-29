@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import {
+  Tag,
   Input,
   InputGroup,
   InputRightElement,
@@ -67,6 +68,7 @@ const Order = () => {
               objectFit="cover"
             />
           )}
+
           <Flex
             flexDirection="column"
             width="70%"
@@ -76,6 +78,16 @@ const Order = () => {
             <Text fontWeight="bold" textAlign="left" fontSize="xl">
               {order.name}
             </Text>
+            {order.status == "" ? (
+              <Tag style={{ background: "#ff3636", color: "white" }} size="lg">
+                Not Packed
+              </Tag>
+            ) : (
+              <Tag colorScheme="green" size="lg">
+                {order.status}
+              </Tag>
+            )}
+
             <Text fontSize="md">{order.product_cod}</Text>
             <Text fontWeight="bold" fontSize="xl" color="green.500">
               ₹{order.orderproducts.reduce((acc, curr) => acc + curr.price, 0)}

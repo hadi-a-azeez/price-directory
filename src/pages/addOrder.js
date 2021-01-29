@@ -277,7 +277,7 @@ const AddOrder = () => {
                   </FormControl>
                   <FormControl id="product_size" w="50%" isRequired>
                     <InputGroup>
-                      <InputLeftAddon children="Size" />
+                      <InputLeftAddon children="Size/Color" />
                       <Input
                         type="text"
                         name="size"
@@ -321,18 +321,7 @@ const AddOrder = () => {
             </Stack>
           </RadioGroup>
         </FormControl>
-        {paymentMethod !== "COD" && (
-          <FormControl w="90%" mt="2" isRequired>
-            <FormLabel>Transfer Details :</FormLabel>
-            <Textarea
-              type="text"
-              size="lg"
-              rows="2"
-              name="transfer_details"
-              onChange={updateOrder}
-            />
-          </FormControl>
-        )}
+
         <FormControl w="90%" mt="2">
           <FormLabel>Order Note</FormLabel>
           <Input

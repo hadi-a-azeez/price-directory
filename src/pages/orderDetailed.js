@@ -267,8 +267,8 @@ const OrderDetailed = (props) => {
               <FormLabel>Order Status :</FormLabel>
               <RadioGroup value={order.status}>
                 <Stack direction="row">
-                  <Radio value="ACCEPTED" onChange={updateOrder} name="status">
-                    Accepted
+                  <Radio value="PACKED" onChange={updateOrder} name="status">
+                    Packed
                   </Radio>
                   <Radio
                     value="DISPATCHED"

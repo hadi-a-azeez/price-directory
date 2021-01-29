@@ -67,10 +67,13 @@ export const addProductAPI = async (product) => {
 
 //upload product images
 export const uploadImagesAPI = async (productImages, productId) => {
+  console.log("in image upload");
   let formData = new FormData();
   productImages.map((image) => {
     formData.append("product_image", image.image);
   });
+  console.log("finished appending");
+  console.time();
   try {
     const response = await axios.post(
       `${apiRoot}/product/image/${productId}`,
@@ -81,6 +84,8 @@ export const uploadImagesAPI = async (productImages, productId) => {
         },
       }
     );
+    console.log("finished uploading");
+    console.timeEnd();
     return response;
   } catch (error) {
     console.log(error);
